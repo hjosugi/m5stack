@@ -47,6 +47,7 @@
               shellcheck
               shfmt
               usbutils
+              unzip
             ];
 
             shellHook = ''

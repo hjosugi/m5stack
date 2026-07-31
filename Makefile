@@ -1,4 +1,4 @@
-.PHONY: backup build build-stackchan check detect fetch-stackchan grant init list matrix monitor restore select setup setup-stackchan upload
+.PHONY: backup build build-stackchan check detect fetch-stackchan grant init install-community list matrix monitor restore select setup setup-stackchan upload
 
 detect:
 	./scripts/detect-device.sh
@@ -40,6 +40,10 @@ backup:
 
 upload:
 	@echo "Flash許可を明示するため、./scripts/upload.sh --allow-flash を直接実行してください。" >&2
+	@exit 2
+
+install-community:
+	@echo "工場版置換の許可を明示するため、./scripts/install-community-stackchan.sh --allow-flash --replace-factory-firmware を直接実行してください。" >&2
 	@exit 2
 
 monitor:
