@@ -22,7 +22,7 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               acl
-              arduino-cli
+              arduino-cli.pureGoPkg
               bison
               ccache
               cmake
