@@ -1,0 +1,6 @@
+# ネイティブUSB世代をSoC・Flash容量・製品形状ごとに代表して検証する。
+m5stack:esp32:m5stack_atoms3
+m5stack:esp32:m5stack_cores3
+m5stack:esp32:m5stack_cardputer
+m5stack:esp32:m5stack_nano_c6
+m5stack:esp32:m5stack_tab5

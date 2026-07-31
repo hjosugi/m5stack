@@ -1,0 +1,13 @@
+# key	model	fqbn	chip	flash_bytes
+atoms3	M5AtomS3	m5stack:esp32:m5stack_atoms3	esp32s3	8388608
+cores3	M5CoreS3	m5stack:esp32:m5stack_cores3	esp32s3	16777216
+stackchan	M5StackChan	m5stack:esp32:m5stack_cores3	esp32s3	16777216
+tab5	M5Tab5	m5stack:esp32:m5stack_tab5	esp32p4	16777216
+unitcams3	M5UnitCAMS3	m5stack:esp32:m5stack_unit_cams3	esp32s3	16777216
+stamps3	M5StampS3	m5stack:esp32:m5stack_stamp_s3	esp32s3	8388608
+capsule	M5Capsule	m5stack:esp32:m5stack_capsule	esp32s3	8388608
+cardputer	M5Cardputer	m5stack:esp32:m5stack_cardputer	esp32s3	8388608
+cardputer-adv	M5Cardputer-Adv	m5stack:esp32:m5stack_cardputer	esp32s3	8388608
+dial	M5Dial	m5stack:esp32:m5stack_dial	esp32s3	8388608
+dinmeter	M5DinMeter	m5stack:esp32:m5stack_dinmeter	esp32s3	8388608
+nanoc6	M5NanoC6	m5stack:esp32:m5stack_nano_c6	esp32c6	4194304

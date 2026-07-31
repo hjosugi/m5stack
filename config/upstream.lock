@@ -1,0 +1,10 @@
+# name|url|ref|commit|path
+stackchan|https://github.com/m5stack/StackChan.git|main|b72b3ede38b32d54f0b6ba51c62cfcef2ec3ae1e|StackChan
+stackchan-bsp|https://github.com/m5stack/StackChan-BSP.git|main|f7ed40e6f5d9a1d08440cb926f3a0865b81882f8|StackChan-BSP
+esp-idf|https://github.com/espressif/esp-idf.git|v5.5.4|735507283d5b2f9fb363a1901172dbd9e847945d|esp-idf
+mooncake|https://github.com/Forairaaaaa/mooncake.git|v2.3.3|572a7e488641f1c3f22e85d65c27f095ecf27d12|StackChan/firmware/components/mooncake
+mooncake-log|https://github.com/Forairaaaaa/mooncake_log.git|v1.5.0|554d55cd8c6e551b911b99cad274a46929f05bae|StackChan/firmware/components/mooncake_log
+smooth-ui-toolkit|https://github.com/Forairaaaaa/smooth_ui_toolkit.git|v2.12.0|2a18ff5d3fd6b402339d0f4f3c2834f574e3cb05|StackChan/firmware/components/smooth_ui_toolkit
+xiaozhi-esp32|https://github.com/78/xiaozhi-esp32.git|v2.2.4|e77dedb1309153bb63fed285772962c920c97dd4|StackChan/firmware/xiaozhi-esp32
+arduinojson|https://github.com/bblanchon/ArduinoJson.git|v7.4.2|733bc4ee82630c88c0a619a883cd3a206efae977|StackChan/firmware/components/ArduinoJson
+esp-now|https://github.com/espressif/esp-now.git|c33383de97f3ed2fc52117f5ef04f71990432e5d|c33383de97f3ed2fc52117f5ef04f71990432e5d|StackChan/firmware/components/esp-now
