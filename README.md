@@ -94,6 +94,8 @@ make check             静的検査、秘密情報監査、単体テストを行
 
 ## ドキュメント
 
+- [GitHub Pages（全Markdownの一覧・全文検索）](https://hjosugi.github.io/m5stack/)
+- [Cardputerを画面からミュートする方法と制約](docs/cardputer-mute.md)
 - [詳しい使い方（初回導入から復旧まで）](docs/usage.md)
 - [Stack-chanコミュニティ版の導入・使い方](docs/community-firmware.md)
 - [接続中ハードウェアの調査記録](docs/hardware-inventory.md)

@@ -1,4 +1,4 @@
-.PHONY: backup build build-stackchan check detect fetch-stackchan grant init install-community list matrix monitor restore select setup setup-stackchan upload
+.PHONY: backup build build-stackchan check detect docs fetch-stackchan grant init install-community list matrix monitor restore select setup setup-stackchan upload
 
 detect:
 	./scripts/detect-device.sh
@@ -56,3 +56,6 @@ restore:
 
 check:
 	./scripts/check.sh
+
+docs:
+	mkdocs build --strict

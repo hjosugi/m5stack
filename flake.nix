@@ -43,6 +43,7 @@
               openssl
               pkg-config
               python3
+              python3Packages.mkdocs
               ripgrep
               shellcheck
               shfmt

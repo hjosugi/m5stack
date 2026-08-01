@@ -1,0 +1,37 @@
+site_name: M5Stack調査ドキュメント
+site_description: M5Stack実機、OSS、開発環境、復旧方法の調査記録
+site_url: https://hjosugi.github.io/m5stack/
+repo_url: https://github.com/hjosugi/m5stack
+repo_name: hjosugi/m5stack
+
+docs_dir: docs
+site_dir: .local/site
+
+theme:
+  name: mkdocs
+  locale: ja
+  navigation_depth: 3
+  highlightjs: true
+  hljs_languages:
+    - bash
+    - cpp
+    - yaml
+
+plugins:
+  - search:
+      lang: ja
+      indexing: full
+
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/extra.css
+
+validation:
+  links:
+    not_found: info
+    anchors: warn
+    unrecognized_links: warn

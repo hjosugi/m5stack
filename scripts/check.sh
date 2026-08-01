@@ -6,6 +6,7 @@ SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 source "$SCRIPT_DIR/lib/common.sh"
 
 require_command bash
+require_command mkdocs
 require_command shellcheck
 require_command shfmt
 
@@ -34,5 +35,6 @@ awk -F '|' '
 "$M5_REPO_ROOT/tests/test-common.sh"
 "$M5_REPO_ROOT/tests/test-safety-gates.sh"
 "$M5_REPO_ROOT/scripts/audit-public-tree.sh"
+mkdocs build --strict --config-file "$M5_REPO_ROOT/mkdocs.yml"
 git -C "$M5_REPO_ROOT" diff --check
-log "静的検査と単体テストが完了しました。"
+log "静的検査、単体テスト、Markdownサイトの検証が完了しました。"
