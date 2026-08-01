@@ -10,6 +10,7 @@ M5Stack StackChan（SKU K151）を主対象に、再現可能な開発環境と�
 | PC画面をCardputer／StackChanへ送る | [PC画面リンク](https://hjosugi.github.io/m5stack/screen-link/) |
 | Cardputer-Advを使う | [Cardputer-Adv基本操作](https://hjosugi.github.io/m5stack/cardputer-adv/) |
 | Cardputer-Advをミュートする | [Cardputer-Adv mute](https://hjosugi.github.io/m5stack/cardputer-mute/) |
+| Cardputer-Advのfirmwareを選ぶ | [firmware比較と推奨構成](https://hjosugi.github.io/m5stack/cardputer-firmware-guide/) |
 | Bruce 1.16の対応を確認する | [BruceとCardputer-Adv](https://hjosugi.github.io/m5stack/bruce-cardputer-adv/) |
 | セットアップ、バックアップ、書込み | [安全な実機操作](https://hjosugi.github.io/m5stack/safe-workflow/) |
 | USB不調や復旧を調べる | [復旧とUSBトラブル対応](https://hjosugi.github.io/m5stack/recovery/) |
@@ -147,6 +148,7 @@ task check                         静的検査、秘密情報監査、単体テ
 - [PC画面リンク](docs/screen-link.md)
 - [Cardputer-Advの基本的な使い方](docs/cardputer-adv.md)
 - [Cardputer-Advを画面からミュートする方法と制約](docs/cardputer-mute.md)
+- [Cardputer-Adv firmware比較と推奨構成](docs/cardputer-firmware-guide.md)
 - [Bruce 1.16とCardputer-Adv](docs/bruce-cardputer-adv.md)
 - [Cardputerコミュニティソフトの見方](docs/cardputer-community-software.md)
 - [ESP32 GitHubプロジェクトの見方](docs/esp32-projects-guide.md)

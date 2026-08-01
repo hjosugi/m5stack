@@ -1,8 +1,28 @@
 # Cardputer-Advをミュートする
 
-## 最短手順
+## いまBruceの音を止める
 
-M5Stack公式のCardputer-Adv UserDemoでは、画面を見ながら前面キーボードの`Q`を押すと静音モードを切り替えられます。画面はタッチパネルではありません。
+画面に`Bruce`と表示されている場合、`Q`は効きません。次の順に操作します。
+
+1. `` ` ``または`Backspace`でBruceのメインメニューまで戻る。
+2. `;`または`,`で上、`.`または`/`で下へ移動する。
+3. `Config`を選び、`Enter`を押す。
+4. `Audio Config`を選び、`Enter`を押す。
+5. `Sound: ON`を選んで`Enter`を押し、表示が`Sound: OFF`になったことを確認する。
+
+Bruce 1.16はこの操作で`soundEnabled`を反転し、設定fileへ保存します。すでに音声fileを再生中なら再生を止め、設定後にBruceを再起動して確認してください。
+
+`Audio Config`がない場合は、`About`で版を確認します。本ページで確認した公式配布物は`Bruce-m5stack-cardputer.bin` 1.16です。別build、Lite build、古い版ではメニューが異なる可能性があります。
+
+## M5LauncherからBruceを起動している場合
+
+M5Launcherは複数firmwareのinstall・起動・partition管理を行う基盤であり、起動したBruceのマスターミュートではありません。M5Launcherへ戻って`Q`を押すのではなく、Bruceを起動して上記の`Audio Config`を変更します。
+
+2026-08-01時点の現行M5Launcherは2.7.2ではなく[2.8.0](https://github.com/bmorcelli/Launcher/releases/tag/2.8.0)です。2.8.0のCardputer用sourceと設定項目には、起動先firmwareの音声を一括停止する設定はありません。
+
+## 公式UserDemoの場合
+
+M5Stack公式のCardputer-Adv UserDemoだけは、画面を見ながら前面キーボードの`Q`を押すと静音モードを切り替えられます。画面はタッチパネルではありません。
 
 | 画面 | 操作 | 結果 |
 | --- | --- | --- |
@@ -11,7 +31,16 @@ M5Stack公式のCardputer-Adv UserDemoでは、画面を見ながら前面キー
 | 画面上部 | 消音アイコンを確認 | アイコン表示中は静音モード |
 | 再起動後 | 操作不要 | 設定はNVSから復元される |
 
-音が消えない場合は、まず起動画面を確認してください。初代Cardputer用、Cardputer-Adv用、Bruce等では操作と対象が異なります。
+## 画面別の結論
+
+| いま表示されているfirmware | 消音操作 |
+| --- | --- |
+| Bruce 1.16 | `Config` → `Audio Config` → `Sound: OFF` |
+| M5Launcher 2.8.0 | 起動先firmwareを開き、そのfirmware内で設定する |
+| 公式UserDemo CardputerADV | launcher画面で`Q` |
+| Picoware、UIFlow2、game等 | 各firmware固有。`Q`やBruce設定は引き継がれない |
+
+Cardputer-Advには全firmwareへ共通する物理mute switchはありません。firmwareを切り替えるたびに、そのfirmwareの設定を確認します。
 
 ## 何が静かになるか
 
@@ -34,7 +63,7 @@ Cardputerにはスピーカーとマイクの両方があります。`Q`で止�
 
 ## Bruce 1.16の場合
 
-Bruceでは`Config`の`Audio Config`から`Sound: OFF`へ切り替えます。音量は`Sound Volume`で10〜100%を選べます。公式UserDemoの`Q`操作とは共通ではありません。対応状況、外付け無線モジュール、導入上の注意は[Bruce 1.16調査](bruce-cardputer-adv.md)にまとめています。
+Bruceでは`Config`の`Audio Config`から`Sound: OFF`へ切り替えます。音量は`Sound Volume`で10〜100%を選べます。公式UserDemoの`Q`操作とは共通ではありません。対応状況、外付け無線モジュール、導入上の注意は[Bruce 1.16調査](bruce-cardputer-adv.md)、firmware全体の選び方は[Cardputer-Adv firmware選定](cardputer-firmware-guide.md)にまとめています。
 
 ## 自作ファームウェアで完全に消音する
 
@@ -69,5 +98,7 @@ Cardputer-Advは3.5 mm端子へヘッドホン等を接続すると、内蔵ス�
 - [Cardputer / Cardputer-Adv Speaker](https://docs.m5stack.com/en/arduino/m5cardputer/speaker): Speaker APIと音量範囲
 - [Cardputer Mic](https://docs.m5stack.com/en/arduino/m5cardputer/mic): マイクとスピーカーの切替例
 - [M5Cardputer-UserDemo `CardputerADV`](https://github.com/m5stack/M5Cardputer-UserDemo/tree/CardputerADV): ADV用ランチャーと静音処理
+- [Bruce 1.16 `Audio Config`](https://github.com/BruceDevices/firmware/blob/59e83bfbd8a63a6b67ea23498e15c710a1ed9657/src/core/menu_items/ConfigMenu.cpp#L124-L149): `Sound`切替と保存
+- [M5Launcher 2.8.0](https://github.com/bmorcelli/Launcher/tree/2.8.0): launcherと起動先firmwareの設定分離
 
 確認対象は上記コミットです。別のファームウェアや将来版で画面が異なる場合は、ファームウェア名と版を先に確認してください。

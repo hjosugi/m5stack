@@ -1,5 +1,12 @@
 # 作業記録
 
+## 2026-08-01 Cardputer mute再調査
+
+- muteできない原因をfirmware差として再整理した。`Q`は公式UserDemo専用であり、Bruce 1.16では`Config` → `Audio Config` → `Sound: OFF`を使う。
+- M5Launcherは2.7.2ではなく2.8.0が現行であることをRelease API、tag source、配布assetで確認した。
+- M5Launcher 2.8.0のCardputer assetを取得し、1,401,280 bytes、SHA-256 `308c11982fd7260f535c4fe1f999c3cd4e13b649cd27a29b0cbeb2064f35483e`を確認した。実機への書込みは行っていない。
+- Bruce、Picoware、UIFlow2、UserDemo、NEMO、Poseidon、MicroHydra、CircuitPython、Game Station、MeshCore、Meshtasticの版とADV対応根拠を再確認した。
+
 ## 2026-08-01 my-m5docs最終統合
 
 - 既存GistのESP32 project調査を、安全境界と採否判断を加えたMarkdownとしてmy-m5docsへ統合した。

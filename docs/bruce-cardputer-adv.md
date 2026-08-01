@@ -50,7 +50,7 @@ READMEの`:ok:`は、その無線chipが本体へ内蔵されているという�
 
 ## Bruceでミュートする
 
-`Config`から`Audio Config`を開き、`Sound: OFF`へ切り替えます。`Sound Volume`では10〜100%を選べます。設定はBruceの設定ファイルへ保存されます。
+`Q`ではなく、`Config`から`Audio Config`を開き、`Sound: ON`を選択して`Sound: OFF`へ切り替えます。`Sound Volume`では10〜100%を選べます。設定はBruceの設定ファイルへ保存されます。Cardputer-Advでの移動keyを含む手順は[ミュート手順](cardputer-mute.md)にまとめています。
 
 これは公式UserDemoの`Q`静音とは別の実装です。Bruceの音声再生コードは`Sound: OFF`を確認しますが、外付け機器が独自に出す音までは制御しません。
 
@@ -71,3 +71,4 @@ BruceのWeb Flasher、M5Burner、M5LauncherはいずれもFlashを変更する�
 - [Bruce公式リポジトリ](https://github.com/BruceDevices/firmware/tree/59e83bfbd8a63a6b67ea23498e15c710a1ed9657)
 - [Cardputer-Adv公式hardware仕様](https://docs.m5stack.com/en/core/Cardputer-Adv)
 - [Cardputer-Adv工場ファームウェア復元](https://docs.m5stack.com/en/guide/restore_factory/cardputer_adv)
+- [Cardputer-Adv firmware選定](cardputer-firmware-guide.md)

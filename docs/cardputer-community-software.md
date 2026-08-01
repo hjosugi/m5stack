@@ -31,6 +31,8 @@
 
 Bruce 1.16は単一binがTCA8418を検出してADVへ切り替えることを確認済みです。詳細は[Bruce 1.16とCardputer-Adv](bruce-cardputer-adv.md)に分離しています。他の掲載アプリは本ページ作成時点で個別の実機検証をしていません。
 
+その後、M5Launcher、Picoware、NEMO、Poseidon、MicroHydra、CircuitPython、Game Station、MeshCore、Meshtasticを個別に再確認しました。現行版と用途別の判断は[Cardputer-Adv firmware選定](cardputer-firmware-guide.md)を正本とします。
+
 ## 初心者が優先するもの
 
 1. 公式Cardputer-Adv UserDemo
