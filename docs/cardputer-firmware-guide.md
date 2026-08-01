@@ -8,7 +8,7 @@
 本体: M5Launcher 2.8.0
 └── メイン: Bruce 1.16
 
-microSDに保管:
+microSDへ保管予定（実カード未copy）:
 ├── Picoware v2.1.0
 ├── Factory UserDemo ADV-V0.3
 ├── UIFlow2 Cardputer-Adv v2.5.0
@@ -16,7 +16,7 @@ microSDに保管:
 └── Meshtastic v2.7.26.54e0d8d
 ```
 
-普段はBruceを自動起動し、別用途だけM5Launcherへ戻ってSD上のfirmwareへ入れ替えます。Cardputer-AdvのFlashは8 MBなので、この6種類をすべて同時常駐させる構成ではありません。M5LauncherはOSではなく、Flash上のapp・data partition、SD上のbinary、online catalogを管理するlauncherです。
+microSDへのcopy後は、普段はBruceを自動起動し、別用途だけM5Launcherへ戻ってSD上のfirmwareへ入れ替えます。Cardputer-AdvのFlashは8 MBなので、この6種類をすべて同時常駐させる構成ではありません。M5LauncherはOSではなく、Flash上のapp・data partition、SD上のbinary、online catalogを管理するlauncherです。
 
 ## 実機へ反映した状態
 
