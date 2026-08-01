@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "scripts/check.sh": {
-    "mtime": 1785565924.7438052,
-    "ast_hash": "be326986a7506facd814d310398a320e",
+    "mtime": 1785566600.47347,
+    "ast_hash": "bb23e9a192a2d5688a7f36f23447ddcb",
     "semantic_hash": ""
   },
   "scripts/detect-device.sh": {
@@ -140,8 +140,8 @@
     "semantic_hash": ""
   },
   "stackchan/screen-link/build.sh": {
-    "mtime": 1785565767.4902222,
-    "ast_hash": "2ddc7b0c278509db965df10675b446bf",
+    "mtime": 1785567536.5997488,
+    "ast_hash": "476d700b1c7ffdd83e9460bf8a85067c",
     "semantic_hash": ""
   },
   "stackchan/screen-link/components/screen_link_auth/screen_link_auth.cpp": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "tests/test-safety-gates.sh": {
-    "mtime": 1785565939.5819793,
-    "ast_hash": "f14a00b27191659bdef11a8d44610f4a",
+    "mtime": 1785566305.558177,
+    "ast_hash": "7b94d14fcf24fce325553700f364e465",
     "semantic_hash": ""
   },
   ".github/dependabot.yml": {
@@ -180,13 +180,13 @@
     "semantic_hash": ""
   },
   ".github/workflows/stackchan-factory.yml": {
-    "mtime": 1785565782.1797197,
-    "ast_hash": "e059671b5428b1b879083fd497d3daa3",
+    "mtime": 1785567526.8297322,
+    "ast_hash": "ec8c0ebed6d9ed33c202db960d5e8a8c",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785566162.4485548,
-    "ast_hash": "2bb83425ad7de60c74e7eeec6eca1a3a",
+    "mtime": 1785568223.600287,
+    "ast_hash": "a5ef5282d92b9d6ede2ca11e6216ffaa",
     "semantic_hash": ""
   },
   "cardputer/screen-link/README.md": {
@@ -235,8 +235,8 @@
     "semantic_hash": ""
   },
   "docs/work-log.md": {
-    "mtime": 1785565782.1817164,
-    "ast_hash": "77a9a8656fc267b704c0dc94835ba3e1",
+    "mtime": 1785568223.601287,
+    "ast_hash": "bc4e2eac5a83cc9b5bfaff51482662a9",
     "semantic_hash": ""
   },
   "pc/screen-link/README.md": {
@@ -270,13 +270,13 @@
     "semantic_hash": ""
   },
   "tests/test-taskfile.sh": {
-    "mtime": 1785565782.1862597,
-    "ast_hash": "234e40aaf35d434f641453741971d9f5",
+    "mtime": 1785568223.5982869,
+    "ast_hash": "28f0e6979ffd2cd61b55f3d4153d0c6e",
     "semantic_hash": ""
   },
   "Taskfile.yml": {
-    "mtime": 1785566180.528761,
-    "ast_hash": "41d5104d450c9ef0774a656f94f4d89e",
+    "mtime": 1785567526.8287323,
+    "ast_hash": "8d6efc312667d94e7008b525b32736e5",
     "semantic_hash": ""
   },
   "scripts/install-community-stackchan.sh": {
@@ -285,8 +285,8 @@
     "semantic_hash": ""
   },
   "docs/cardputer-mute.md": {
-    "mtime": 1785565782.1805794,
-    "ast_hash": "7c242e599b94a328a306a88a0ee23467",
+    "mtime": 1785567237.2884586,
+    "ast_hash": "467f0e7073db3fb4e0dfbfe9d62a82ea",
     "semantic_hash": ""
   },
   "docs/community-firmware.md": {
@@ -295,8 +295,8 @@
     "semantic_hash": ""
   },
   "docs/index.md": {
-    "mtime": 1785566180.5307608,
-    "ast_hash": "113561f45e55deefe4e47cfd3c61daa6",
+    "mtime": 1785568223.5992868,
+    "ast_hash": "58cf08d9e3f0ba25d4c0cd297253648c",
     "semantic_hash": ""
   },
   "docs/screen-link.md": {
@@ -307,6 +307,36 @@
   "mkdocs.yml": {
     "mtime": 1785566180.5297608,
     "ast_hash": "d90c7e50cb3500ecd95b53ec4bb1372e",
+    "semantic_hash": ""
+  },
+  "scripts/check-markdown-links.py": {
+    "mtime": 1785566567.214101,
+    "ast_hash": "92ed294141a860388906be1b857d4981",
+    "semantic_hash": ""
+  },
+  "docs/bruce-cardputer-adv.md": {
+    "mtime": 1785567237.2919188,
+    "ast_hash": "2b603ef414f78483d3feca7593c16627",
+    "semantic_hash": ""
+  },
+  "docs/cardputer-adv.md": {
+    "mtime": 1785567237.2894588,
+    "ast_hash": "dffe43ddfa8586d2feee8c7202e7da6b",
+    "semantic_hash": ""
+  },
+  "docs/cardputer-community-software.md": {
+    "mtime": 1785567489.9826825,
+    "ast_hash": "5d678d1809260e0fc248908d5f3dd3e1",
+    "semantic_hash": ""
+  },
+  "docs/esp32-projects-guide.md": {
+    "mtime": 1785568223.5982869,
+    "ast_hash": "b8f137f02d6ae110602f7478cca324b5",
+    "semantic_hash": ""
+  },
+  "docs/m5stack-beginner.md": {
+    "mtime": 1785567489.9826825,
+    "ast_hash": "0061ac949fede549a4c86ba5e4bb2bbb",
     "semantic_hash": ""
   }
 }

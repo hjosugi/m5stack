@@ -149,6 +149,7 @@ task check                         静的検査、秘密情報監査、単体テ
 - [Cardputer-Advを画面からミュートする方法と制約](docs/cardputer-mute.md)
 - [Bruce 1.16とCardputer-Adv](docs/bruce-cardputer-adv.md)
 - [Cardputerコミュニティソフトの見方](docs/cardputer-community-software.md)
+- [ESP32 GitHubプロジェクトの見方](docs/esp32-projects-guide.md)
 - [詳しい使い方（初回導入から復旧まで）](docs/usage.md)
 - [Stack-chanコミュニティ版の導入・使い方](docs/community-firmware.md)
 - [接続中ハードウェアの調査記録](docs/hardware-inventory.md)

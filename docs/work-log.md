@@ -1,5 +1,12 @@
 # 作業記録
 
+## 2026-08-01 my-m5docs最終統合
+
+- 既存GistのESP32 project調査を、安全境界と採否判断を加えたMarkdownとしてmy-m5docsへ統合した。
+- Cardputer-Adv公式UserDemo、Bruce 1.16、Cardputer community softwareの調査を個別文書として収録した。
+- StackChan画面リンク版を公開用仮値でbuildし、`stack-chan.bin`生成まで確認した。実機への書込みは行っていない。
+- GitHub ActionsのTask一覧testがhuman-readable出力へ依存していたため、JSON出力による検証へ置き換えた。
+
 ## 2026-08-01
 
 ### CardputerミュートとMarkdownサイト

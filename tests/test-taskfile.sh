@@ -12,7 +12,7 @@ REPO_ROOT=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
   exit 1
 }
 
-task_list=$(task --dir "$REPO_ROOT" --list-all)
+task_list_json=$(task --dir "$REPO_ROOT" --list-all --json)
 expected_tasks=(
   check
   docs:build
@@ -33,7 +33,8 @@ expected_tasks=(
   host:stackchan:status
 )
 for task_name in "${expected_tasks[@]}"; do
-  grep -Fq -- "* $task_name:" <<< "$task_list" || {
+  jq -e --arg task_name "$task_name" \
+    '.tasks | any(.name == $task_name)' <<< "$task_list_json" > /dev/null || {
     printf '必須taskがありません: %s\n' "$task_name" >&2
     exit 1
   }
