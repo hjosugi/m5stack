@@ -63,7 +63,7 @@ Cardputerにはスピーカーとマイクの両方があります。`Q`で止�
 
 ## Bruce 1.16の場合
 
-Bruceでは`Config`の`Audio Config`から`Sound: OFF`へ切り替えます。音量は`Sound Volume`で10〜100%を選べます。公式UserDemoの`Q`操作とは共通ではありません。対応状況、外付け無線モジュール、導入上の注意は[Bruce 1.16調査](bruce-cardputer-adv.md)、firmware全体の選び方は[Cardputer-Adv firmware選定](cardputer-firmware-guide.md)にまとめています。
+Bruceでは`Config`の`Audio Config`から`Sound: OFF`へ切り替えます。音量は`Sound Volume`で10〜100%を選べます。公式UserDemoの`Q`操作とは共通ではありません。対応状況、外付け無線モジュール、導入上の注意は[Bruce 1.16調査](bruce-cardputer-adv.md)、採用構成は[Cardputer-Adv firmware構成](cardputer-firmware-guide.md)にまとめています。
 
 ## 自作ファームウェアで完全に消音する
 

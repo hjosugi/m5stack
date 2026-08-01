@@ -71,4 +71,4 @@ BruceのWeb Flasher、M5Burner、M5LauncherはいずれもFlashを変更する�
 - [Bruce公式リポジトリ](https://github.com/BruceDevices/firmware/tree/59e83bfbd8a63a6b67ea23498e15c710a1ed9657)
 - [Cardputer-Adv公式hardware仕様](https://docs.m5stack.com/en/core/Cardputer-Adv)
 - [Cardputer-Adv工場ファームウェア復元](https://docs.m5stack.com/en/guide/restore_factory/cardputer_adv)
-- [Cardputer-Adv firmware選定](cardputer-firmware-guide.md)
+- [Cardputer-Adv firmware構成](cardputer-firmware-guide.md)

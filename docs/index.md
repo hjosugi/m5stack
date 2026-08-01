@@ -25,9 +25,9 @@
 | 文書 | 確認できること |
 | --- | --- |
 | [Cardputer-Advの基本的な使い方](cardputer-adv.md) | 電源、充電、公式UserDemo、キーボード、工場版復元 |
-| [Cardputer-Advをミュートする](cardputer-mute.md) | 公式UserDemoの`Q`静音、対象範囲、別ファームウェアとの差 |
-| [Cardputer-Adv firmware選定](cardputer-firmware-guide.md) | M5Launcher、Bruce、Picoware、Python、game、LoRaの比較 |
+| [Cardputer-Adv firmware構成](cardputer-firmware-guide.md) | 採用版、配布物、SHA-256、microSD配置、切替手順 |
 | [Bruce 1.16とCardputer-Adv](bruce-cardputer-adv.md) | ADV対応の実装根拠、内蔵／外付け機能、音設定、安全上の境界 |
+| [Cardputer-Advをミュートする](cardputer-mute.md) | 公式UserDemoの`Q`静音、対象範囲、別ファームウェアとの差 |
 | [Cardputerコミュニティソフトの見方](cardputer-community-software.md) | awesome listの使い方、ADV対応の判定、導入前確認 |
 
 ## StackChan

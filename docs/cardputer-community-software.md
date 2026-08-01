@@ -31,14 +31,14 @@
 
 Bruce 1.16は単一binがTCA8418を検出してADVへ切り替えることを確認済みです。詳細は[Bruce 1.16とCardputer-Adv](bruce-cardputer-adv.md)に分離しています。他の掲載アプリは本ページ作成時点で個別の実機検証をしていません。
 
-その後、M5Launcher、Picoware、NEMO、Poseidon、MicroHydra、CircuitPython、Game Station、MeshCore、Meshtasticを個別に再確認しました。現行版と用途別の判断は[Cardputer-Adv firmware選定](cardputer-firmware-guide.md)を正本とします。
+その後、M5Launcher、Picoware、NEMO、Poseidon、MicroHydra、CircuitPython、Game Station、MeshCore、Meshtasticを個別に再確認しました。現行版と採用結果は[Cardputer-Adv firmware構成](cardputer-firmware-guide.md)を正本とします。
 
-## 初心者が優先するもの
+## 初回動作確認の順序
 
 1. 公式Cardputer-Adv UserDemo
 2. M5Cardputer、M5Unified、M5GFXの公式example
 3. source、license、対象boardが明確な小さなアプリ
-4. factory復元を準備した後のlauncher
+4. factory復元を準備した後の[M5Launcher採用構成](cardputer-firmware-guide.md)
 5. 用途と許可範囲を理解した後のセキュリティ試験firmware
 
 最初は画面、キーボード、microSD、Wi-Fiを一つずつ確認します。複数のlauncherやfirmwareを連続で書き換えると、不具合がhardware、firmware、設定のどれにあるか分からなくなります。
