@@ -1,0 +1,297 @@
+{
+  "cardputer/screen-link/build.sh": {
+    "mtime": 1785550579.770075,
+    "ast_hash": "6b07af2ed5dd39c6ed5b3f05874960a5",
+    "semantic_hash": ""
+  },
+  "cardputer/screen-link/firmware/ScreenLinkCardputer/screen_link_secrets.example.h": {
+    "mtime": 1785548775.4861555,
+    "ast_hash": "8cdd51e8cbf04d29c2284c00625a0c47",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/pyproject.toml": {
+    "mtime": 1785548627.1824553,
+    "ast_hash": "fdbd2fb815d4439d3bd9713f0538cad7",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/run.sh": {
+    "mtime": 1785549003.2160797,
+    "ast_hash": "5ad968ff756a19f41d49166968f610c9",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/src/m5_screen_link/__init__.py": {
+    "mtime": 1785548627.1834555,
+    "ast_hash": "88cffcd8d5fcbc3fc50d68ee9b8ae418",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/src/m5_screen_link/protocol.py": {
+    "mtime": 1785548627.1834555,
+    "ast_hash": "0e871fa009ce799ede036a829acfb314",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/src/m5_screen_link/server.py": {
+    "mtime": 1785550075.2316282,
+    "ast_hash": "89a8f534b099c5fe2eb13a25a51e2a6c",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/src/m5_screen_link/static/app.js": {
+    "mtime": 1785550061.3014638,
+    "ast_hash": "3ab7c4637592e0e48196496f6441db21",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/tests/test_protocol.py": {
+    "mtime": 1785548627.1864555,
+    "ast_hash": "e3b05fcb54ccb67755e9ba3babd7c6fa",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/tests/test_server.py": {
+    "mtime": 1785550069.6165621,
+    "ast_hash": "832df4a7295201adfca1eb4c4b595a2e",
+    "semantic_hash": ""
+  },
+  "scripts/audit-public-tree.sh": {
+    "mtime": 1785548458.463189,
+    "ast_hash": "1f3df02d9eaf59e271c027adfd82a646",
+    "semantic_hash": ""
+  },
+  "scripts/backup-flash.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "d4a48d1a935f4a3a3ac4c541c8cf77d8",
+    "semantic_hash": ""
+  },
+  "scripts/build-matrix.sh": {
+    "mtime": 1785548960.7057242,
+    "ast_hash": "970ad4260c6f275eec20d6fa63fbac15",
+    "semantic_hash": ""
+  },
+  "scripts/build-stackchan-factory.sh": {
+    "mtime": 1785548835.80044,
+    "ast_hash": "c00bc5d4e529aee3dfdc6c8cf9ca6ea9",
+    "semantic_hash": ""
+  },
+  "scripts/build.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "d82d437781836a9abde5fadbb06ca8ee",
+    "semantic_hash": ""
+  },
+  "scripts/check-site.py": {
+    "mtime": 1785559195.1645234,
+    "ast_hash": "c9517279ce4c5d68edbeee80f600d922",
+    "semantic_hash": ""
+  },
+  "scripts/check.sh": {
+    "mtime": 1785559462.6602774,
+    "ast_hash": "e9881494ec376108a537d70c567b9417",
+    "semantic_hash": ""
+  },
+  "scripts/detect-device.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "266b2f55ce2062a4741029ab387ad18d",
+    "semantic_hash": ""
+  },
+  "scripts/fetch-stackchan.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "9946c1180e379753ac8cae4ee1f9ca93",
+    "semantic_hash": ""
+  },
+  "scripts/grant-port-access.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "874849973d406f02a73e971e555af30a",
+    "semantic_hash": ""
+  },
+  "scripts/init-env.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "38110c17fb7aadbdf127947839c6b167",
+    "semantic_hash": ""
+  },
+  "scripts/lib/common.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "0459af37039da241c7887b25115295e7",
+    "semantic_hash": ""
+  },
+  "scripts/monitor.sh": {
+    "mtime": 1785548458.4640825,
+    "ast_hash": "1f8b0f9fdd269941453e628f115d3a69",
+    "semantic_hash": ""
+  },
+  "scripts/restore-flash.sh": {
+    "mtime": 1785548458.464659,
+    "ast_hash": "c53a6ada33bb123a1a18bd4c010d78d6",
+    "semantic_hash": ""
+  },
+  "scripts/select-board.sh": {
+    "mtime": 1785548458.464659,
+    "ast_hash": "7642563f96f58823744d070e56181cc8",
+    "semantic_hash": ""
+  },
+  "scripts/setup-stackchan-factory.sh": {
+    "mtime": 1785548458.464659,
+    "ast_hash": "14df3125f7e263caf6376b86c4ef6bfe",
+    "semantic_hash": ""
+  },
+  "scripts/setup.sh": {
+    "mtime": 1785548960.7057242,
+    "ast_hash": "61f0b275b3fb24255e463b5c068cdba3",
+    "semantic_hash": ""
+  },
+  "scripts/upload.sh": {
+    "mtime": 1785548458.464659,
+    "ast_hash": "b77422f031ce58f748c16ce53a88b5cf",
+    "semantic_hash": ""
+  },
+  "scripts/verify-stackchan-upstream.sh": {
+    "mtime": 1785548458.464659,
+    "ast_hash": "b145b7d1ca02e7f2c6d3d59b8eee3d86",
+    "semantic_hash": ""
+  },
+  "stackchan/screen-link/build.sh": {
+    "mtime": 1785550579.770075,
+    "ast_hash": "2ddc7b0c278509db965df10675b446bf",
+    "semantic_hash": ""
+  },
+  "stackchan/screen-link/components/screen_link_auth/screen_link_auth.cpp": {
+    "mtime": 1785549779.005858,
+    "ast_hash": "c9ee642880438a6dedab0f0bbbceee80",
+    "semantic_hash": ""
+  },
+  "tests/test-common.sh": {
+    "mtime": 1785548458.464659,
+    "ast_hash": "7a9cde18041cb15f5a670b4b48a4d4e2",
+    "semantic_hash": ""
+  },
+  "tests/test-safety-gates.sh": {
+    "mtime": 1785548458.4660132,
+    "ast_hash": "cb201cff628a5ff40eaa61ab8adfbb8c",
+    "semantic_hash": ""
+  },
+  ".github/dependabot.yml": {
+    "mtime": 1785548458.460659,
+    "ast_hash": "b7b6322e93bac2977fd5db7adaaa85e3",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1785548458.462075,
+    "ast_hash": "3a6c9c8edaa3f9a2a046e922ed89c53f",
+    "semantic_hash": ""
+  },
+  ".github/workflows/pages.yml": {
+    "mtime": 1785559233.763542,
+    "ast_hash": "65005a45b32cebdfb36610e56826d579",
+    "semantic_hash": ""
+  },
+  ".github/workflows/release.yml": {
+    "mtime": 1785559233.9205382,
+    "ast_hash": "e5a84e16657ad5d7c81358c774796955",
+    "semantic_hash": ""
+  },
+  ".github/workflows/stackchan-factory.yml": {
+    "mtime": 1785548458.462153,
+    "ast_hash": "43341d8736e7fe55946a3951b5f78a51",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1785559234.0965338,
+    "ast_hash": "778b0193ac7c20103f0493d2f861989b",
+    "semantic_hash": ""
+  },
+  "cardputer/screen-link/README.md": {
+    "mtime": 1785559234.416526,
+    "ast_hash": "7315d45cc3947d34ac3de14d5990cc64",
+    "semantic_hash": ""
+  },
+  "config/ci-boards.txt": {
+    "mtime": 1785548458.4625108,
+    "ast_hash": "c7af5d589187590d23768da975a1a344",
+    "semantic_hash": ""
+  },
+  "docs/hardware-inventory.md": {
+    "mtime": 1785548458.4625108,
+    "ast_hash": "65f822febbee86a3d987de535efc115e",
+    "semantic_hash": ""
+  },
+  "docs/oss-selection.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "7e4d841737ab64c601e40c26fa3424f1",
+    "semantic_hash": ""
+  },
+  "docs/recovery.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "1fc683d0530156e0f5fb24f87868b677",
+    "semantic_hash": ""
+  },
+  "docs/safe-workflow.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "f62942fcb9f910cef16788585efb334f",
+    "semantic_hash": ""
+  },
+  "docs/stackchan-factory.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "f2e357b9e285048d91c49a5178558375",
+    "semantic_hash": ""
+  },
+  "docs/updating.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "a990c9d811def34ed1aa8944e7a8e73e",
+    "semantic_hash": ""
+  },
+  "docs/usage.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "0d5f694de8d78fdeaace898fcaaefb84",
+    "semantic_hash": ""
+  },
+  "docs/work-log.md": {
+    "mtime": 1785548458.4627483,
+    "ast_hash": "c770f6662bfd2c5811aa3e48265f37db",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/README.md": {
+    "mtime": 1785559234.2635298,
+    "ast_hash": "23f89d6087017d09c7cb34376756565b",
+    "semantic_hash": ""
+  },
+  "pc/screen-link/src/m5_screen_link/static/index.html": {
+    "mtime": 1785548627.1844554,
+    "ast_hash": "0337a7a07a166b000f803d2ef4a6e234",
+    "semantic_hash": ""
+  },
+  "site/404.html": {
+    "mtime": 1785559139.9360895,
+    "ast_hash": "66de8a341ef62fdbed22c0457663ce80",
+    "semantic_hash": ""
+  },
+  "site/cardputer-mute.html": {
+    "mtime": 1785559139.453104,
+    "ast_hash": "054f72ab37cdda21def692c44e8c9a32",
+    "semantic_hash": ""
+  },
+  "site/index.html": {
+    "mtime": 1785559139.1411135,
+    "ast_hash": "f306d84da4bda7730ded9f63f4433b57",
+    "semantic_hash": ""
+  },
+  "site/safe-development.html": {
+    "mtime": 1785559139.6050994,
+    "ast_hash": "2b9937138565dfcf9cbb1d228c7685cb",
+    "semantic_hash": ""
+  },
+  "site/screen-link.html": {
+    "mtime": 1785559139.3021085,
+    "ast_hash": "d3a8c9db1ddef0f9f4f4ac77bdf6ae8c",
+    "semantic_hash": ""
+  },
+  "site/troubleshooting.html": {
+    "mtime": 1785559139.7680945,
+    "ast_hash": "b0d74bb28a18f842749993990078f01a",
+    "semantic_hash": ""
+  },
+  "stackchan/screen-link/README.md": {
+    "mtime": 1785559234.5735223,
+    "ast_hash": "c2ad3c35cc96100bb8f9eb8bc8eff598",
+    "semantic_hash": ""
+  },
+  "stackchan/screen-link/components/screen_link_auth/CMakeLists.txt": {
+    "mtime": 1785549779.005858,
+    "ast_hash": "8a23208c291cc4af9552b3a0020c4ac1",
+    "semantic_hash": ""
+  }
+}
