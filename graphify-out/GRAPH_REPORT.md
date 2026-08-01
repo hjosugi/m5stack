@@ -1,16 +1,16 @@
 # Graph Report - m5stack  (2026-08-01)
 
 ## Corpus Check
-- 59 files · ~12,761 words
+- 59 files · ~12,819 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 367 nodes · 599 edges · 33 communities (26 shown, 7 thin omitted)
+- 368 nodes · 602 edges · 33 communities (26 shown, 7 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 38 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `464c2b19`
+- Built from commit: `5ab171b1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -53,8 +53,8 @@
 2. `log()` - 21 edges
 3. `require_command()` - 18 edges
 4. `詳しい使い方` - 16 edges
-5. `load_local_env()` - 13 edges
-6. `Cardputer-Adv firmware構成` - 13 edges
+5. `Cardputer-Adv firmware構成` - 14 edges
+6. `load_local_env()` - 13 edges
 7. `Target` - 12 edges
 8. `create_app()` - 12 edges
 9. `FrameHub` - 11 edges
@@ -174,11 +174,11 @@ Cohesion: 0.80
 Nodes (4): links_outside_fences(), local_target(), main(), Path
 
 ### Community 32 - "Cardputer-Adv firmware構成"
-Cohesion: 0.15
-Nodes (13): Bruceをメインにする, Cardputer-Adv firmware構成, LoRa系の判断, M5Launcherを使う時の注意, microSDの配置, Python系の判断, Security firmwareの境界, 主要firmware比較 (+5 more)
+Cohesion: 0.14
+Nodes (14): Bruceをメインにする, Cardputer-Adv firmware構成, LoRa系の判断, M5Launcherを使う時の注意, microSDの配置, Python系の判断, Security firmwareの境界, 主要firmware比較 (+6 more)
 
 ## Knowledge Gaps
-- **168 isolated node(s):** `build.sh script`, `m5-screen-link`, `run.sh script`, `targetIds`, `targetSizes` (+163 more)
+- **169 isolated node(s):** `build.sh script`, `m5-screen-link`, `run.sh script`, `targetIds`, `targetSizes` (+164 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -190,12 +190,12 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `詳しい使い方` connect `詳しい使い方` to `index.md`?**
   _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **Why does `Cardputer-Adv firmware構成` connect `Cardputer-Adv firmware構成` to `index.md`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
+  _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **What connects `build.sh script`, `m5-screen-link`, `run.sh script` to the rest of the system?**
-  _168 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _169 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `common.sh` be split into smaller, more focused modules?**
   _Cohesion score 0.07668231611893583 - nodes in this community are weakly interconnected._
 - **Should `server.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08051948051948052 - nodes in this community are weakly interconnected._
 - **Should `index.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.1350806451612903 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13911290322580644 - nodes in this community are weakly interconnected._

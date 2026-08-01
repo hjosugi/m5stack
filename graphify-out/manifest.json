@@ -235,8 +235,8 @@
     "semantic_hash": ""
   },
   "docs/work-log.md": {
-    "mtime": 1785571644.218414,
-    "ast_hash": "7d9981c9ef363d127f5a072e86d30bd2",
+    "mtime": 1785572461.4398746,
+    "ast_hash": "15a968e3d0ac9c0ad7325a4fd6bd7784",
     "semantic_hash": ""
   },
   "pc/screen-link/README.md": {
@@ -285,8 +285,8 @@
     "semantic_hash": ""
   },
   "docs/cardputer-mute.md": {
-    "mtime": 1785571709.409009,
-    "ast_hash": "70290ec495558c410632dfcf79eda992",
+    "mtime": 1785572461.4388745,
+    "ast_hash": "d17867ed034b42f3fdde35b34eea1e18",
     "semantic_hash": ""
   },
   "docs/community-firmware.md": {
@@ -315,13 +315,13 @@
     "semantic_hash": ""
   },
   "docs/bruce-cardputer-adv.md": {
-    "mtime": 1785571709.410009,
-    "ast_hash": "305581aba430b3a43253a4f2044cbeb8",
+    "mtime": 1785572371.4080524,
+    "ast_hash": "68c5df6226a1996b9d714540a3b01167",
     "semantic_hash": ""
   },
   "docs/cardputer-adv.md": {
-    "mtime": 1785567237.2894588,
-    "ast_hash": "dffe43ddfa8586d2feee8c7202e7da6b",
+    "mtime": 1785572610.752238,
+    "ast_hash": "257a762f03f406a5bb5fcc879db8a8d4",
     "semantic_hash": ""
   },
   "docs/cardputer-community-software.md": {
@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "docs/cardputer-firmware-guide.md": {
-    "mtime": 1785571685.1397874,
-    "ast_hash": "f9f2bb30203b54168bb58a6c56530682",
+    "mtime": 1785572479.1330361,
+    "ast_hash": "8b3db8ffa96d11d684181b97122afaeb",
     "semantic_hash": ""
   }
 }

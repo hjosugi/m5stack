@@ -18,9 +18,20 @@ microSDに保管:
 
 普段はBruceを自動起動し、別用途だけM5Launcherへ戻ってSD上のfirmwareへ入れ替えます。Cardputer-AdvのFlashは8 MBなので、この6種類をすべて同時常駐させる構成ではありません。M5LauncherはOSではなく、Flash上のapp・data partition、SD上のbinary、online catalogを管理するlauncherです。
 
-## 先に訂正する版番号
+## 実機へ反映した状態
 
-提示された比較ではM5Launcher 2.7.2を最新版としていましたが、2026-07-31 15:19 UTCに2.8.0が公開されています。日本時間では2026-08-01 00:19です。
+2026-08-01に接続対象をCardputer-Adv一台へ固定し、次を実機で確認しました。
+
+- M5Launcher 2.8.0の公式merged binaryを`0x0`へ書き、esptoolの書込み後hash検証に成功した。Flash全消去は行っていない。
+- 通常起動後のserial consoleから`Launcher 2.8.0`を確認した。
+- Launcher 2.8.0の公式serial転送方式でBruce配布物からapp領域4,088,224 bytesだけをinstallし、全chunkのACKと`OK flashed, rebooting`を確認した。
+- 再起動後にBruce CLIが`Bruce v1.16`、`Device: M5Stack Cardputer`を返すことを確認した。Wi-Fiは接続していない。
+
+従って、現在の本体はM5Launcher 2.8.0を起動基盤とし、Bruce 1.16をメインfirmwareとして動かしています。microSD用treeと全binaryは非公開のローカル領域でhash照合済みですが、PCにmicroSDが接続されていないため、実カードへのcopyだけは未実施です。
+
+## 確認した現行版
+
+M5Launcher 2.8.0は2026-07-31 15:19 UTCに公開されました。日本時間では2026-08-01 00:19です。
 
 | 項目 | 確認値 |
 | --- | --- |
@@ -33,7 +44,7 @@ microSDに保管:
 
 M5Launcher 2.8.0の配布assetを実際に取得し、GitHub Release APIのdigestと同じSHA-256になることを確認しました。CardputerとADVは同じassetを使い、起動時にTCA8418の有無を判定します。
 
-2.8.0ではkeyboard shortcut、fast boot、download済みfirmwareの更新確認、multi-part binary処理、data partition backup対応等が加わりました。2.7系で導入されたdynamic partition管理、複数firmware、暗号化Wi-Fi設定も引き継いでいます。
+2.8.0ではkeyboard shortcut、fast boot、download済みfirmwareの更新確認、multi-part binary処理、data partition backup対応等が加わりました。従来版のdynamic partition管理、複数firmware、暗号化Wi-Fi設定も引き継いでいます。
 
 ## 配布物と照合値
 
@@ -107,6 +118,8 @@ SDHC、最大32 GB、MBR、FAT32を使います。SDXCやGPTのカードは避�
 game ROMは権利を持つdumpだけを非圧縮で`roms/`へ置きます。本リポジトリやPagesではROM、firmware binary、Flash dumpを配布しません。
 
 ## Bruceをメインにする
+
+本実機ではM5Launcher 2.8.0付属のserial flasherを使ってBruce 1.16をinstall済みです。microSDを使う場合も、以後の標準手順は次の通りです。
 
 1. M5Launcher起動中に`SD`を開く。
 2. `firmware/Bruce-1.16.bin`を選び、`Install`を実行する。

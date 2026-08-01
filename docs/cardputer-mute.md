@@ -18,7 +18,7 @@ Bruce 1.16はこの操作で`soundEnabled`を反転し、設定fileへ保存し�
 
 M5Launcherは複数firmwareのinstall・起動・partition管理を行う基盤であり、起動したBruceのマスターミュートではありません。M5Launcherへ戻って`Q`を押すのではなく、Bruceを起動して上記の`Audio Config`を変更します。
 
-2026-08-01時点の現行M5Launcherは2.7.2ではなく[2.8.0](https://github.com/bmorcelli/Launcher/releases/tag/2.8.0)です。2.8.0のCardputer用sourceと設定項目には、起動先firmwareの音声を一括停止する設定はありません。
+2026-08-01時点の現行M5Launcherは[2.8.0](https://github.com/bmorcelli/Launcher/releases/tag/2.8.0)です。Cardputer用sourceと設定項目には、起動先firmwareの音声を一括停止する設定はありません。
 
 ## 公式UserDemoの場合
 

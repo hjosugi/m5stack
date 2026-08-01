@@ -74,7 +74,7 @@ BLEでは接続先のBluetooth設定から`CP-ADV Kbd XXXX`形式の名前を選
 4. M5Burnerで`Cardputer-Adv`用の工場ファームウェアと対象ポートを選ぶ。
 5. `Start`で書き込み、成功表示を確認する。
 
-初代Cardputer用とCardputer-Adv用を混同しません。Flash書込みは現在のファームウェアと設定を置換します。本リポジトリの調査・ビルドでは実機へ書き込んでいません。
+初代Cardputer用とCardputer-Adv用を混同しません。Flash書込みは現在のファームウェアと設定を置換します。通常の調査・ビルドtaskは書込みませんが、2026-08-01は対象を一台へ固定し、明示された構成どおりM5Launcher 2.8.0とBruce 1.16を導入しました。実測結果は[作業記録](work-log.md)にあります。
 
 ## 公式資料
 

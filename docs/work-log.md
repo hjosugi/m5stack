@@ -5,13 +5,16 @@
 - 接続中のCardputer-Advだけを、既知のStackChanとは異なるUSB個体として固定した。Boot ROMでESP32-S3 revision v0.2、8 MB Flash、Secure Boot無効、Flash Encryption無効を確認した。
 - 8 MB全Flash backupは64 KiB分割、4 KiB fallback、単一接続、115200／921600 baudで試したが、USB転送切断が再発して完成しなかった。不完全dumpは復旧用として扱わない。
 - 代替復旧経路として公式Factory UserDemo ADV-V0.3を取得し、2,690,480 bytes、SHA-256 `7bb1532427c875445b16186b6139afa371f67ddbdc83ae5bfe4a9089c7883b74`を確認した。
-- M5Launcher 2.8.0を`0x0`へ書き、esptoolの書込み後hash検証に成功した。USB経由ではDownload Modeを解除できなかったため、G0を押さない電源再投入後の通常起動確認を残している。
-- Bruce 1.16、Picoware v2.1.0、UserDemo ADV-V0.3、UIFlow2 v2.5.0、Game Station v1.2、Meshtastic v2.7.26.54e0d8dを取得し、全binaryのSHA-256を照合した。Picowareの`apps`と`scripts`を含むmicroSD用treeを非公開`.local/`へ準備したが、PCにmicroSDが未接続なのでカードへのcopyはまだ行っていない。
+- M5Launcher 2.8.0を`0x0`へ書き、esptoolの書込み後hash検証に成功した。Flash全消去は行っていない。watchdog reset後に通常の`SPI_FAST_FLASH_BOOT`へ入り、serial consoleの`Launcher 2.8.0`応答と、6720 KBの未割当領域を確認した。
+- Bruce 1.16、Picoware v2.1.0、UserDemo ADV-V0.3、UIFlow2 v2.5.0、Game Station v1.2、Meshtastic v2.7.26.54e0d8dを取得し、全binaryのSHA-256を照合した。
+- M5Launcher 2.8.0の公式serial flasherと同じapp抽出・ACK付き転送手順で、Bruce配布物のapp領域4,088,224 bytesを`Bruce-1.16`としてinstallした。全転送を完了し、Launcherの`OK flashed, rebooting`を確認した。
+- 再起動後のBruce CLIから`Bruce v1.16`、`Device: M5Stack Cardputer`、Wi-Fi未接続の応答を得た。これを現在のメインfirmwareとする。
+- Picowareの`apps`と`scripts`を含むmicroSD用treeを非公開`.local/`へ準備したが、PCにmicroSDが未接続なのでカードへのcopyはまだ行っていない。game ROMは同梱していない。
 
 ## 2026-08-01 Cardputer mute再調査
 
 - muteできない原因をfirmware差として再整理した。`Q`は公式UserDemo専用であり、Bruce 1.16では`Config` → `Audio Config` → `Sound: OFF`を使う。
-- M5Launcherは2.7.2ではなく2.8.0が現行であることをRelease API、tag source、配布assetで確認した。
+- M5Launcher 2.8.0が現行であることをRelease API、tag source、配布assetで確認した。
 - M5Launcher 2.8.0のCardputer assetを取得し、1,401,280 bytes、SHA-256 `308c11982fd7260f535c4fe1f999c3cd4e13b649cd27a29b0cbeb2064f35483e`を確認した。この時点では調査だけで、実機書込みは上の作業へ分離した。
 - Bruce、Picoware、UIFlow2、UserDemo、NEMO、Poseidon、MicroHydra、CircuitPython、Game Station、MeshCore、Meshtasticの版とADV対応根拠を再確認した。
 
