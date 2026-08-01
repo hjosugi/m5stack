@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 .PHONY: backup build build-stackchan check detect docs fetch-stackchan grant init install-community list matrix monitor restore select setup setup-stackchan upload
+||||||| 25f29cd
+.PHONY: backup build build-stackchan check detect fetch-stackchan grant init list matrix monitor restore select setup setup-stackchan upload
+=======
+.PHONY: backup build build-cardputer-screen-link build-stackchan build-stackchan-screen-link check detect fetch-stackchan grant init list matrix monitor restore select setup setup-stackchan upload
+>>>>>>> agent/pc-screen-link
 
 detect:
 	./scripts/detect-device.sh
@@ -24,6 +30,12 @@ setup-stackchan:
 
 build-stackchan:
 	./scripts/build-stackchan-factory.sh
+
+build-cardputer-screen-link:
+	./cardputer/screen-link/build.sh
+
+build-stackchan-screen-link:
+	./stackchan/screen-link/build.sh
 
 build:
 	./scripts/build.sh

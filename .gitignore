@@ -1,8 +1,13 @@
 .direnv/
+.venv/
+__pycache__/
+*.py[cod]
 .env
 .env.*
 !.env.example
 .local/
+graphify-out/cache/
+graphify-out/20??-??-??/
 result
 result-*
 

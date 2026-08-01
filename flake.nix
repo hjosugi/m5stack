@@ -22,6 +22,7 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               acl
+              actionlint
               arduino-cli.pureGoPkg
               bison
               ccache
@@ -48,7 +49,12 @@
               shellcheck
               shfmt
               usbutils
+<<<<<<< HEAD
               unzip
+||||||| 25f29cd
+=======
+              uv
+>>>>>>> agent/pc-screen-link
             ];
 
             shellHook = ''

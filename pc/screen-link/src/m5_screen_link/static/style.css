@@ -1,0 +1,50 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #11131a;
+  color: #f5f7ff;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  width: min(42rem, calc(100% - 2rem));
+  margin: 2rem auto;
+}
+
+label,
+fieldset,
+.settings,
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+
+fieldset,
+label {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+input[type='password'] {
+  flex: 1;
+  min-width: 12rem;
+}
+
+input,
+button {
+  font: inherit;
+  padding: 0.55rem 0.7rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+video,
+canvas {
+  display: none;
+}
