@@ -26,16 +26,68 @@ jobs:
       - name: Check
         run: nix develop --command ./scripts/check.sh
 
-  arduino:
-    name: Arduino build matrix
+  arduino-setup:
+    name: Arduino dependencies
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install Nix
         uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31.11.0
+      - name: Restore pinned Arduino environment
+        id: arduino-cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .local/arduino
+          key: arduino-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', 'versions.env', 'config/upstream.lock', 'scripts/setup.sh') }}
       - name: Install pinned Arduino dependencies
+        if: steps.arduino-cache.outputs.cache-hit != 'true'
         run: nix develop --command ./scripts/setup.sh
-      - name: Build representative boards
-        run: nix develop --command ./scripts/build-matrix.sh
+
+  arduino:
+    name: Arduino / ${{ matrix.name }}
+    needs: arduino-setup
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: AtomS3
+            target: m5stack:esp32:m5stack_atoms3
+          - name: CoreS3
+            target: m5stack:esp32:m5stack_cores3
+          - name: Cardputer
+            target: m5stack:esp32:m5stack_cardputer
+          - name: NanoC6
+            target: m5stack:esp32:m5stack_nano_c6
+          - name: Tab5
+            target: m5stack:esp32:m5stack_tab5
+          - name: Cardputer Screen Link
+            target: cardputer-screen-link
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Nix
+        uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31.11.0
+      - name: Restore pinned Arduino environment
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .local/arduino
+          key: arduino-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', 'versions.env', 'config/upstream.lock', 'scripts/setup.sh') }}
+          fail-on-cache-miss: true
+      - name: Build ${{ matrix.name }}
+        run: nix develop --command ./scripts/build-ci-target.sh '${{ matrix.target }}'
+
+  arduino-result:
+    name: Arduino build matrix
+    if: always()
+    needs: arduino
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Confirm every target succeeded
+        env:
+          MATRIX_RESULT: ${{ needs.arduino.result }}
+        run: test "$MATRIX_RESULT" = success

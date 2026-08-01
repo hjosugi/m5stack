@@ -24,7 +24,9 @@ let stream
 let socket
 let running = false
 let sentFrames = 0
+let droppedFrames = 0
 let startedAt = 0
+const maxBufferedBytes = 512 * 1024
 
 function setStatus(message) {
   elements.status.textContent = message
@@ -52,16 +54,15 @@ function jpegBlob(canvas, quality) {
   })
 }
 
-async function sendTarget(name, quality) {
-  if (!elements[name].checked || socket.readyState !== WebSocket.OPEN) return
+async function encodeTarget(name, quality) {
   const canvas = elements.canvases[name]
   drawContained(elements.source, canvas)
-  const jpeg = new Uint8Array(await (await jpegBlob(canvas, quality)).arrayBuffer())
+  const blob = await jpegBlob(canvas, quality)
+  const jpeg = new Uint8Array(await blob.arrayBuffer())
   const packet = new Uint8Array(jpeg.byteLength + 1)
   packet[0] = targetIds[name]
   packet.set(jpeg, 1)
-  socket.send(packet)
-  sentFrames += 1
+  return packet
 }
 
 async function frameLoop() {
@@ -69,16 +70,25 @@ async function frameLoop() {
     const frameStarted = performance.now()
     const fps = clamp(Number(elements.fps.value) || 8, 1, 15)
     const quality = clamp(Number(elements.quality.value) || 60, 30, 90) / 100
+    const targets = Object.keys(targetIds).filter((name) => elements[name].checked)
     try {
-      await sendTarget('cardputer', quality)
-      await sendTarget('stackchan', quality)
+      if (socket?.readyState !== WebSocket.OPEN) throw new Error('WebSocket接続が切れました')
+      if (socket.bufferedAmount > maxBufferedBytes) {
+        droppedFrames += targets.length
+      } else {
+        const packets = await Promise.all(targets.map((name) => encodeTarget(name, quality)))
+        if (!running || socket?.readyState !== WebSocket.OPEN) return
+        for (const packet of packets) socket.send(packet)
+        sentFrames += packets.length
+      }
     } catch (error) {
       setStatus(`送信エラー: ${error.message}`)
       stop()
       return
     }
     const elapsedSeconds = Math.max(0.001, (performance.now() - startedAt) / 1000)
-    setStatus(`送信中: ${(sentFrames / elapsedSeconds).toFixed(1)} frames/s（2画面合計）`)
+    const dropped = droppedFrames ? `、破棄 ${droppedFrames}` : ''
+    setStatus(`送信中: ${(sentFrames / elapsedSeconds).toFixed(1)} frames/s（${targets.length}画面合計${dropped}）`)
     const remaining = Math.max(0, 1000 / fps - (performance.now() - frameStarted))
     await new Promise((resolve) => setTimeout(resolve, remaining))
   }
@@ -137,6 +147,7 @@ async function start() {
 
     running = true
     sentFrames = 0
+    droppedFrames = 0
     startedAt = performance.now()
     elements.start.disabled = true
     elements.stop.disabled = false
