@@ -3,10 +3,60 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+
+
+REQUIRED_DESIGN_TOKENS = {
+    "color-background",
+    "color-surface",
+    "color-text",
+    "color-text-muted",
+    "color-border",
+    "color-accent",
+    "font-family-sans",
+    "font-family-mono",
+    "font-size-xs",
+    "font-size-sm",
+    "font-size-md",
+    "font-size-lg",
+    "font-size-xl",
+    "font-size-2xl",
+    "font-size-3xl",
+    "font-size-4xl",
+    "line-height-tight",
+    "line-height-code",
+    "line-height-body",
+    "font-weight-bold",
+    "font-weight-extra-bold",
+    "space-1",
+    "space-2",
+    "space-3",
+    "space-4",
+    "space-5",
+    "space-6",
+    "space-7",
+    "space-8",
+    "space-9",
+    "space-10",
+    "space-11",
+    "radius-xs",
+    "radius-sm",
+    "radius-md",
+    "radius-lg",
+    "radius-pill",
+    "radius-circle",
+}
+TYPOGRAPHY_PROPERTIES = (
+    "font-family",
+    "font-size",
+    "font-weight",
+    "line-height",
+    "letter-spacing",
+)
 
 
 class PageParser(HTMLParser):
@@ -110,6 +160,51 @@ def validate_links(site_root: Path, pages: dict[Path, PageParser]) -> list[str]:
     return errors
 
 
+def validate_styles(site_root: Path) -> list[str]:
+    css_path = site_root / "assets" / "site.css"
+    if not css_path.is_file():
+        return [f"{css_path}: 共通CSSがありません"]
+
+    css = css_path.read_text(encoding="utf-8")
+    errors: list[str] = []
+    defined_tokens = set(re.findall(r"--([a-z0-9-]+)\s*:", css))
+    referenced_tokens = set(re.findall(r"var\(--([a-z0-9-]+)", css))
+
+    for token in sorted(REQUIRED_DESIGN_TOKENS - defined_tokens):
+        errors.append(f"{css_path}: 必須design token --{token} がありません")
+    for token in sorted(referenced_tokens - defined_tokens):
+        errors.append(f"{css_path}: 未定義のdesign token --{token} を参照しています")
+
+    root_rule = re.search(r":root\s*\{.*?\n\}", css, flags=re.DOTALL)
+    if root_rule is None:
+        errors.append(f"{css_path}: :root のdesign token定義がありません")
+    else:
+        outside_root = css[: root_rule.start()] + css[root_rule.end() :]
+        raw_color = re.search(r"#[0-9a-fA-F]{3,8}\b|(?:rgb|hsl)a?\(", outside_root)
+        if raw_color:
+            line = outside_root.count("\n", 0, raw_color.start()) + 1
+            errors.append(f"{css_path}:{line}: 色は--color-* token経由で指定してください")
+
+    for property_name in TYPOGRAPHY_PROPERTIES:
+        declaration = re.compile(
+            rf"^\s*{re.escape(property_name)}\s*:\s*([^;]+);", flags=re.MULTILINE
+        )
+        for match in declaration.finditer(css):
+            value = match.group(1).strip()
+            if "var(" in value or value == "inherit":
+                continue
+            line = css.count("\n", 0, match.start()) + 1
+            errors.append(
+                f"{css_path}:{line}: {property_name}はtypography token経由で指定してください"
+            )
+
+    shorthand = re.search(r"^\s*font\s*:", css, flags=re.MULTILINE)
+    if shorthand:
+        line = css.count("\n", 0, shorthand.start()) + 1
+        errors.append(f"{css_path}:{line}: font shorthandは使わずtokenを個別指定してください")
+    return errors
+
+
 def main() -> int:
     site_root = Path(sys.argv[1] if len(sys.argv) > 1 else "site")
     if not site_root.is_dir():
@@ -117,12 +212,15 @@ def main() -> int:
         return 1
     pages, errors = parse_pages(site_root)
     errors.extend(validate_links(site_root, pages))
+    errors.extend(validate_styles(site_root))
     if not pages:
         errors.append(f"{site_root}: HTMLがありません")
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
-    print(f"GitHub Pages: {len(pages)}ページのmetadataと内部リンクを確認しました。")
+    print(
+        f"GitHub Pages: {len(pages)}ページのmetadata、内部リンク、design tokenを確認しました。"
+    )
     return 0
 
 
