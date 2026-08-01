@@ -43,6 +43,21 @@ load_local_env
 [[ $M5_USB_SERIAL == test-serial ]]
 [[ $(stat -c %a "$M5_ENV_FILE") == 600 ]]
 
+redacted_output=$(printf '%s\n' \
+  'Chip type: ESP32-S3' \
+  'Serial port /dev/serial/by-id/usb-device-private-id-if00:' \
+  'Connected to ESP32-S3 on /dev/serial/by-id/usb-device-private-id-if00:' \
+  'MAC: 00:11:22:33:44:55' \
+  'Base MAC: 00:11:22:33:44:55' \
+  'SerialNumber: private-device-id' \
+  'Detected flash size: 16MB' |
+  redact_device_identity)
+[[ $redacted_output == *'Chip type: ESP32-S3'* ]]
+[[ $redacted_output == *'Detected flash size: 16MB'* ]]
+[[ $redacted_output != *'00:11:22:33:44:55'* ]]
+[[ $redacted_output != *'private-device-id'* ]]
+[[ $redacted_output == *'/dev/serial/by-id/[redacted]'* ]]
+
 printf 'UNSUPPORTED=value\n' >> "$M5_ENV_FILE"
 if (load_local_env) > /dev/null 2>&1; then
   printf '未対応の.envキーを拒否できませんでした。\n' >&2

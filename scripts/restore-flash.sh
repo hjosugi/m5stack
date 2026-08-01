@@ -28,6 +28,7 @@ warn "$M5_MODEL のFlash全体を検証済みバックアップで上書きし�
 if [[ $BOARD_KEY == stackchan ]]; then
   warn "再起動後のサーボ動作に備えて周囲を空けてください。"
 fi
-esptool --chip "$BOARD_CHIP" --port "$resolved_port" --baud 460800 \
-  --before default-reset --after hard-reset write-flash 0 "$backup_file"
+esptool --chip "$BOARD_CHIP" --port "$resolved_port" --baud "$M5_ESPTOOL_BAUD" \
+  --before default-reset --after hard-reset write-flash 0 "$backup_file" 2>&1 |
+  redact_device_identity
 log "全Flashの復旧が完了しました。"

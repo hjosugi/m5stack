@@ -14,11 +14,11 @@ StackChanは起動するファームウェアによってサーボへ給電し�
 
 ```bash
 direnv allow
-make setup
-make detect
-make init
-./scripts/select-board.sh stackchan
-make build
+task arduino:setup
+task device:detect
+task device:init
+task device:select MODEL=stackchan
+task arduino:build
 ```
 
 `detect`はsysfsだけを読み、シリアルポートを開きません。`init`は検出した生USBシリアルを`.env`へ権限`0600`で保存します。`select-board`により製品名、FQBN、SoC、Flash容量が一組で固定されます。
@@ -54,6 +54,8 @@ make build
 
 バックアップは`.local/backups/`に保存されます。NVSにはWi-Fi認証情報やアプリ設定が含まれ得るため、Git、クラウド共有、チャットへ添付しないでください。
 
+USB転送エラー等で16 MB全体を検証できない場合、不完全な読出しは削除され、markerも作られません。その状態で工場版を置換するなら、先に公式M5Burnerと製品文書を入手し、別の復旧経路を用意します。
+
 ## 4. シリアル監視
 
 シリアルポートを開くだけでもDTR/RTSによってESP32がリセットする場合があります。
@@ -72,6 +74,18 @@ StackChanでは、検証済みの全Flashバックアップと二つの明示許
 
 この操作は工場ファームウェア、OTAスロット、アプリ、設定を置換し得ます。通常の環境構築やビルド検証には不要です。書込み後は、起動時の不意な動きに備えて手を離して観察します。
 
-## 6. 公式ファームウェア
+## 6. Stack-chanコミュニティ版
+
+K151専用の安定版を入れる場合は[コミュニティ版の導入・使い方](community-firmware.md)に従います。全Flashバックアップがあれば次を使用できます。
+
+```bash
+./scripts/install-community-stackchan.sh \
+  --allow-flash \
+  --replace-factory-firmware
+```
+
+バックアップがなく、公式M5Burnerによる復旧を準備済みの場合だけ`--official-recovery-ready`を追加できます。スクリプトは対象一台、固定SHA-256、イメージ種別、セキュリティ状態、K151用の三つの書込みアドレスを検証します。
+
+## 7. 公式ファームウェア
 
 公式ソースはビルドできますが、自動Flash用ターゲットは用意していません。公開ソースが実機の配布版より遅れる可能性があるためです。[StackChan公式ファームウェアの再現ビルド](stackchan-factory.md)と[復旧手順](recovery.md)を参照してください。

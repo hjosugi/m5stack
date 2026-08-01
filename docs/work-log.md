@@ -1,12 +1,56 @@
 # 作業記録
 
+## 2026-08-01
+
+### CardputerミュートとMarkdownサイト
+
+- 公式Cardputer UserDemoの固定コミットを確認し、画面上の音量・ミュート設定がないことを記録した。
+- スピーカー消音、マイク停止、Cardputer AdvのAUX切替を別の機能として整理した。
+- `docs/`の全Markdownを自動掲載し、日本語本文を検索できる最小構成のMkDocsサイトを追加した。
+- Pagesではアプリやファームウェアを配布せず、調査文書の一覧、閲覧、検索だけを提供する方針にした。
+
+### 対象USBの訂正と固定
+
+- 外付けHubと別のESP32-S3をStackChan内部構成と関連付けた前日の判断を、公式回路図と物理的な抜き差しで訂正した。
+- K151を単独接続し、最終対象を一台のCoreS3 native USBへ固定した。
+- ESP32-S3 revision v0.2、16 MB Quad Flash、Secure Boot無効、Flash Encryption無効を確認した。
+- 生USBシリアルは`.env`だけへ保存し、公開記録では短縮SHA-256のみを使用した。
+
+### バックアップと復旧経路
+
+- 16 MB全読出しを複数baudと1 MiB、64 KiB、4 KiBの分割で再試行した。
+- USB転送停止が特定offset付近で再発し、完全な全Flashイメージは作成できなかった。
+- スクリプトを、64 KiB読出し、4 KiB fallback、3回retry、不完全データ削除、marker非生成へ変更した。
+- M5Stack公式文書からM5Burnerを取得し、配布ZIPとアプリ起動を確認して工場版復旧経路を確保した。
+
+### OSSカスタムファームウェア調査
+
+- GitHub上のK151/CoreS3候補についてREADME、Release、ライセンス、更新状況、書込み方法を比較した。
+- K151標準構成、Apache-2.0、安定版Release、Web Installer、配布SHA-256、実機release gateが揃う`stack-chan/stack-chan` v1.0.0を選定した。
+- AI会話、Home Assistant、ペット/API、PlatformIO系の候補は用途別の代替として記録した。
+
+### v1.0.0書込みと起動確認
+
+- GitHub Release ZIPのSHA-256を配布値と照合した。
+- K151用bootloader/applicationがESP32-S3、16 MB、DIO、80 MHzで、イメージ内hashが有効であることを確認した。
+- 配布元manifestどおり`0x0`、`0x8000`、`0x10000`へ書き込み、三領域すべての書込み後hash検証に成功した。
+- 再起動後に同じ実機が再列挙され、起動ログでK151専用driver、PY32、サーボ電源、頭部touch、Stack-chan Voiceの初期化を確認した。
+- Wi-Fi未設定を示すログは正常であり、認証情報を受け取らずBLE設定ページを開いた。
+
+### 公開実装
+
+- コミュニティ版v1.0.0のURLとSHA-256を固定した。
+- 対象一台、復旧条件、security、image種別、offset、書込みhashを検証する明示許可付きinstallerを追加した。
+- esptool出力からMAC、SerialNumber、`/dev/serial/by-id/`の実名を除去するtestを追加した。
+- 詳細な導入、初回設定、MOD、工場版復旧、実機確認手順を追加した。
+
 ## 2026-07-31
 
 ### 対象確定
 
 - ユーザー指定の公式`m5stack/StackChan`を主対象とした。
 - 公式仕様でCoreS3、ESP32-S3、16 MB Flash、8 MB PSRAM、ロボット本体USB-Cのデータ接続を確認した。
-- sysfsでUSB 2.0 Hub `214b:7250`配下のEspressif native USB `303a:1001`と`cdc_acm`を確認した。
+- sysfsで外付けUSB Hub配下のEspressif native USBと`cdc_acm`を予備観測した。この関連付けは翌日の対象分離で訂正した。
 - USB ID単独では型番を確定できないため、製品情報と実測の二つを分けて記録した。
 - 生USBシリアル、購入情報、氏名、住所等はリポジトリへ記録していない。
 
@@ -49,4 +93,4 @@
 - 公開対象に`.env`、`.local/`、生USBシリアル、Flashイメージ、認証情報を含めていない。
 - 公開先は`https://github.com/hjosugi/m5stack`とし、PR・commit・CI結果はGitHubの履歴を正本とする。
 
-検証中もポートACLの付与、シリアルopen、DTR/RTS、実機リセット、Flash読出し・書込みは行っていない。
+2026-07-31の検証中は、ポートACLの付与、シリアルopen、DTR/RTS、実機リセット、Flash読出し・書込みを行っていない。翌日の実機操作は上の2026-08-01記録へ分離した。

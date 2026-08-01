@@ -1,6 +1,6 @@
 # 詳しい使い方
 
-このページは、初回導入から日常のビルド、実機バックアップ、書込み、復旧までを順番に説明します。StackChanでは、環境構築とビルドだけなら本体をリセットする必要はありません。
+このページは、初回導入から日常のビルド、実機バックアップ、書込み、復旧までを順番に説明します。StackChanでは、環境構築とビルドだけなら本体をリセットする必要はありません。K151向け安定版を使う場合は、あわせて[コミュニティ版の導入・使い方](community-firmware.md)を参照してください。
 
 ## 1. リポジトリを準備する
 
@@ -15,7 +15,7 @@ direnv allow
 shellへ入ると次の案内が表示されます。
 
 ```text
-M5Stack開発環境: make detect / make setup / make build
+M5Stack開発環境: task device:detect / task arduino:setup / task arduino:build
 ```
 
 direnvを使わない場合は、shellを明示的に開きます。
@@ -27,7 +27,7 @@ nix develop
 一つのコマンドだけ実行することもできます。
 
 ```bash
-nix develop --command make check
+nix develop --command task check
 ```
 
 `flake.lock`によりArduino CLI、esptool、CMake、ShellCheck等のホストツールが固定されます。Arduino Core、ライブラリ、ESP-IDFはリポジトリ内の`.local/`へ導入され、ホストのグローバル環境を変更しません。
@@ -37,7 +37,7 @@ nix develop --command make check
 StackChanをUSB-CデータケーブルでPCへ接続し、まだシリアルポートは開かずに確認します。
 
 ```bash
-make detect
+task device:detect
 ```
 
 正常時は、概ね次の情報が表示されます。
@@ -58,11 +58,11 @@ M5/ESP32 USBデバイスを1台検出しました。
 ## 3. 実機をローカル設定へ固定する
 
 ```bash
-make init
-./scripts/select-board.sh stackchan
+task device:init
+task device:select MODEL=stackchan
 ```
 
-`make init`は次の値を`.env`へ保存します。
+`task device:init`は次の値を`.env`へ保存します。
 
 - 安定したシリアルポート名
 - 生USBシリアル（対象取り違え防止用）
@@ -81,14 +81,14 @@ git check-ignore -v .env
 製品一覧を確認するには次を使います。
 
 ```bash
-make list
+task device:list
 ```
 
 別の実機へ接続し直す場合は、対象一台だけを接続してローカル設定を明示更新します。
 
 ```bash
 ./scripts/init-env.sh --force
-./scripts/select-board.sh cardputer-adv
+task device:select MODEL=cardputer-adv
 ```
 
 `--force`は`.env`だけを置換します。Flashは操作しません。
@@ -96,7 +96,7 @@ make list
 ## 4. Arduino環境を導入する
 
 ```bash
-make setup
+task arduino:setup
 ```
 
 このコマンドは次を`.local/arduino/`へ固定版で導入します。
@@ -114,7 +114,7 @@ make setup
 選択した製品向けの最小確認スケッチをコンパイルします。
 
 ```bash
-make build
+task arduino:build
 ```
 
 StackChanの場合はCoreS3用FQBNを使用します。生成物は次に置かれます。
@@ -128,7 +128,7 @@ StackChanの場合はCoreS3用FQBNを使用します。生成物は次に置か�
 代表的なM5Stack製品すべてでコンパイル互換性を確認する場合は次を実行します。
 
 ```bash
-make matrix
+task arduino:matrix
 ```
 
 ## 6. StackChan公式ファームウェアをビルドする
@@ -136,8 +136,8 @@ make matrix
 Arduinoスケッチとは別に、公式量産系ソースを再現ビルドできます。
 
 ```bash
-make setup-stackchan
-make build-stackchan
+task stackchan:factory:setup
+task stackchan:factory:build
 ```
 
 初回セットアップはStackChan、StackChan-BSP、ESP-IDF、submodule、ESP32-S3 toolchainを`.local/`へ取得します。ビルド時には上流依存のcommit、公式パッチ、host tests、日本語設定を検証します。
@@ -151,7 +151,13 @@ make build-stackchan
 
 これらのコマンドも実機へ書き込みません。公開ソースは接続実機の工場配布版より遅い場合があるため、生成したbinを自動適用しません。
 
-## 7. 実機ポートへ一時的にアクセスする
+## 7. Stack-chanコミュニティ版を使う
+
+K151を標準ターゲットとして実機検証された`stack-chan/stack-chan` v1.0.0を、Web Installerまたは固定版CLIで導入できます。工場版とは別実装であり、書込み前に全Flashバックアップまたは公式M5Burnerの復旧経路を用意します。
+
+導入、初回BLE/Wi-Fi設定、MOD Gallery、Blockly、Face Editor、Simulator、工場版への戻し方は[専用手順](community-firmware.md)にまとめています。
+
+## 8. 実機ポートへ一時的にアクセスする
 
 ここから先は実機へ影響し得ます。StackChanを平らな場所へ置き、頭部、台座、USBケーブルの可動余裕を確認してください。
 
@@ -161,7 +167,7 @@ make build-stackchan
 
 現在のデバイスノードだけへユーザーACLを追加します。管理者認証画面が出る場合があります。恒久的なグループ変更や`udev`ルール追加は行わず、USBを抜くとACLは失われます。
 
-## 8. 工場出荷Flashをバックアップする
+## 9. 工場出荷Flashをバックアップする
 
 この操作はESP32-S3をリセットします。サーボが動く可能性に備え、手を離してから実行します。
 
@@ -172,7 +178,8 @@ make build-stackchan
 実行中は次の二段階があります。
 
 1. セキュリティ情報を読み、Secure BootまたはFlash Encryptionが有効なら中止する。
-2. StackChanの16 MB全体を読み、サイズとSHA-256を検証する。
+2. StackChanの16 MB全体を64 KiB単位で読み、失敗箇所は4 KiBへ分割して再試行する。
+3. 全体のサイズとSHA-256を検証する。途中失敗時は不完全なデータを削除し、markerを作らない。
 
 成功時は次の構成で保存されます。
 
@@ -186,7 +193,7 @@ make build-stackchan
 
 さらに`.local/backups/verified/`へ、書込みゲート用markerが作られます。FlashにはWi-Fi情報、アプリ設定、認証情報等が含まれ得ます。`.local/`の外へコピーしたりGitHubへ公開したりしないでください。
 
-## 9. シリアルログを見る
+## 10. シリアルログを見る
 
 シリアルポートを開くとDTR/RTSによって本体がリセットする可能性があります。物理安全を確認し、許可を明示します。
 
@@ -194,9 +201,9 @@ make build-stackchan
 ./scripts/monitor.sh --allow-reset
 ```
 
-終了は`Ctrl-C`です。ポートが見つからない場合は、USBを差し直して`make detect`を先に実行します。
+終了は`Ctrl-C`です。ポートが見つからない場合は、USBを差し直して`task device:detect`を先に実行します。
 
-## 10. Arduino確認スケッチを書き込む
+## 11. Arduino確認スケッチを書き込む
 
 通常のセットアップには不要です。工場ファームウェアを置換する意図があり、復旧用バックアップを検証済みの場合だけ実行します。
 
@@ -216,7 +223,7 @@ Cardputer Adv等、工場版置換の追加確認を課していない製品で�
 
 StackChanへの書込み後は工場版のAI Agent、アプリ、OTA等が使えなくなる可能性があります。起動直後は手を離し、不意な動作がないか確認してください。
 
-## 11. 全Flashを復旧する
+## 12. 全Flashを復旧する
 
 書込み前に保存した同じ実機のバックアップを指定します。
 
@@ -228,20 +235,20 @@ StackChanへの書込み後は工場版のAI Agent、アプリ、OTA等が使え
 
 スクリプトは保存場所、SHA-256、容量、現在の接続実機を検証してから、Flash全体を書き戻します。途中でUSBや電源を抜かないでください。再起動時のサーボ動作に備え、手を離して待ちます。
 
-## 12. 日常の開発サイクル
+## 13. 日常の開発サイクル
 
 工場ファームを維持している間の日常作業は、基本的に次だけです。
 
 ```bash
-make detect
-make build
-make check
+task device:detect
+task arduino:build
+task check
 ```
 
 Arduinoスケッチを実機テストする段階になったら、毎回次を確認します。
 
 1. `.env`の選択製品と、机上の実機が一致している。
-2. `make detect`が一台だけを検出する。
+2. `task device:detect`が一台だけを検出する。
 3. 検証済みバックアップがある。
 4. StackChanの可動範囲が空いている。
 5. 実行するスケッチがサーボへ何を指示するか理解している。
@@ -280,6 +287,6 @@ Download Mode、USB不調、全Flash復旧の詳細は[復旧とUSBトラブル�
 公開前は必ず次を実行します。
 
 ```bash
-make check
+task check
 git status --short
 ```

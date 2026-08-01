@@ -1,6 +1,20 @@
 # OSSとバージョンの選定
 
-調査日は2026-07-31です。バージョン番号だけでなく、ビルドに使うGitコミットも[`config/upstream.lock`](../config/upstream.lock)に固定しています。
+調査日は2026-08-01です。バージョン番号だけでなく、ビルドに使うGitコミットや配布物のSHA-256も固定しています。
+
+## K151向けカスタムファームウェア
+
+GitHub上のREADME、Release資産、ライセンス、更新状況、書込み方法を比較しました。
+
+| 候補 | 用途 | ライセンス | 配布形態 | 判断 |
+| --- | --- | --- | --- | --- |
+| [`stack-chan/stack-chan`](https://github.com/stack-chan/stack-chan) v1.0.0 | MOD、顔、動作、ブラウザー開発 | Apache-2.0 | K151用Web Installer、固定ZIP | 採用 |
+| [`ciniml/stackchan-idf`](https://github.com/ciniml/stackchan-idf) | OpenAI/Gemini/XiaoZhi音声会話 | BSL-1.0 | CoreS3用Release/Web Flasher | source-available上の条件を要確認 |
+| [`m5stack/esphome-yaml`](https://github.com/m5stack/esphome-yaml) | Home Assistant/Voice Assistant | MIT | 公式オンライン書込み、factory bin | HA用途の選択肢 |
+| [`Corvelis/stackchan-pet-fw`](https://github.com/Corvelis/stackchan-pet-fw) | ペット反応、HTTP/WebSocket/USB | MIT | CoreS3 factory binとSHA256 | 会話クライアントは別途必要 |
+| [`ronron-gh/AI_StackChan_Ex`](https://github.com/ronron-gh/AI_StackChan_Ex) | Arduino系AI会話 | MIT | PlatformIOソース | Releaseバイナリなし |
+
+`stack-chan/stack-chan`はK151を標準構成と明記し、`M5StackChan CoreS3`を実機release gateにしています。初の安定版v1.0.0、配布ZIPとSHA-256、ブラウザー書込み、工場版への公式復旧手順が揃うため、最初のカスタムファームウェアに選びました。固定値は[`versions.env`](../versions.env)、実機手順は[コミュニティ版の導入・使い方](community-firmware.md)にあります。
 
 ## Arduino経路
 

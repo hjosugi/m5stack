@@ -7,6 +7,7 @@ M5_ENV_FILE=${M5_ENV_FILE:-"$M5_REPO_ROOT/.env"}
 M5_SYSFS_ROOT=${M5_SYSFS_ROOT:-/sys/bus/usb/devices}
 M5_DEV_ROOT=${M5_DEV_ROOT:-/dev}
 M5_BY_ID_ROOT=${M5_BY_ID_ROOT:-/dev/serial/by-id}
+M5_ESPTOOL_BAUD=${M5_ESPTOOL_BAUD:-115200}
 
 # versions.envはGit管理された固定値だけを含む。
 # shellcheck source=../../versions.env
@@ -53,6 +54,13 @@ usb_id_is_supported() {
 hash_identifier() {
   require_command sha256sum
   printf '%s' "$1" | sha256sum | cut -c 1-12
+}
+
+redact_device_identity() {
+  sed -E \
+    -e 's#/dev/serial/by-id/[^[:space:]]+#/dev/serial/by-id/[redacted]#g' \
+    -e '/(^|[[:space:]])((Base|BASE|Device)[[:space:]]+)?MAC([[:space:]]|:)/Id' \
+    -e '/Serial(Number| number)[[:space:]]*:/Id'
 }
 
 load_local_env() {

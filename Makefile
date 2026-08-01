@@ -1,4 +1,10 @@
+<<<<<<< HEAD
+.PHONY: backup build build-stackchan check detect docs fetch-stackchan grant init install-community list matrix monitor restore select setup setup-stackchan upload
+||||||| 25f29cd
+.PHONY: backup build build-stackchan check detect fetch-stackchan grant init list matrix monitor restore select setup setup-stackchan upload
+=======
 .PHONY: backup build build-cardputer-screen-link build-stackchan build-stackchan-screen-link check detect fetch-stackchan grant init list matrix monitor restore select setup setup-stackchan upload
+>>>>>>> agent/pc-screen-link
 
 detect:
 	./scripts/detect-device.sh
@@ -48,6 +54,10 @@ upload:
 	@echo "Flash許可を明示するため、./scripts/upload.sh --allow-flash を直接実行してください。" >&2
 	@exit 2
 
+install-community:
+	@echo "工場版置換の許可を明示するため、./scripts/install-community-stackchan.sh --allow-flash --replace-factory-firmware を直接実行してください。" >&2
+	@exit 2
+
 monitor:
 	@echo "リセットの可能性を許可するため、./scripts/monitor.sh --allow-reset を直接実行してください。" >&2
 	@exit 2
@@ -58,3 +68,6 @@ restore:
 
 check:
 	./scripts/check.sh
+
+docs:
+	mkdocs build --strict
