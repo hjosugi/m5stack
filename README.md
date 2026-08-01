@@ -2,14 +2,14 @@
 
 M5Stack StackChan（SKU K151）を主対象に、再現可能な開発環境と安全ゲート付きの実機手順をまとめた公開リポジトリです。Cardputer Advも同じローカル環境でビルド対象にできます。
 
-> **最初に見る:** [図入りの短い手順（GitHub Pages）](https://hjosugi.github.io/m5stack/)
+> **最初に見る:** [my-m5docs（Markdown一覧・全文検索）](https://hjosugi.github.io/m5stack/)
 
 | やりたいこと | 読む場所 |
 | --- | --- |
-| PC画面をCardputer／StackChanへ送る | [PC画面リンク](https://hjosugi.github.io/m5stack/screen-link.html) |
-| Cardputerを完全muteする | [Cardputer mute](https://hjosugi.github.io/m5stack/cardputer-mute.html) |
-| セットアップ、バックアップ、書込み、復旧 | [安全な実機操作](https://hjosugi.github.io/m5stack/safe-development.html) |
-| エラーから調べる | [困ったとき](https://hjosugi.github.io/m5stack/troubleshooting.html) |
+| PC画面をCardputer／StackChanへ送る | [PC画面リンク](https://hjosugi.github.io/m5stack/screen-link/) |
+| Cardputerをミュートする | [Cardputer mute](https://hjosugi.github.io/m5stack/cardputer-mute/) |
+| セットアップ、バックアップ、書込み | [安全な実機操作](https://hjosugi.github.io/m5stack/safe-workflow/) |
+| USB不調や復旧を調べる | [復旧とUSBトラブル対応](https://hjosugi.github.io/m5stack/recovery/) |
 
 このリポジトリは次の事故を防ぐことを優先します。
 
@@ -57,9 +57,6 @@ Boot ROMからESP32-S3 revision v0.2、16 MB Flash、Secure Boot無効、Flash E
 
 StackChanのコミュニティ版v1.0.0には、このPC画面受信経路はありません。画面リンク版のビルドはできますが、ファームウェアを自動で置換しません。
 
-<<<<<<< HEAD
-||||||| 25f29cd
-=======
 ### host PCから画面リンクを操作する
 
 `Taskfile.yml`の`host:*` taskで、PC relayの準備、起動、接続確認をまとめて実行できます。
@@ -78,8 +75,6 @@ task host:stackchan:status
 ```
 
 別hostのrelayを確認する場合は、信頼できるLAN内で`URL=http://host:port`を指定します。これらのtaskは画面中継と接続確認だけを行い、サーボ制御、リセット、Flash書込みは行いません。
-
->>>>>>> agent/go-task-migration
 ## 最短の安全な手順
 
 ```bash
@@ -122,31 +117,6 @@ K151向けコミュニティ安定版を導入する場合は、[コミュニテ
 ## コマンド
 
 ```text
-<<<<<<< HEAD
-make detect            USB属性だけを読む
-make init              実機固有値を非公開.envへ保存する
-make list              対応製品を一覧表示する
-make select MODEL=...  本体型番を選択する
-make setup             Arduinoの固定版をローカル導入する
-make build             選択製品向けに確認スケッチをビルドする
-make matrix            代表製品向けにビルドする
-make setup-stackchan   固定版ESP-IDFと上流ソースを導入する
-make build-stackchan   公式ファームを日本語設定でビルドする
-make build-cardputer-screen-link  Cardputer画面リンクclientをビルドする
-make build-stackchan-screen-link  StackChan画面リンク版をビルドする
-make check             静的検査、秘密情報監査、単体テストを行う
-||||||| 25f29cd
-make detect            USB属性だけを読む
-make init              実機固有値を非公開.envへ保存する
-make list              対応製品を一覧表示する
-make select MODEL=...  本体型番を選択する
-make setup             Arduinoの固定版をローカル導入する
-make build             選択製品向けに確認スケッチをビルドする
-make matrix            代表製品向けにビルドする
-make setup-stackchan   固定版ESP-IDFと上流ソースを導入する
-make build-stackchan   公式ファームを日本語設定でビルドする
-make check             静的検査、秘密情報監査、単体テストを行う
-=======
 task device:detect                 USB属性だけを読む
 task device:init                   実機固有値を非公開.envへ保存する
 task device:list                   対応製品を一覧表示する
@@ -156,19 +126,21 @@ task arduino:build                 選択製品向けに確認スケッチをビ
 task arduino:matrix                代表製品向けにビルドする
 task stackchan:factory:setup       固定版ESP-IDFと上流ソースを導入する
 task stackchan:factory:build       公式ファームを日本語設定でビルドする
+task stackchan:community:install   コミュニティ版の安全案内を表示する
 task cardputer:screen-link:build   Cardputer画面リンクclientをビルドする
 task stackchan:screen-link:build   StackChan画面リンク版をビルドする
 task host:screen-link:run          host PCで画面relayを起動する
 task host:stackchan:status         host PCからStackChan接続数を確認する
+task docs:build                    my-m5docsを厳格ビルドする
 task check                         静的検査、秘密情報監査、単体テストを行う
->>>>>>> agent/go-task-migration
 ```
 
 一覧は`task --list`で確認できます。短いaliasとして`task detect`や`task build`も利用できます。リセットやFlash操作はTaskの短縮taskでは実行できません。許可フラグを付けて対応スクリプトを直接呼び出します。
 
 ## ドキュメント
 
-- [GitHub Pages（全Markdownの一覧・全文検索）](https://hjosugi.github.io/m5stack/)
+- [my-m5docs（全Markdownの一覧・全文検索）](https://hjosugi.github.io/m5stack/)
+- [PC画面リンク](docs/screen-link.md)
 - [Cardputerを画面からミュートする方法と制約](docs/cardputer-mute.md)
 - [詳しい使い方（初回導入から復旧まで）](docs/usage.md)
 - [Stack-chanコミュニティ版の導入・使い方](docs/community-firmware.md)

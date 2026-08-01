@@ -1,5 +1,5 @@
-site_name: M5Stack調査ドキュメント
-site_description: M5Stack実機、OSS、開発環境、復旧方法の調査記録
+site_name: my-m5docs
+site_description: M5Stack実機、OSS、開発環境、画面リンク、復旧方法のMarkdown調査記録
 site_url: https://hjosugi.github.io/m5stack/
 repo_url: https://github.com/hjosugi/m5stack
 repo_name: hjosugi/m5stack

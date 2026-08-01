@@ -38,9 +38,9 @@
 
 ```bash
 direnv allow
-make detect
-make init
-./scripts/select-board.sh stackchan
+task device:detect
+task device:init
+task device:select MODEL=stackchan
 ./scripts/grant-port-access.sh
 ```
 

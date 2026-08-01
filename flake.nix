@@ -41,6 +41,7 @@
               libffi
               libusb1
               ninja
+              nodejs
               openssl
               pkg-config
               python3
@@ -49,17 +50,8 @@
               shellcheck
               shfmt
               usbutils
-<<<<<<< HEAD
-<<<<<<< HEAD
               unzip
-||||||| 25f29cd
-=======
               uv
->>>>>>> agent/pc-screen-link
-||||||| 25f29cd
-=======
-              uv
->>>>>>> agent/go-task-migration
             ];
 
             shellHook = ''

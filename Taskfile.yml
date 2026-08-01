@@ -12,6 +12,12 @@ tasks:
     cmds:
       - ./scripts/check.sh
 
+  docs:build:
+    desc: my-m5docsを厳格ビルドする
+    aliases: [docs]
+    cmds:
+      - mkdocs build --strict
+
   device:detect:
     desc: USB属性だけを読み、対応デバイス候補を表示する
     aliases: [detect]
@@ -120,6 +126,12 @@ tasks:
     aliases: [build-stackchan]
     cmds:
       - ./scripts/build-stackchan-factory.sh
+
+  stackchan:community:install:
+    desc: "安全案内のみ。実行は scripts/install-community-stackchan.sh --allow-flash --replace-factory-firmware"
+    aliases: [install-community]
+    cmds:
+      - ./scripts/install-community-stackchan.sh
 
   stackchan:screen-link:build:
     desc: StackChan画面リンク版をビルドする（Flashなし）

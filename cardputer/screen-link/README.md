@@ -1,6 +1,6 @@
 # Cardputer Adv PC画面リンク
 
-PC側を含む設定順は、[GitHub PagesのPC画面リンク手順](https://hjosugi.github.io/m5stack/screen-link.html)にまとめています。
+PC側を含む設定順は、[my-m5docsのPC画面リンク手順](https://hjosugi.github.io/m5stack/screen-link/)にまとめています。
 
 PCブラウザーで選んだ画面またはウィンドウを、Wi-Fi経由のJPEG列としてCardputer Adv（240×135）へ表示します。音声は送信しません。
 

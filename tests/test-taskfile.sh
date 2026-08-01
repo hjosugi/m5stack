@@ -15,6 +15,7 @@ REPO_ROOT=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 task_list=$(task --dir "$REPO_ROOT" --list-all)
 expected_tasks=(
   check
+  docs:build
   device:detect
   device:select
   arduino:setup
@@ -23,6 +24,7 @@ expected_tasks=(
   cardputer:screen-link:build
   stackchan:factory:setup
   stackchan:factory:build
+  stackchan:community:install
   stackchan:screen-link:build
   host:screen-link:setup
   host:screen-link:run
