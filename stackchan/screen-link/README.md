@@ -16,12 +16,7 @@ PC relayを動かすPCのLAN IPと、relayと同じtokenを設定します。
 
 ```bash
 cp stackchan/screen-link/.env.example stackchan/screen-link/.env
-<<<<<<< HEAD
-./stackchan/screen-link/build.sh
-||||||| 25f29cd
-=======
 task stackchan:screen-link:build
->>>>>>> agent/go-task-migration
 ```
 
 tokenとPC固有IPを含む`.env`、生成sdkconfig、ファームウェアは`.local/`内に置かれ、Git管理されません。固定した公式ソース、依存、host testsを検証してから`.local/build/stackchan-screen-link-ja/`へビルドします。このコマンドは実機へ書き込みません。

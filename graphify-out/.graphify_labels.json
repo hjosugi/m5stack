@@ -1,29 +1,4 @@
 {
-<<<<<<< HEAD
-  "0": "common.sh",
-  "1": "server.py",
-  "2": "README.md",
-  "3": "詳しい使い方",
-  "4": "PageParser",
-  "5": "app.js",
-  "6": "ServerTest",
-  "7": "m5stack",
-  "8": "2026-07-31",
-  "9": "Cardputer Adv PC画面リンク",
-  "10": "PC Screen Link relay",
-  "11": "StackChan PC画面リンク",
-  "12": "test-common.sh",
-  "13": "cardputer/screen-link/build.sh",
-  "14": "build-stackchan-factory.sh",
-  "15": "安全な実機ワークフロー",
-  "16": "screen_link_auth.cpp",
-  "17": "test-safety-gates.sh",
-  "18": "run.sh",
-  "19": "stackchan/screen-link/build.sh",
-  "20": "screen_link_secrets.example.h",
-  "21": "m5-screen-link"
-||||||| 25f29cd
-=======
   "0": "die",
   "1": "server.py",
   "2": "README.md",
@@ -52,5 +27,4 @@
   "25": "build-stackchan-factory.sh script",
   "26": "select-board.sh script",
   "27": "test-taskfile.sh"
->>>>>>> agent/go-task-migration
 }
