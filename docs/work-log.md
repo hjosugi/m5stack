@@ -4,8 +4,13 @@
 
 ### CardputerミュートとMarkdownサイト
 
-- 公式Cardputer UserDemoの固定コミットを確認し、画面上の音量・ミュート設定がないことを記録した。
-- スピーカー消音、マイク停止、Cardputer AdvのAUX切替を別の機能として整理した。
+- 最初は通常の`main`ブランチだけを確認し、ADV版にも画面上のミュートがないと誤って判断した。
+- 公式UserDemoの`CardputerADV`ブランチを再監査し、`Q`静音、消音アイコン、NVS保存を固定コミットで確認して文書を訂正した。
+- 静音対象のランチャー効果音、静音対象外の`Record`再生、マイク停止、AUX切替を別の機能として整理した。
+- Cardputer-Advの電源、充電、キーマップ、BLE／USB Keyboard、工場版復元を公式資料とソースから整理した。
+- Bruce 1.16のADV自動検出、ES8311対応、内蔵／外付け機能、音設定を確認し、Release binのSHA-256を実測した。実機への書込みは行っていない。
+- M5Stack、ESP32-S3、Cardputer-Adv、Arduino、公式libraryの関係を初心者向けに整理した。
+- `awesome-m5stack-cardputer`を初代Cardputer中心の非公式索引として確認し、ADV対応を個別に判断する基準と安全な選び方を追加した。
 - `docs/`の全Markdownを自動掲載し、日本語本文を検索できる最小構成のMkDocsサイトを追加した。
 - Pagesではアプリやファームウェアを配布せず、調査文書の一覧、閲覧、検索だけを提供する方針にした。
 

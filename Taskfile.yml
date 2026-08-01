@@ -139,6 +139,11 @@ tasks:
     cmds:
       - ./stackchan/screen-link/build.sh
 
+  stackchan:screen-link:ci:
+    desc: 公開用の仮値でStackChan画面リンク版を検証する（Flashなし）
+    cmds:
+      - ./stackchan/screen-link/build.sh --ci
+
   host:screen-link:setup:
     desc: host PCへ画面relayの固定版Python依存を導入する
     aliases: [host:setup]

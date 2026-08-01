@@ -24,3 +24,5 @@ jobs:
         run: nix develop --command task stackchan:factory:setup
       - name: Test and build official source
         run: nix develop --command task stackchan:factory:build
+      - name: Build Screen Link overlay with public CI values
+        run: nix develop --command task stackchan:screen-link:ci

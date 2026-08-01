@@ -6,8 +6,11 @@ M5Stack StackChan（SKU K151）を主対象に、再現可能な開発環境と�
 
 | やりたいこと | 読む場所 |
 | --- | --- |
+| M5Stackとマイコンを最初から理解する | [初心者向け全体像](https://hjosugi.github.io/m5stack/m5stack-beginner/) |
 | PC画面をCardputer／StackChanへ送る | [PC画面リンク](https://hjosugi.github.io/m5stack/screen-link/) |
-| Cardputerをミュートする | [Cardputer mute](https://hjosugi.github.io/m5stack/cardputer-mute/) |
+| Cardputer-Advを使う | [Cardputer-Adv基本操作](https://hjosugi.github.io/m5stack/cardputer-adv/) |
+| Cardputer-Advをミュートする | [Cardputer-Adv mute](https://hjosugi.github.io/m5stack/cardputer-mute/) |
+| Bruce 1.16の対応を確認する | [BruceとCardputer-Adv](https://hjosugi.github.io/m5stack/bruce-cardputer-adv/) |
 | セットアップ、バックアップ、書込み | [安全な実機操作](https://hjosugi.github.io/m5stack/safe-workflow/) |
 | USB不調や復旧を調べる | [復旧とUSBトラブル対応](https://hjosugi.github.io/m5stack/recovery/) |
 
@@ -140,8 +143,12 @@ task check                         静的検査、秘密情報監査、単体テ
 ## ドキュメント
 
 - [my-m5docs（全Markdownの一覧・全文検索）](https://hjosugi.github.io/m5stack/)
+- [M5Stackとマイコンの初心者向け全体像](docs/m5stack-beginner.md)
 - [PC画面リンク](docs/screen-link.md)
-- [Cardputerを画面からミュートする方法と制約](docs/cardputer-mute.md)
+- [Cardputer-Advの基本的な使い方](docs/cardputer-adv.md)
+- [Cardputer-Advを画面からミュートする方法と制約](docs/cardputer-mute.md)
+- [Bruce 1.16とCardputer-Adv](docs/bruce-cardputer-adv.md)
+- [Cardputerコミュニティソフトの見方](docs/cardputer-community-software.md)
 - [詳しい使い方（初回導入から復旧まで）](docs/usage.md)
 - [Stack-chanコミュニティ版の導入・使い方](docs/community-firmware.md)
 - [接続中ハードウェアの調査記録](docs/hardware-inventory.md)

@@ -1,69 +1,73 @@
-# Cardputerをミュートする
+# Cardputer-Advをミュートする
 
-## 結論
+## 最短手順
 
-M5Stack公式のCardputer UserDemoには、画面からスピーカー音量を変更したりミュートしたりする設定メニューがありません。Cardputerの画面はタッチパネルではないため、設定画面があるファームウェアでも前面キーボードか上面のG0ボタンで操作します。
+M5Stack公式のCardputer-Adv UserDemoでは、画面を見ながら前面キーボードの`Q`を押すと静音モードを切り替えられます。画面はタッチパネルではありません。
 
-したがって、画面からミュートできるかどうかは現在書き込まれているファームウェア次第です。まず起動画面や「About」でファームウェア名と版を確認してください。
+| 画面 | 操作 | 結果 |
+| --- | --- | --- |
+| 起動ロゴ | `Q` | 静音モードを有効にしてランチャーへ進む。起動画面では解除できない |
+| メインのアプリ選択画面 | `Q` | 静音モードをON／OFFする |
+| 画面上部 | 消音アイコンを確認 | アイコン表示中は静音モード |
+| 再起動後 | 操作不要 | 設定はNVSから復元される |
 
-| 使用中のもの | 画面からのミュート |
-| --- | --- |
-| M5Stack公式Cardputer UserDemo | 設定メニューがないため不可 |
-| Cardputer Advの3.5 mm AUX | 挿すと内蔵スピーカーからAUXへ出力が切り替わる。画面設定ではなく、無音も保証しない |
-| M5Launcher、Bruce等の別ファームウェア | メニューと操作が版ごとに異なる。対象ファームウェアの文書を確認する |
-| 自作ファームウェア | 画面項目と保存処理を実装できる |
+音が消えない場合は、まず起動画面を確認してください。初代Cardputer用、Cardputer-Adv用、Bruce等では操作と対象が異なります。
 
-## 「ミュート」の対象を分ける
+## 何が静かになるか
 
-Cardputerにはスピーカーとマイクの両方があります。スピーカーの消音とマイクの停止は別の操作です。
+公式ADV UserDemoの静音モードが抑止するのは、ランチャーの起動音、ランダム効果音、キー入力音です。
 
-- スピーカーミュート: キー操作音、WAV、音声再生を出さない。
-- マイクミュート: 録音処理を止める。スピーカー音量を0にしてもマイクは止まらない。
+`Record`アプリの録音再生は静音フラグを参照せず、スピーカー音量を直接設定して再生します。従って`Q`は全アプリを強制的に無音にするマスターミュートではありません。録音再生を始める前にも音が出てよいか確認してください。
 
-録音や音声通信を扱うファームウェアでは、画面に`Speaker: Muted`と`Mic: Off`を別々に表示するのが安全です。
+Cardputerにはスピーカーとマイクの両方があります。`Q`で止まるのは上記のスピーカー効果音であり、マイク機能を停止する操作ではありません。
 
-## 公式UserDemoで設定できない根拠
+## 根拠と、以前の説明が違った理由
 
-2026-08-01にM5Stack公式[`M5Cardputer-UserDemo`](https://github.com/m5stack/M5Cardputer-UserDemo)のコミット`a34d7ebcd508fb903a2b1123be8c8b54abd55d07`を確認しました。
+2026-08-01に公式[`M5Cardputer-UserDemo`](https://github.com/m5stack/M5Cardputer-UserDemo)をブランチ別に再確認しました。
 
-- ランチャーに音量設定アプリはありません。
-- キー移動音はソース内の固定音量で再生されます。
-- 音量を不揮発メモリーへ保存する設定処理はありません。
+- `CardputerADV`ブランチのコミット`b549eac0a3c65bc108186c276b8fac0a214aaa4e`には、[`Q`で静音を切り替えるランチャー処理](https://github.com/m5stack/M5Cardputer-UserDemo/blob/b549eac0a3c65bc108186c276b8fac0a214aaa4e/main/apps/app_launcher/view/menu/menu.cpp#L83-L88)があります。
+- [起動処理](https://github.com/m5stack/M5Cardputer-UserDemo/blob/b549eac0a3c65bc108186c276b8fac0a214aaa4e/main/apps/app_launcher/view/boot_anim/boot_anim.cpp#L49-L71)は保存済みの`quiet_mode`を音の再生前にNVSから復元します。
+- [システムバー](https://github.com/m5stack/M5Cardputer-UserDemo/blob/b549eac0a3c65bc108186c276b8fac0a214aaa4e/main/apps/app_launcher/view/system_bar/system_bar.cpp#L106-L109)は静音中に専用アイコンを描画します。
+- 通常の`main`ブランチは初代Cardputer系の実装であり、同じ静音処理がありません。
 
-画面にスピーカーアイコンが見つからないのは操作の見落としではなく、公式デモがハードウェア機能の見本であり、一般的なOSの設定画面を備えていないためです。
+最初の調査では通常の`main`だけを確認してADV版にも設定がないと判断していました。これは対象ブランチの取り違えでした。本ページはADV専用ブランチの実装を正本として訂正しています。
 
-## 自作ファームウェアへ画面設定を追加する
+## Bruce 1.16の場合
 
-M5Stack公式のCardputer Speaker APIは、CardputerとCardputer Advの両方で`M5Unified`の`Speaker_Class`を使用します。論理的な消音は音量を0へ設定し、マイクを止める場合はマイク処理を終了します。
+Bruceでは`Config`の`Audio Config`から`Sound: OFF`へ切り替えます。音量は`Sound Volume`で10〜100%を選べます。公式UserDemoの`Q`操作とは共通ではありません。対応状況、外付け無線モジュール、導入上の注意は[Bruce 1.16調査](bruce-cardputer-adv.md)にまとめています。
+
+## 自作ファームウェアで完全に消音する
+
+M5Stack公式のSpeaker APIでは音量を0〜255で設定できます。
 
 ```cpp
-// スピーカーを消音する
 M5Cardputer.Speaker.stop();
 M5Cardputer.Speaker.setVolume(0);
+```
 
-// マイクを停止する（スピーカーとは別設定）
+画面設定として実装する場合は、音を出す全経路が同じ状態を参照するようにします。
+
+1. `Sound: On / Muted`を描画する。
+2. キーボードで選択し、`Enter`で切り替える。
+3. ミュート前の音量を保存し、解除時に戻す。
+4. 再起動後も維持する場合だけNVSへ保存する。
+5. 各アプリが再生直前に固定音量を設定し直さないようにする。
+
+マイクも止める場合は、スピーカーとは別に録音処理を終了します。
+
+```cpp
 M5Cardputer.Mic.end();
 ```
 
-画面設定として実装する場合は、次の状態を持たせます。
+## 3.5 mm端子
 
-1. `Sound: On / Muted`を描画する。
-2. キーボードで選択し、Enterで切り替える。
-3. ミュート前の音量を保存し、解除時に戻す。
-4. 再起動後も維持する場合だけ、ESP32のNVSへ設定値を保存する。
-5. 音を再生する全アプリが同じ設定を参照する。
-
-`setVolume(0)`だけを一画面で呼び出しても、別アプリが固定音量を再設定すれば音は戻ります。ランチャーと各アプリへ共通の設定値を渡す必要があります。
-
-## Cardputer AdvのAUXについて
-
-Cardputer Advは3.5 mm端子へヘッドホンまたは外部スピーカーを接続すると、内蔵スピーカーからAUXへ出力が切り替わります。これは内蔵スピーカーを静かにする手段にはなりますが、音声信号自体のミュートではありません。
+Cardputer-Advは3.5 mm端子へヘッドホン等を接続すると、内蔵スピーカーアンプが無効になります。これは出力先の切替であり、音声信号自体のミュートではありません。
 
 ## 参照した公式情報
 
-- [Cardputer / Cardputer Adv Speaker](https://docs.m5stack.com/en/arduino/m5cardputer/speaker): 対応機種、Speaker API、AUX出力切替
-- [Cardputer Mic](https://docs.m5stack.com/en/arduino/m5cardputer/mic): マイクとスピーカーを切り替える公式例
-- [Cardputer Adv製品文書](https://docs.m5stack.com/en/core/Cardputer-Adv): スピーカーアンプ、3.5 mm端子、操作部
-- [M5Cardputer-UserDemo](https://github.com/m5stack/M5Cardputer-UserDemo): 公式デモのランチャー、キー音、Speaker実装
+- [Cardputer-Adv製品文書](https://docs.m5stack.com/en/core/Cardputer-Adv): ES8311、NS4150B、3.5 mm端子、電源、充電
+- [Cardputer / Cardputer-Adv Speaker](https://docs.m5stack.com/en/arduino/m5cardputer/speaker): Speaker APIと音量範囲
+- [Cardputer Mic](https://docs.m5stack.com/en/arduino/m5cardputer/mic): マイクとスピーカーの切替例
+- [M5Cardputer-UserDemo `CardputerADV`](https://github.com/m5stack/M5Cardputer-UserDemo/tree/CardputerADV): ADV用ランチャーと静音処理
 
-調査日以降に公式デモへ設定画面が追加される可能性があります。手元の画面がこの説明と違う場合は、ファームウェア名と版を確認してから、その版の操作方法を追記します。
+確認対象は上記コミットです。別のファームウェアや将来版で画面が異なる場合は、ファームウェア名と版を先に確認してください。

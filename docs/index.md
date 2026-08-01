@@ -8,6 +8,7 @@
 
 | 文書 | 確認できること |
 | --- | --- |
+| [M5Stackとマイコンの全体像](m5stack-beginner.md) | ESP32、Cardputer、開発ツール、library、学習順 |
 | [詳しい使い方](usage.md) | 初回導入、日常のビルド、バックアップ、書込み、復旧 |
 | [安全な実機手順](safe-workflow.md) | リセットやFlashの前に必要な確認と安全ゲート |
 | [ハードウェア調査記録](hardware-inventory.md) | 接続機器の特定根拠、USB観測、実機確認の限界 |
@@ -23,7 +24,10 @@
 
 | 文書 | 確認できること |
 | --- | --- |
-| [Cardputerをミュートする](cardputer-mute.md) | 画面設定の有無、スピーカーとマイクの違い、ファームウェア実装方法 |
+| [Cardputer-Advの基本的な使い方](cardputer-adv.md) | 電源、充電、公式UserDemo、キーボード、工場版復元 |
+| [Cardputer-Advをミュートする](cardputer-mute.md) | 公式UserDemoの`Q`静音、対象範囲、別ファームウェアとの差 |
+| [Bruce 1.16とCardputer-Adv](bruce-cardputer-adv.md) | ADV対応の実装根拠、内蔵／外付け機能、音設定、安全上の境界 |
+| [Cardputerコミュニティソフトの見方](cardputer-community-software.md) | awesome listの使い方、ADV対応の判定、導入前確認 |
 
 ## StackChan
 

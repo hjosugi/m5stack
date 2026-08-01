@@ -26,6 +26,7 @@ expected_tasks=(
   stackchan:factory:build
   stackchan:community:install
   stackchan:screen-link:build
+  stackchan:screen-link:ci
   host:screen-link:setup
   host:screen-link:run
   host:screen-link:status

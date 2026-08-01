@@ -6,24 +6,36 @@ REPO_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)
 # shellcheck source=../../scripts/lib/common.sh
 source "$REPO_ROOT/scripts/lib/common.sh"
 
-env_file="$SCRIPT_DIR/.env"
-[[ -f $env_file ]] || die "$env_file がありません。.env.exampleをコピーし、実値を設定してください。"
+if (($# > 1)); then
+  die "使用方法: $0 [--ci]"
+fi
+if (($# == 1)) && [[ $1 != --ci ]]; then
+  die "使用方法: $0 [--ci]"
+fi
 
-SCREEN_LINK_SERVER_URL=
-SCREEN_LINK_TOKEN=
-line_number=0
-while IFS= read -r line || [[ -n $line ]]; do
-  ((line_number += 1))
-  line=${line%$'\r'}
-  [[ -z $line || $line == \#* ]] && continue
-  [[ $line == *=* ]] || die "$env_file:$line_number はKEY=VALUE形式ではありません。"
-  key=${line%%=*}
-  value=${line#*=}
-  case "$key" in
-    SCREEN_LINK_SERVER_URL | SCREEN_LINK_TOKEN) printf -v "$key" '%s' "$value" ;;
-    *) die "$env_file:$line_number の未対応キー $key を拒否しました。" ;;
-  esac
-done < "$env_file"
+if [[ ${1:-} == --ci ]]; then
+  SCREEN_LINK_SERVER_URL=http://192.0.2.1:8765
+  SCREEN_LINK_TOKEN=ci-placeholder-token
+else
+  env_file="$SCRIPT_DIR/.env"
+  [[ -f $env_file ]] || die "$env_file がありません。.env.exampleをコピーし、実値を設定してください。"
+
+  SCREEN_LINK_SERVER_URL=
+  SCREEN_LINK_TOKEN=
+  line_number=0
+  while IFS= read -r line || [[ -n $line ]]; do
+    ((line_number += 1))
+    line=${line%$'\r'}
+    [[ -z $line || $line == \#* ]] && continue
+    [[ $line == *=* ]] || die "$env_file:$line_number はKEY=VALUE形式ではありません。"
+    key=${line%%=*}
+    value=${line#*=}
+    case "$key" in
+      SCREEN_LINK_SERVER_URL | SCREEN_LINK_TOKEN) printf -v "$key" '%s' "$value" ;;
+      *) die "$env_file:$line_number の未対応キー $key を拒否しました。" ;;
+    esac
+  done < "$env_file"
+fi
 
 if [[ ! $SCREEN_LINK_SERVER_URL =~ ^http://[A-Za-z0-9.-]+:([0-9]{1,5})$ ]]; then
   die "SCREEN_LINK_SERVER_URLはhttp://LAN-IP:port形式で指定してください。"
