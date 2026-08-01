@@ -8,8 +8,16 @@ source "$SCRIPT_DIR/lib/common.sh"
 require_command bash
 require_command shellcheck
 require_command shfmt
+require_command uv
 
-mapfile -d '' shell_files < <(find "$M5_REPO_ROOT/scripts" "$M5_REPO_ROOT/tests" -type f -name '*.sh' -print0 | sort -z)
+mapfile -d '' shell_files < <(
+  find \
+    "$M5_REPO_ROOT/scripts" \
+    "$M5_REPO_ROOT/tests" \
+    "$M5_REPO_ROOT/cardputer" \
+    "$M5_REPO_ROOT/stackchan" \
+    -type f -name '*.sh' -print0 | sort -z
+)
 ((${#shell_files[@]} > 0)) || die "検査対象のShellスクリプトがありません。"
 
 for shell_file in "${shell_files[@]}"; do
@@ -33,6 +41,8 @@ awk -F '|' '
 
 "$M5_REPO_ROOT/tests/test-common.sh"
 "$M5_REPO_ROOT/tests/test-safety-gates.sh"
+uv run --project "$M5_REPO_ROOT/pc/screen-link" --frozen \
+  python -m unittest discover -s "$M5_REPO_ROOT/pc/screen-link/tests" -v
 "$M5_REPO_ROOT/scripts/audit-public-tree.sh"
 git -C "$M5_REPO_ROOT" diff --check
 log "静的検査と単体テストが完了しました。"

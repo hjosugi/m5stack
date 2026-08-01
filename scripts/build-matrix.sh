@@ -19,4 +19,6 @@ while IFS= read -r fqbn || [[ -n $fqbn ]]; do
     "$M5_REPO_ROOT/firmware/hello_m5"
 done < "$M5_REPO_ROOT/config/ci-boards.txt"
 
+"$M5_REPO_ROOT/cardputer/screen-link/build.sh" --ci
+
 log "Arduinoビルドマトリクスが完了しました。"

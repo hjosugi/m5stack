@@ -29,6 +29,7 @@ install_library() {
 install_library M5GFX "$M5GFX_VERSION"
 install_library M5Unified "$M5UNIFIED_VERSION"
 install_library M5Cardputer "$M5CARDPUTER_VERSION"
+install_library ArduinoWebsockets "$ARDUINOWEBSOCKETS_VERSION"
 install_library IRremoteESP8266 "$IRREMOTEESP8266_VERSION"
 install_library M5Unit-NFC "$M5UNIT_NFC_VERSION"
 
@@ -47,5 +48,5 @@ assert_exact_git_checkout "$bsp_dir" "$STACKCHAN_BSP_COMMIT"
 log "導入済みCore:"
 arduino_cli core list | awk 'NR == 1 || $1 == "m5stack:esp32"'
 log "導入済みM5ライブラリ:"
-arduino_cli lib list | awk 'NR == 1 || $1 ~ /^(M5|IRremoteESP8266|StackChan-BSP)/'
+arduino_cli lib list | awk 'NR == 1 || $1 ~ /^(M5|ArduinoWebsockets|IRremoteESP8266|StackChan-BSP)/'
 log "Arduino環境の固定版セットアップが完了しました。実機は操作していません。"

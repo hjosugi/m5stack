@@ -1,0 +1,21 @@
+[project]
+name = "m5-screen-link"
+version = "0.1.0"
+description = "Relay a browser-captured PC screen to M5Stack devices"
+requires-python = ">=3.11"
+dependencies = [
+  "aiohttp>=3.12,<4",
+]
+
+[project.scripts]
+m5-screen-link = "m5_screen_link.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/m5_screen_link"]
+
+[tool.uv]
+package = true
