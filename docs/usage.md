@@ -15,7 +15,7 @@ direnv allow
 shellへ入ると次の案内が表示されます。
 
 ```text
-M5Stack開発環境: make detect / make setup / make build
+M5Stack開発環境: task device:detect / task arduino:setup / task arduino:build
 ```
 
 direnvを使わない場合は、shellを明示的に開きます。
@@ -27,7 +27,7 @@ nix develop
 一つのコマンドだけ実行することもできます。
 
 ```bash
-nix develop --command make check
+nix develop --command task check
 ```
 
 `flake.lock`によりArduino CLI、esptool、CMake、ShellCheck等のホストツールが固定されます。Arduino Core、ライブラリ、ESP-IDFはリポジトリ内の`.local/`へ導入され、ホストのグローバル環境を変更しません。
@@ -37,7 +37,7 @@ nix develop --command make check
 StackChanをUSB-CデータケーブルでPCへ接続し、まだシリアルポートは開かずに確認します。
 
 ```bash
-make detect
+task device:detect
 ```
 
 正常時は、概ね次の情報が表示されます。
@@ -58,11 +58,11 @@ M5/ESP32 USBデバイスを1台検出しました。
 ## 3. 実機をローカル設定へ固定する
 
 ```bash
-make init
-./scripts/select-board.sh stackchan
+task device:init
+task device:select MODEL=stackchan
 ```
 
-`make init`は次の値を`.env`へ保存します。
+`task device:init`は次の値を`.env`へ保存します。
 
 - 安定したシリアルポート名
 - 生USBシリアル（対象取り違え防止用）
@@ -81,14 +81,14 @@ git check-ignore -v .env
 製品一覧を確認するには次を使います。
 
 ```bash
-make list
+task device:list
 ```
 
 別の実機へ接続し直す場合は、対象一台だけを接続してローカル設定を明示更新します。
 
 ```bash
 ./scripts/init-env.sh --force
-./scripts/select-board.sh cardputer-adv
+task device:select MODEL=cardputer-adv
 ```
 
 `--force`は`.env`だけを置換します。Flashは操作しません。
@@ -96,7 +96,7 @@ make list
 ## 4. Arduino環境を導入する
 
 ```bash
-make setup
+task arduino:setup
 ```
 
 このコマンドは次を`.local/arduino/`へ固定版で導入します。
@@ -114,7 +114,7 @@ make setup
 選択した製品向けの最小確認スケッチをコンパイルします。
 
 ```bash
-make build
+task arduino:build
 ```
 
 StackChanの場合はCoreS3用FQBNを使用します。生成物は次に置かれます。
@@ -128,7 +128,7 @@ StackChanの場合はCoreS3用FQBNを使用します。生成物は次に置か�
 代表的なM5Stack製品すべてでコンパイル互換性を確認する場合は次を実行します。
 
 ```bash
-make matrix
+task arduino:matrix
 ```
 
 ## 6. StackChan公式ファームウェアをビルドする
@@ -136,8 +136,8 @@ make matrix
 Arduinoスケッチとは別に、公式量産系ソースを再現ビルドできます。
 
 ```bash
-make setup-stackchan
-make build-stackchan
+task stackchan:factory:setup
+task stackchan:factory:build
 ```
 
 初回セットアップはStackChan、StackChan-BSP、ESP-IDF、submodule、ESP32-S3 toolchainを`.local/`へ取得します。ビルド時には上流依存のcommit、公式パッチ、host tests、日本語設定を検証します。
@@ -201,7 +201,7 @@ K151を標準ターゲットとして実機検証された`stack-chan/stack-chan
 ./scripts/monitor.sh --allow-reset
 ```
 
-終了は`Ctrl-C`です。ポートが見つからない場合は、USBを差し直して`make detect`を先に実行します。
+終了は`Ctrl-C`です。ポートが見つからない場合は、USBを差し直して`task device:detect`を先に実行します。
 
 ## 11. Arduino確認スケッチを書き込む
 
@@ -240,15 +240,15 @@ StackChanへの書込み後は工場版のAI Agent、アプリ、OTA等が使え
 工場ファームを維持している間の日常作業は、基本的に次だけです。
 
 ```bash
-make detect
-make build
-make check
+task device:detect
+task arduino:build
+task check
 ```
 
 Arduinoスケッチを実機テストする段階になったら、毎回次を確認します。
 
 1. `.env`の選択製品と、机上の実機が一致している。
-2. `make detect`が一台だけを検出する。
+2. `task device:detect`が一台だけを検出する。
 3. 検証済みバックアップがある。
 4. StackChanの可動範囲が空いている。
 5. 実行するスケッチがサーボへ何を指示するか理解している。
@@ -287,6 +287,6 @@ Download Mode、USB不調、全Flash復旧の詳細は[復旧とUSBトラブル�
 公開前は必ず次を実行します。
 
 ```bash
-make check
+task check
 git status --short
 ```

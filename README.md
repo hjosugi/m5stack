@@ -57,15 +57,38 @@ Boot ROMからESP32-S3 revision v0.2、16 MB Flash、Secure Boot無効、Flash E
 
 StackChanのコミュニティ版v1.0.0には、このPC画面受信経路はありません。画面リンク版のビルドはできますが、ファームウェアを自動で置換しません。
 
+<<<<<<< HEAD
+||||||| 25f29cd
+=======
+### host PCから画面リンクを操作する
+
+`Taskfile.yml`の`host:*` taskで、PC relayの準備、起動、接続確認をまとめて実行できます。
+
+```bash
+cp pc/screen-link/.env.example pc/screen-link/.env
+task host:screen-link:setup
+task host:screen-link:run
+```
+
+relayを起動したterminalとは別のterminalで状態を確認します。`stackchan=1`ならStackChanがrelayへ接続中です。
+
+```bash
+task host:screen-link:status
+task host:stackchan:status
+```
+
+別hostのrelayを確認する場合は、信頼できるLAN内で`URL=http://host:port`を指定します。これらのtaskは画面中継と接続確認だけを行い、サーボ制御、リセット、Flash書込みは行いません。
+
+>>>>>>> agent/go-task-migration
 ## 最短の安全な手順
 
 ```bash
 direnv allow
-make setup
-make detect
-make init
-./scripts/select-board.sh stackchan
-make build
+task arduino:setup
+task device:detect
+task device:init
+task device:select MODEL=stackchan
+task arduino:build
 ```
 
 ここまではUSBシリアルポートを開かず、リセットも書込みも行いません。`direnv`を使わない場合は、各コマンドを`nix develop --command ...`で実行できます。
@@ -73,8 +96,8 @@ make build
 公式ファームウェアもビルドする場合は次を実行します。初回はESP-IDFツールチェーンを`.local/`へダウンロードします。
 
 ```bash
-make setup-stackchan
-make build-stackchan
+task stackchan:factory:setup
+task stackchan:factory:build
 ```
 
 ## 実機を操作する前に
@@ -99,6 +122,7 @@ K151向けコミュニティ安定版を導入する場合は、[コミュニテ
 ## コマンド
 
 ```text
+<<<<<<< HEAD
 make detect            USB属性だけを読む
 make init              実機固有値を非公開.envへ保存する
 make list              対応製品を一覧表示する
@@ -111,9 +135,36 @@ make build-stackchan   公式ファームを日本語設定でビルドする
 make build-cardputer-screen-link  Cardputer画面リンクclientをビルドする
 make build-stackchan-screen-link  StackChan画面リンク版をビルドする
 make check             静的検査、秘密情報監査、単体テストを行う
+||||||| 25f29cd
+make detect            USB属性だけを読む
+make init              実機固有値を非公開.envへ保存する
+make list              対応製品を一覧表示する
+make select MODEL=...  本体型番を選択する
+make setup             Arduinoの固定版をローカル導入する
+make build             選択製品向けに確認スケッチをビルドする
+make matrix            代表製品向けにビルドする
+make setup-stackchan   固定版ESP-IDFと上流ソースを導入する
+make build-stackchan   公式ファームを日本語設定でビルドする
+make check             静的検査、秘密情報監査、単体テストを行う
+=======
+task device:detect                 USB属性だけを読む
+task device:init                   実機固有値を非公開.envへ保存する
+task device:list                   対応製品を一覧表示する
+task device:select MODEL=...       本体型番を選択する
+task arduino:setup                 Arduinoの固定版をローカル導入する
+task arduino:build                 選択製品向けに確認スケッチをビルドする
+task arduino:matrix                代表製品向けにビルドする
+task stackchan:factory:setup       固定版ESP-IDFと上流ソースを導入する
+task stackchan:factory:build       公式ファームを日本語設定でビルドする
+task cardputer:screen-link:build   Cardputer画面リンクclientをビルドする
+task stackchan:screen-link:build   StackChan画面リンク版をビルドする
+task host:screen-link:run          host PCで画面relayを起動する
+task host:stackchan:status         host PCからStackChan接続数を確認する
+task check                         静的検査、秘密情報監査、単体テストを行う
+>>>>>>> agent/go-task-migration
 ```
 
-リセットやFlash操作はMakeの短縮ターゲットでは実行できません。許可フラグを付けて対応スクリプトを直接呼び出します。
+一覧は`task --list`で確認できます。短いaliasとして`task detect`や`task build`も利用できます。リセットやFlash操作はTaskの短縮taskでは実行できません。許可フラグを付けて対応スクリプトを直接呼び出します。
 
 ## ドキュメント
 

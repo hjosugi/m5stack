@@ -1,0 +1,174 @@
+version: "3.48"
+
+tasks:
+  default:
+    desc: 利用できるtaskを表示する
+    cmds:
+      - task --list
+    silent: true
+
+  check:
+    desc: 静的検査、秘密情報監査、単体テストを実行する
+    cmds:
+      - ./scripts/check.sh
+
+  device:detect:
+    desc: USB属性だけを読み、対応デバイス候補を表示する
+    aliases: [detect]
+    cmds:
+      - ./scripts/detect-device.sh
+
+  device:init:
+    desc: 実機固有値を非公開.envへ保存する
+    aliases: [init]
+    cmds:
+      - ./scripts/init-env.sh
+
+  device:list:
+    desc: 対応製品を一覧表示する
+    aliases: [list]
+    cmds:
+      - ./scripts/select-board.sh list
+
+  device:select:
+    desc: "対象製品を選ぶ（例: task device:select MODEL=cores3）"
+    aliases: [select]
+    requires:
+      vars: [MODEL]
+    env:
+      TASK_MODEL: "{{.MODEL}}"
+    cmds:
+      - ./scripts/select-board.sh "$TASK_MODEL"
+
+  device:grant-port:
+    desc: 選択済みUSB portへ一時的な利用権限を付ける
+    aliases: [grant]
+    cmds:
+      - ./scripts/grant-port-access.sh
+
+  device:backup:
+    desc: "安全案内のみ。実行は scripts/backup-flash.sh --allow-reset"
+    aliases: [backup]
+    cmds:
+      - ./scripts/backup-flash.sh
+
+  device:upload:
+    desc: "安全案内のみ。実行は scripts/upload.sh --allow-flash"
+    aliases: [upload]
+    cmds:
+      - ./scripts/upload.sh
+
+  device:monitor:
+    desc: "安全案内のみ。実行は scripts/monitor.sh --allow-reset"
+    aliases: [monitor]
+    cmds:
+      - ./scripts/monitor.sh
+
+  device:restore:
+    desc: "安全案内のみ。実行は scripts/restore-flash.sh --allow-flash <flash.bin>"
+    aliases: [restore]
+    cmds:
+      - ./scripts/restore-flash.sh
+
+  arduino:setup:
+    desc: Arduinoの固定版依存を.localへ導入する
+    aliases: [setup]
+    cmds:
+      - ./scripts/setup.sh
+
+  arduino:build:
+    desc: 選択製品向けの確認スケッチをビルドする
+    aliases: [build]
+    cmds:
+      - ./scripts/build.sh
+
+  arduino:matrix:
+    desc: 代表製品向けの確認スケッチを順番にビルドする
+    aliases: [matrix]
+    cmds:
+      - ./scripts/build-matrix.sh
+
+  arduino:ci:
+    desc: "CI対象を一つビルドする（例: task arduino:ci TARGET=m5stack:esp32:m5stack_cores3）"
+    requires:
+      vars: [TARGET]
+    env:
+      TASK_TARGET: "{{.TARGET}}"
+    cmds:
+      - ./scripts/build-ci-target.sh "$TASK_TARGET"
+
+  cardputer:screen-link:build:
+    desc: Cardputer画面リンクclientをビルドする（Flashなし）
+    aliases: [build-cardputer-screen-link]
+    cmds:
+      - ./cardputer/screen-link/build.sh
+
+  stackchan:fetch:
+    desc: StackChan上流ソースを固定commitで取得する
+    aliases: [fetch-stackchan]
+    cmds:
+      - ./scripts/fetch-stackchan.sh
+
+  stackchan:factory:setup:
+    desc: 固定版ESP-IDFとStackChan上流ソースを導入する
+    aliases: [setup-stackchan]
+    cmds:
+      - ./scripts/setup-stackchan-factory.sh
+
+  stackchan:factory:build:
+    desc: StackChan公式ファームを日本語設定でビルドする（Flashなし）
+    aliases: [build-stackchan]
+    cmds:
+      - ./scripts/build-stackchan-factory.sh
+
+  stackchan:screen-link:build:
+    desc: StackChan画面リンク版をビルドする（Flashなし）
+    aliases: [build-stackchan-screen-link]
+    cmds:
+      - ./stackchan/screen-link/build.sh
+
+  host:screen-link:setup:
+    desc: host PCへ画面relayの固定版Python依存を導入する
+    aliases: [host:setup]
+    cmds:
+      - uv sync --project pc/screen-link --frozen
+
+  host:screen-link:run:
+    desc: host PCでCardputer／StackChan向け画面relayを起動する
+    aliases: [host:run]
+    cmds:
+      - ./pc/screen-link/run.sh
+
+  host:screen-link:test:
+    desc: host PCの画面relay単体テストを実行する
+    aliases: [host:test]
+    cmds:
+      - uv run --project pc/screen-link --frozen python -m unittest discover -s pc/screen-link/tests -v
+
+  host:screen-link:status:
+    desc: host PCのrelayと接続端末数を確認する（URL=http://host:portで上書き）
+    aliases: [host:status]
+    vars:
+      STATUS_URL: '{{.URL | default ""}}'
+    env:
+      SCREEN_LINK_STATUS_URL: "{{.STATUS_URL}}"
+    cmds:
+      - ./scripts/screen-link-status.sh
+
+  host:stackchan:status:
+    desc: host PCからrelayへ接続中のStackChan台数を確認する
+    vars:
+      STATUS_URL: '{{.URL | default ""}}'
+    env:
+      SCREEN_LINK_STATUS_URL: "{{.STATUS_URL}}"
+    cmds:
+      - ./scripts/screen-link-status.sh --target stackchan
+
+  host:cardputer:status:
+    desc: host PCからrelayへ接続中のCardputer台数を確認する
+    vars:
+      STATUS_URL: '{{.URL | default ""}}'
+    env:
+      SCREEN_LINK_STATUS_URL: "{{.STATUS_URL}}"
+    cmds:
+      - ./scripts/screen-link-status.sh --target cardputer

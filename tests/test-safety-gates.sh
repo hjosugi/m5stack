@@ -19,9 +19,19 @@ expect_rejected "コミュニティ版書込み" "$REPO_ROOT/scripts/install-com
 expect_rejected "シリアルモニター" "$REPO_ROOT/scripts/monitor.sh"
 expect_rejected "Flash復旧" "$REPO_ROOT/scripts/restore-flash.sh"
 
+<<<<<<< HEAD
 # Makeの短縮ターゲットも、危険操作を直接呼ばず使用方法を案内するだけにする。
 for target in backup upload install-community monitor restore; do
   expect_rejected "make $target" make --no-print-directory -C "$REPO_ROOT" "$target"
+||||||| 25f29cd
+# Makeの短縮ターゲットも、危険操作を直接呼ばず使用方法を案内するだけにする。
+for target in backup upload monitor restore; do
+  expect_rejected "make $target" make --no-print-directory -C "$REPO_ROOT" "$target"
+=======
+# Taskの短縮taskも、危険操作を直接呼ばず使用方法を案内するだけにする。
+for target in backup upload monitor restore; do
+  expect_rejected "task $target" task --dir "$REPO_ROOT" "$target"
+>>>>>>> agent/go-task-migration
 done
 
 printf 'safety gate tests: OK\n'

@@ -7,16 +7,35 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 require_command bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 require_command mkdocs
 ||||||| 25f29cd
 =======
 require_command actionlint
 >>>>>>> agent/pc-screen-link
+||||||| 25f29cd
+=======
+require_command actionlint
+>>>>>>> agent/go-task-migration
 require_command shellcheck
 require_command shfmt
+<<<<<<< HEAD
+||||||| 25f29cd
+=======
+require_command task
+>>>>>>> agent/go-task-migration
 require_command uv
 require_command python3
 
+<<<<<<< HEAD
+||||||| 25f29cd
+mapfile -d '' shell_files < <(find "$M5_REPO_ROOT/scripts" "$M5_REPO_ROOT/tests" -type f -name '*.sh' -print0 | sort -z)
+=======
+[[ -f $M5_REPO_ROOT/Taskfile.yml ]] || die "Taskfile.ymlがありません。"
+[[ ! -e $M5_REPO_ROOT/Makefile ]] || die "MakefileはTaskfile.ymlへ移行済みです。"
+task --dir "$M5_REPO_ROOT" --list-all > /dev/null
+
+>>>>>>> agent/go-task-migration
 mapfile -d '' shell_files < <(
   find \
     "$M5_REPO_ROOT/scripts" \
@@ -48,6 +67,7 @@ awk -F '|' '
 ' "$M5_REPO_ROOT/config/upstream.lock"
 
 "$M5_REPO_ROOT/tests/test-common.sh"
+"$M5_REPO_ROOT/tests/test-taskfile.sh"
 "$M5_REPO_ROOT/tests/test-safety-gates.sh"
 uv run --project "$M5_REPO_ROOT/pc/screen-link" --frozen \
   python -m unittest discover -s "$M5_REPO_ROOT/pc/screen-link/tests" -v

@@ -26,7 +26,12 @@ cp cardputer/screen-link/.env.example cardputer/screen-link/.env
 `.env`へ2.4 GHz Wi-Fi、PCのLAN IP、PC relayと同じtokenを設定します。認証情報はGitへ追加しません。
 
 ```bash
+<<<<<<< HEAD
 ./cardputer/screen-link/build.sh
+||||||| 25f29cd
+=======
+task cardputer:screen-link:build
+>>>>>>> agent/go-task-migration
 ```
 
 成果物は`.local/build/cardputer-screen-link/`へ生成されます。このコマンドは実機へ書き込みません。既存ファームウェアを置換するため、書き込み前に現在のファームウェアの復旧経路を用意してください。

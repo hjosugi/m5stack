@@ -21,6 +21,6 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31.11.0
       - name: Install pinned ESP-IDF toolchain
-        run: nix develop --command ./scripts/setup-stackchan-factory.sh
+        run: nix develop --command task stackchan:factory:setup
       - name: Test and build official source
-        run: nix develop --command ./scripts/build-stackchan-factory.sh
+        run: nix develop --command task stackchan:factory:build
