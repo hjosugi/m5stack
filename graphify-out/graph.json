@@ -759,8 +759,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pc_screen_link_tests_test_server",
-      "community": 6,
-      "community_name": "ServerTest",
+      "community": 1,
+      "community_name": "server.py",
       "norm_label": "test_server.py"
     },
     {
@@ -862,8 +862,8 @@
       },
       "_origin": "ast",
       "id": "scripts_audit_public_tree",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "audit-public-tree.sh"
     },
     {
@@ -877,8 +877,8 @@
       },
       "_origin": "ast",
       "id": "scripts_audit_public_tree_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "audit-public-tree.sh script"
     },
     {
@@ -892,7 +892,7 @@
       },
       "_origin": "ast",
       "id": "scripts_backup_flash",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "backup-flash.sh"
     },
@@ -908,7 +908,7 @@
       "_origin": "ast",
       "id": "scripts_backup_flash_sh__entry",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "backup-flash.sh script"
     },
     {
@@ -922,8 +922,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_ci_target",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "build-ci-target.sh"
     },
     {
@@ -937,8 +937,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_ci_target_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "build-ci-target.sh script"
     },
     {
@@ -952,8 +952,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_matrix",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "build-matrix.sh"
     },
     {
@@ -967,8 +967,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_matrix_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "build-matrix.sh script"
     },
     {
@@ -982,8 +982,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_stackchan_factory",
-      "community": 14,
-      "community_name": "build-stackchan-factory.sh",
+      "community": 25,
+      "community_name": "build-stackchan-factory.sh script",
       "norm_label": "build-stackchan-factory.sh"
     },
     {
@@ -997,8 +997,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_stackchan_factory_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 25,
+      "community_name": "build-stackchan-factory.sh script",
       "norm_label": "build-stackchan-factory.sh script"
     },
     {
@@ -1012,8 +1012,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_stackchan_factory_idf_tools_path",
-      "community": 14,
-      "community_name": "build-stackchan-factory.sh",
+      "community": 25,
+      "community_name": "build-stackchan-factory.sh script",
       "norm_label": "idf_tools_path"
     },
     {
@@ -1027,8 +1027,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_stackchan_factory_complete",
-      "community": 14,
-      "community_name": "build-stackchan-factory.sh",
+      "community": 25,
+      "community_name": "build-stackchan-factory.sh script",
       "norm_label": "complete()"
     },
     {
@@ -1042,8 +1042,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "scripts/build.sh"
     },
     {
@@ -1057,8 +1057,8 @@
       },
       "_origin": "ast",
       "id": "scripts_build_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "build.sh script"
     },
     {
@@ -1076,7 +1076,7 @@
       "label": "PageParser",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L12",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "scripts_check_site_pageparser",
       "community": 4,
@@ -1098,7 +1098,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L13",
+      "source_location": "L63",
       "_origin": "ast",
       "id": "scripts_check_site_pageparser_init",
       "community": 4,
@@ -1109,7 +1109,7 @@
       "label": ".title()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L23",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "scripts_check_site_pageparser_title",
       "community": 4,
@@ -1120,7 +1120,7 @@
       "label": ".handle_starttag()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L26",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "scripts_check_site_pageparser_handle_starttag",
       "community": 4,
@@ -1131,7 +1131,7 @@
       "label": ".handle_endtag()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L41",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "scripts_check_site_pageparser_handle_endtag",
       "community": 4,
@@ -1142,7 +1142,7 @@
       "label": ".handle_data()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L45",
+      "source_location": "L95",
       "_origin": "ast",
       "id": "scripts_check_site_pageparser_handle_data",
       "community": 4,
@@ -1153,7 +1153,7 @@
       "label": "parse_pages()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L50",
+      "source_location": "L100",
       "_origin": "ast",
       "id": "scripts_check_site_parse_pages",
       "community": 4,
@@ -1175,7 +1175,7 @@
       "label": "resolve_local_target()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L71",
+      "source_location": "L121",
       "_origin": "ast",
       "id": "scripts_check_site_resolve_local_target",
       "community": 4,
@@ -1186,7 +1186,7 @@
       "label": "validate_links()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L91",
+      "source_location": "L141",
       "_origin": "ast",
       "id": "scripts_check_site_validate_links",
       "community": 4,
@@ -1194,10 +1194,21 @@
       "norm_label": "validate_links()"
     },
     {
+      "label": "validate_styles()",
+      "file_type": "code",
+      "source_file": "scripts/check-site.py",
+      "source_location": "L163",
+      "_origin": "ast",
+      "id": "scripts_check_site_validate_styles",
+      "community": 4,
+      "community_name": "PageParser",
+      "norm_label": "validate_styles()"
+    },
+    {
       "label": "main()",
       "file_type": "code",
       "source_file": "scripts/check-site.py",
-      "source_location": "L113",
+      "source_location": "L208",
       "_origin": "ast",
       "id": "scripts_check_site_main",
       "community": 4,
@@ -1215,8 +1226,8 @@
       },
       "_origin": "ast",
       "id": "scripts_check",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "check.sh"
     },
     {
@@ -1230,8 +1241,8 @@
       },
       "_origin": "ast",
       "id": "scripts_check_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "check.sh script"
     },
     {
@@ -1245,8 +1256,8 @@
       },
       "_origin": "ast",
       "id": "scripts_detect_device",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "detect-device.sh"
     },
     {
@@ -1260,8 +1271,8 @@
       },
       "_origin": "ast",
       "id": "scripts_detect_device_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "detect-device.sh script"
     },
     {
@@ -1275,8 +1286,8 @@
       },
       "_origin": "ast",
       "id": "scripts_fetch_stackchan",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "fetch-stackchan.sh"
     },
     {
@@ -1290,8 +1301,8 @@
       },
       "_origin": "ast",
       "id": "scripts_fetch_stackchan_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "fetch-stackchan.sh script"
     },
     {
@@ -1305,8 +1316,8 @@
       },
       "_origin": "ast",
       "id": "scripts_fetch_stackchan_checkout_exact",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "checkout_exact()"
     },
     {
@@ -1320,7 +1331,7 @@
       },
       "_origin": "ast",
       "id": "scripts_grant_port_access",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "grant-port-access.sh"
     },
@@ -1336,7 +1347,7 @@
       "_origin": "ast",
       "id": "scripts_grant_port_access_sh__entry",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "grant-port-access.sh script"
     },
     {
@@ -1350,8 +1361,8 @@
       },
       "_origin": "ast",
       "id": "scripts_init_env",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "init-env.sh"
     },
     {
@@ -1365,8 +1376,8 @@
       },
       "_origin": "ast",
       "id": "scripts_init_env_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "init-env.sh script"
     },
     {
@@ -1380,7 +1391,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "common.sh"
     },
@@ -1395,7 +1406,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_sh__entry",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "common.sh script"
     },
@@ -1410,8 +1421,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_log",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "log()"
     },
     {
@@ -1426,7 +1437,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_warn",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "warn()"
     },
     {
@@ -1441,7 +1452,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_die",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "die()"
     },
     {
@@ -1456,7 +1467,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_require_command",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "require_command()"
     },
     {
@@ -1470,7 +1481,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_read_usb_attr",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "read_usb_attr()"
     },
@@ -1485,8 +1496,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_usb_id_is_supported",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "usb_id_is_supported()"
     },
     {
@@ -1500,7 +1511,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_hash_identifier",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "hash_identifier()"
     },
@@ -1516,7 +1527,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_load_local_env",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "load_local_env()"
     },
     {
@@ -1530,8 +1541,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_write_local_env",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "write_local_env()"
     },
     {
@@ -1545,8 +1556,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_detect_m5_usb",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "detect_m5_usb()"
     },
     {
@@ -1561,7 +1572,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_verify_bound_device",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "verify_bound_device()"
     },
     {
@@ -1575,8 +1586,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_lookup_board_key",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 26,
+      "community_name": "select-board.sh script",
       "norm_label": "lookup_board_key()"
     },
     {
@@ -1591,7 +1602,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_require_model_config",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "require_model_config()"
     },
     {
@@ -1605,8 +1616,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_configure_arduino_env",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "configure_arduino_env()"
     },
     {
@@ -1620,7 +1631,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_fqbn_slug",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "fqbn_slug()"
     },
@@ -1635,8 +1646,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_arduino_cli",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "arduino_cli()"
     },
     {
@@ -1650,7 +1661,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_device_hash",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "device_hash()"
     },
@@ -1665,7 +1676,7 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_backup_marker_path",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "backup_marker_path()"
     },
@@ -1681,7 +1692,7 @@
       "_origin": "ast",
       "id": "scripts_lib_common_require_port_access",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "require_port_access()"
     },
     {
@@ -1695,8 +1706,8 @@
       },
       "_origin": "ast",
       "id": "scripts_lib_common_assert_exact_git_checkout",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 25,
+      "community_name": "build-stackchan-factory.sh script",
       "norm_label": "assert_exact_git_checkout()"
     },
     {
@@ -1710,7 +1721,7 @@
       },
       "_origin": "ast",
       "id": "scripts_monitor",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "monitor.sh"
     },
@@ -1726,7 +1737,7 @@
       "_origin": "ast",
       "id": "scripts_monitor_sh__entry",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "monitor.sh script"
     },
     {
@@ -1740,7 +1751,7 @@
       },
       "_origin": "ast",
       "id": "scripts_restore_flash",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "restore-flash.sh"
     },
@@ -1756,8 +1767,38 @@
       "_origin": "ast",
       "id": "scripts_restore_flash_sh__entry",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "restore-flash.sh script"
+    },
+    {
+      "label": "screen-link-status.sh",
+      "file_type": "code",
+      "source_file": "scripts/screen-link-status.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "scripts_screen_link_status",
+      "community": 0,
+      "community_name": "die",
+      "norm_label": "screen-link-status.sh"
+    },
+    {
+      "label": "screen-link-status.sh script",
+      "file_type": "code",
+      "source_file": "scripts/screen-link-status.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "scripts_screen_link_status_sh__entry",
+      "community": 0,
+      "community_name": "die",
+      "norm_label": "screen-link-status.sh script"
     },
     {
       "label": "select-board.sh",
@@ -1770,8 +1811,8 @@
       },
       "_origin": "ast",
       "id": "scripts_select_board",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 26,
+      "community_name": "select-board.sh script",
       "norm_label": "select-board.sh"
     },
     {
@@ -1785,8 +1826,8 @@
       },
       "_origin": "ast",
       "id": "scripts_select_board_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 26,
+      "community_name": "select-board.sh script",
       "norm_label": "select-board.sh script"
     },
     {
@@ -1800,8 +1841,8 @@
       },
       "_origin": "ast",
       "id": "scripts_select_board_usage",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 26,
+      "community_name": "select-board.sh script",
       "norm_label": "usage()"
     },
     {
@@ -1816,7 +1857,7 @@
       "_origin": "ast",
       "id": "scripts_setup_stackchan_factory",
       "community": 14,
-      "community_name": "build-stackchan-factory.sh",
+      "community_name": "log",
       "norm_label": "setup-stackchan-factory.sh"
     },
     {
@@ -1831,7 +1872,7 @@
       "_origin": "ast",
       "id": "scripts_setup_stackchan_factory_sh__entry",
       "community": 14,
-      "community_name": "build-stackchan-factory.sh",
+      "community_name": "log",
       "norm_label": "setup-stackchan-factory.sh script"
     },
     {
@@ -1846,7 +1887,7 @@
       "_origin": "ast",
       "id": "scripts_setup_stackchan_factory_idf_tools_path",
       "community": 14,
-      "community_name": "build-stackchan-factory.sh",
+      "community_name": "log",
       "norm_label": "idf_tools_path"
     },
     {
@@ -1860,8 +1901,8 @@
       },
       "_origin": "ast",
       "id": "scripts_setup",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "setup.sh"
     },
     {
@@ -1875,8 +1916,8 @@
       },
       "_origin": "ast",
       "id": "scripts_setup_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "setup.sh script"
     },
     {
@@ -1890,8 +1931,8 @@
       },
       "_origin": "ast",
       "id": "scripts_setup_install_library",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 23,
+      "community_name": "setup.sh script",
       "norm_label": "install_library()"
     },
     {
@@ -1905,7 +1946,7 @@
       },
       "_origin": "ast",
       "id": "scripts_upload",
-      "community": 0,
+      "community": 22,
       "community_name": "common.sh",
       "norm_label": "upload.sh"
     },
@@ -1921,7 +1962,7 @@
       "_origin": "ast",
       "id": "scripts_upload_sh__entry",
       "community": 0,
-      "community_name": "common.sh",
+      "community_name": "die",
       "norm_label": "upload.sh script"
     },
     {
@@ -1935,8 +1976,8 @@
       },
       "_origin": "ast",
       "id": "scripts_verify_stackchan_upstream",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "verify-stackchan-upstream.sh"
     },
     {
@@ -1950,8 +1991,8 @@
       },
       "_origin": "ast",
       "id": "scripts_verify_stackchan_upstream_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 14,
+      "community_name": "log",
       "norm_label": "verify-stackchan-upstream.sh script"
     },
     {
@@ -2043,8 +2084,8 @@
       },
       "_origin": "ast",
       "id": "tests_test_common_sh__entry",
-      "community": 0,
-      "community_name": "common.sh",
+      "community": 24,
+      "community_name": "detect_m5_usb",
       "norm_label": "test-common.sh script"
     },
     {
@@ -2153,6 +2194,36 @@
       "norm_label": "expect_rejected()"
     },
     {
+      "label": "test-taskfile.sh",
+      "file_type": "code",
+      "source_file": "tests/test-taskfile.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "_origin": "ast",
+      "id": "tests_test_taskfile",
+      "community": 27,
+      "community_name": "test-taskfile.sh",
+      "norm_label": "test-taskfile.sh"
+    },
+    {
+      "label": "test-taskfile.sh script",
+      "file_type": "code",
+      "source_file": "tests/test-taskfile.sh",
+      "source_location": "L1",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "_origin": "ast",
+      "id": "tests_test_taskfile_sh__entry",
+      "community": 27,
+      "community_name": "test-taskfile.sh",
+      "norm_label": "test-taskfile.sh script"
+    },
+    {
       "label": "README.md",
       "file_type": "document",
       "source_file": "README.md",
@@ -2208,10 +2279,21 @@
       "norm_label": "pc\u753b\u9762\u30ea\u30f3\u30af(\u8a66\u9a13\u5b9f\u88c5)"
     },
     {
-      "label": "\u6700\u77ed\u306e\u5b89\u5168\u306a\u624b\u9806",
+      "label": "host PC\u304b\u3089\u753b\u9762\u30ea\u30f3\u30af\u3092\u64cd\u4f5c\u3059\u308b",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L58",
+      "_origin": "ast",
+      "id": "readme_host_pc\u304b\u3089\u753b\u9762\u30ea\u30f3\u30af\u3092\u64cd\u4f5c\u3059\u308b",
+      "community": 7,
+      "community_name": "m5stack",
+      "norm_label": "host pc\u304b\u3089\u753b\u9762\u30ea\u30f3\u30af\u3092\u64cd\u4f5c\u3059\u308b"
+    },
+    {
+      "label": "\u6700\u77ed\u306e\u5b89\u5168\u306a\u624b\u9806",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "readme_\u6700\u77ed\u306e\u5b89\u5168\u306a\u624b\u9806",
       "community": 7,
@@ -2222,7 +2304,7 @@
       "label": "\u5b9f\u6a5f\u3092\u64cd\u4f5c\u3059\u308b\u524d\u306b",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L78",
+      "source_location": "L97",
       "_origin": "ast",
       "id": "readme_\u5b9f\u6a5f\u3092\u64cd\u4f5c\u3059\u308b\u524d\u306b",
       "community": 7,
@@ -2233,7 +2315,7 @@
       "label": "\u30b3\u30de\u30f3\u30c9",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L95",
+      "source_location": "L114",
       "_origin": "ast",
       "id": "readme_\u30b3\u30de\u30f3\u30c9",
       "community": 7,
@@ -2244,7 +2326,7 @@
       "label": "\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L114",
+      "source_location": "L135",
       "_origin": "ast",
       "id": "readme_\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8",
       "community": 7,
@@ -2255,7 +2337,7 @@
       "label": "\u30e9\u30a4\u30bb\u30f3\u30b9",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L125",
+      "source_location": "L146",
       "_origin": "ast",
       "id": "readme_\u30e9\u30a4\u30bb\u30f3\u30b9",
       "community": 7,
@@ -3058,7 +3140,7 @@
       "label": "\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3",
       "file_type": "document",
       "source_file": "pc/screen-link/README.md",
-      "source_location": "L27",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "pc_screen_link_readme_\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3",
       "community": 10,
@@ -3069,7 +3151,7 @@
       "label": "\u30d7\u30ed\u30c8\u30b3\u30eb",
       "file_type": "document",
       "source_file": "pc/screen-link/README.md",
-      "source_location": "L35",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "pc_screen_link_readme_\u30d7\u30ed\u30c8\u30b3\u30eb",
       "community": 10,
@@ -5357,7 +5439,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L113",
+      "source_location": "L208",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site",
@@ -5368,7 +5450,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L12",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site",
@@ -5379,7 +5461,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L50",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site",
@@ -5390,7 +5472,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L71",
+      "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site",
@@ -5401,7 +5483,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L91",
+      "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site",
@@ -5409,10 +5491,21 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/check-site.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_check_site",
+      "target": "scripts_check_site_validate_styles",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L12",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_pageparser",
@@ -5423,7 +5516,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L45",
+      "source_location": "L95",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_pageparser",
@@ -5434,7 +5527,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L41",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_pageparser",
@@ -5445,7 +5538,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L26",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_pageparser",
@@ -5456,7 +5549,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L13",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_pageparser",
@@ -5467,7 +5560,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L23",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_pageparser",
@@ -5479,7 +5572,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L50",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_parse_pages",
@@ -5491,7 +5584,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L91",
+      "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_validate_links",
@@ -5503,7 +5596,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L118",
+      "source_location": "L213",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_main",
@@ -5515,7 +5608,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L50",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_parse_pages",
@@ -5527,7 +5620,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L114",
+      "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_main",
@@ -5539,7 +5632,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L71",
+      "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_resolve_local_target",
@@ -5551,10 +5644,22 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L91",
+      "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_validate_links",
+      "target": "scripts_check_site_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/check-site.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_check_site_validate_styles",
       "target": "scripts_check_site_py_path",
       "confidence_score": 1.0
     },
@@ -5563,7 +5668,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L96",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_validate_links",
@@ -5575,11 +5680,23 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/check-site.py",
-      "source_location": "L119",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_site_main",
       "target": "scripts_check_site_validate_links",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/check-site.py",
+      "source_location": "L215",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_check_site_main",
+      "target": "scripts_check_site_validate_styles",
       "confidence_score": 1.0
     },
     {
@@ -5611,7 +5728,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/check.sh",
-      "source_location": "L23",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_sh__entry",
@@ -5623,7 +5740,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/check.sh",
-      "source_location": "L52",
+      "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_check_sh__entry",
@@ -6230,6 +6347,18 @@
     {
       "relation": "imports_from",
       "confidence": "INFERRED",
+      "source_file": "scripts/screen-link-status.sh",
+      "source_location": "L6",
+      "weight": 1.0,
+      "context": "import",
+      "_origin": "ast",
+      "source": "scripts_screen_link_status",
+      "target": "scripts_lib_common",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "INFERRED",
       "source_file": "scripts/select-board.sh",
       "source_location": "L6",
       "weight": 1.0,
@@ -6568,6 +6697,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
+      "source_file": "scripts/screen-link-status.sh",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_screen_link_status_sh__entry",
+      "target": "scripts_lib_common_die"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "scripts/select-board.sh",
       "source_location": "L26",
       "weight": 1.0,
@@ -6645,6 +6786,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_restore_flash_sh__entry",
+      "target": "scripts_lib_common_require_command"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/screen-link-status.sh",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_screen_link_status_sh__entry",
       "target": "scripts_lib_common_require_command"
     },
     {
@@ -7032,6 +7185,17 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "scripts/screen-link-status.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_screen_link_status",
+      "target": "scripts_screen_link_status_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "scripts/select-board.sh",
       "source_location": "L1",
       "weight": 1.0,
@@ -7277,6 +7441,17 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test-taskfile.sh",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_test_taskfile",
+      "target": "tests_test_taskfile_sh__entry",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
@@ -7302,7 +7477,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L121",
+      "source_location": "L142",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme",
@@ -7313,7 +7488,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L93",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme",
@@ -7324,7 +7499,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L120",
+      "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme",
@@ -7335,7 +7510,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L123",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme",
@@ -7346,7 +7521,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L116",
+      "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme",
@@ -7357,7 +7532,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L122",
+      "source_location": "L143",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme",
@@ -7390,7 +7565,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L95",
+      "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme_m5stack",
@@ -7401,7 +7576,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L114",
+      "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme_m5stack",
@@ -7412,7 +7587,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L125",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme_m5stack",
@@ -7434,7 +7609,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L78",
+      "source_location": "L97",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme_m5stack",
@@ -7445,7 +7620,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L58",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast",
       "source": "readme_m5stack",
@@ -7461,6 +7636,17 @@
       "_origin": "ast",
       "source": "readme_m5stack",
       "target": "readme_\u73fe\u5728\u306e\u5bfe\u8c61",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme_pc\u753b\u9762\u30ea\u30f3\u30af_\u8a66\u9a13\u5b9f\u88c5",
+      "target": "readme_host_pc\u304b\u3089\u753b\u9762\u30ea\u30f3\u30af\u3092\u64cd\u4f5c\u3059\u308b",
       "confidence_score": 1.0
     },
     {
@@ -8182,7 +8368,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "pc/screen-link/README.md",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast",
       "source": "pc_screen_link_readme_pc_screen_link_relay",
@@ -8193,7 +8379,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "pc/screen-link/README.md",
-      "source_location": "L35",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast",
       "source": "pc_screen_link_readme_pc_screen_link_relay",
@@ -8257,5 +8443,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "58228ce13432395c590cc638f74b991b3ac24d17"
+  "built_at_commit": "f2634ba92a254576062f21a3d3058628c6da2235"
 }
