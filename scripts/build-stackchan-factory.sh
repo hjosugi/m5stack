@@ -61,9 +61,19 @@ if [[ $idf_completion_stub == true ]]; then
   unset -f complete
 fi
 
-firmware_build="$M5_REPO_ROOT/.local/build/stackchan-factory-ja"
+firmware_build=${M5_STACKCHAN_BUILD_DIR:-"$M5_REPO_ROOT/.local/build/stackchan-factory-ja"}
 sdkconfig="$firmware_build/sdkconfig"
 defaults="$firmware_root/sdkconfig.defaults;$M5_REPO_ROOT/config/stackchan/sdkconfig.defaults.local"
+if [[ -n ${M5_STACKCHAN_EXTRA_DEFAULTS:-} ]]; then
+  [[ -f $M5_STACKCHAN_EXTRA_DEFAULTS ]] || die "追加sdkconfig defaultsが見つかりません: $M5_STACKCHAN_EXTRA_DEFAULTS"
+  defaults="$defaults;$M5_STACKCHAN_EXTRA_DEFAULTS"
+fi
+
+idf_extra_args=()
+if [[ -n ${M5_STACKCHAN_EXTRA_COMPONENT_DIRS:-} ]]; then
+  [[ -d $M5_STACKCHAN_EXTRA_COMPONENT_DIRS ]] || die "追加ESP-IDF componentが見つかりません: $M5_STACKCHAN_EXTRA_COMPONENT_DIRS"
+  idf_extra_args+=("-D" "EXTRA_COMPONENT_DIRS=$M5_STACKCHAN_EXTRA_COMPONENT_DIRS")
+fi
 
 log "StackChan公式ファームウェア $STACKCHAN_FIRMWARE_VERSION を日本語設定でビルドします。"
 (
@@ -72,6 +82,7 @@ log "StackChan公式ファームウェア $STACKCHAN_FIRMWARE_VERSION を日本�
     -B "$firmware_build" \
     -D "SDKCONFIG=$sdkconfig" \
     -D "SDKCONFIG_DEFAULTS=$defaults" \
+    "${idf_extra_args[@]}" \
     build
 )
 

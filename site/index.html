@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="M5Stack、Cardputer Adv、StackChanの画面リンクと安全な開発手順。" />
+    <title>M5Stack Safe Lab</title>
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <header class="site-header">
+      <nav class="nav" aria-label="メインナビゲーション">
+        <a class="brand" href="./" aria-current="page"><span class="brand-mark">M5</span>M5Stack Safe Lab</a>
+        <ul class="nav-links">
+          <li><a href="screen-link.html">画面リンク</a></li>
+          <li><a href="cardputer-mute.html">Cardputer mute</a></li>
+          <li><a href="safe-development.html">安全な実機操作</a></li>
+          <li><a href="troubleshooting.html">困ったとき</a></li>
+          <li><a href="https://github.com/hjosugi/m5stack">GitHub</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <p class="eyebrow">M5Stack / Cardputer Adv / StackChan</p>
+        <h1>やることから、すぐ手順へ。</h1>
+        <p class="lead">
+          PC画面の無線リンク、Cardputerの完全mute、実機を壊しにくいビルド・バックアップ・復旧を、目的別にまとめています。
+        </p>
+        <div class="actions">
+          <a class="button primary" href="screen-link.html">PC画面を端末へ送る</a>
+          <a class="button" href="safe-development.html">安全に開発を始める</a>
+        </div>
+        <ul class="badges" aria-label="特徴">
+          <li class="badge">音声は送信しない</li>
+          <li class="badge">2.4 GHz LAN</li>
+          <li class="badge">秘密情報は.envだけ</li>
+          <li class="badge">buildで自動Flashしない</li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="choose-title">
+        <h2 id="choose-title">目的を選ぶ</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="card-number">1</span>
+            <h3><a class="card-link" href="screen-link.html">PC画面を端末へ送る</a></h3>
+            <p>PC relay、Cardputer、StackChanの設定場所と起動順を一ページで確認します。</p>
+          </article>
+          <article class="card">
+            <span class="card-number">2</span>
+            <h3><a class="card-link" href="cardputer-mute.html">Cardputerを確実にmuteする</a></h3>
+            <p>speakerを初期化しない方法と、実行中に音量を0へ落とす方法を分けて掲載します。</p>
+          </article>
+          <article class="card">
+            <span class="card-number">3</span>
+            <h3><a class="card-link" href="safe-development.html">実機を安全に扱う</a></h3>
+            <p>非破壊の確認、全Flashバックアップ、書込み、復旧の境界を短く整理します。</p>
+          </article>
+          <article class="card">
+            <span class="card-number">4</span>
+            <h3><a class="card-link" href="troubleshooting.html">エラーから探す</a></h3>
+            <p>Wi-Fi、relay、USB、権限、StackChanの対応ファームウェアを症状別に確認します。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="flow-title">
+        <h2 id="flow-title">画面リンクの流れ</h2>
+        <p class="section-intro">ブラウザーで選んだ画面だけをJPEG化します。マイクやPC音声は取得しません。</p>
+        <div class="flow" aria-label="PC画面リンクの構成">
+          <div class="flow-node"><strong>PCブラウザー</strong><small>画面を選ぶ</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-node"><strong>PC relay</strong><small>認証して中継</small></div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-node"><strong>端末</strong><small>JPEGを表示</small></div>
+        </div>
+        <div class="callout warning">
+          <strong>このreleaseはbuildまでです。</strong>
+          Cardputer／StackChanへ自動でFlashしません。既存ファームウェアを置き換える前に、復旧経路と全Flashバックアップを用意してください。
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="start-title">
+        <h2 id="start-title">最初の3コマンド</h2>
+        <p class="section-intro">Nixとdirenvが導入済みなら、開発環境はリポジトリ内だけに作られます。</p>
+        <pre><code>git clone https://github.com/hjosugi/m5stack.git
+cd m5stack
+direnv allow</code></pre>
+        <p><a href="safe-development.html#setup">セットアップの続き</a>／<a href="screen-link.html#files">画面リンクの設定場所</a></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>安全ゲート付きM5Stack開発環境</p>
+        <p><a href="https://github.com/hjosugi/m5stack">source</a> · MIT License</p>
+      </div>
+    </footer>
+  </body>
+</html>

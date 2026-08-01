@@ -1,0 +1,10 @@
+menu "M5 Screen Link"
+
+config SCREEN_LINK_AUTH_TOKEN
+    string "Screen-link WebSocket authentication token"
+    default "change-me"
+    help
+        Shared token sent in the Authorization header to the local PC relay.
+        Override this value through an untracked sdkconfig defaults file.
+
+endmenu

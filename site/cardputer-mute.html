@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="M5Cardputerのspeakerを初期化しない完全muteと実行時mute。" />
+    <title>Cardputer mute | M5Stack Safe Lab</title>
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <header class="site-header">
+      <nav class="nav" aria-label="メインナビゲーション">
+        <a class="brand" href="./"><span class="brand-mark">M5</span>M5Stack Safe Lab</a>
+        <ul class="nav-links">
+          <li><a href="screen-link.html">画面リンク</a></li>
+          <li><a href="cardputer-mute.html" aria-current="page">Cardputer mute</a></li>
+          <li><a href="safe-development.html">安全な実機操作</a></li>
+          <li><a href="troubleshooting.html">困ったとき</a></li>
+          <li><a href="https://github.com/hjosugi/m5stack">GitHub</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <p class="breadcrumbs"><a href="./">トップ</a> / Cardputer mute</p>
+      <section class="hero">
+        <p class="eyebrow">Cardputer Adv</p>
+        <h1 class="page-title">音を出さない、2つの方法</h1>
+        <p class="lead">起動時からspeakerを使わないなら「初期化しない」。すでに初期化済みなら「停止＋音量0」です。</p>
+      </section>
+
+      <section class="section" aria-labelledby="complete-title">
+        <h2 id="complete-title">1. speakerを初期化しない</h2>
+        <p>画面リンクの既定設定です。<code>begin</code>より前に無効化します。</p>
+        <pre><code>auto config = M5.config();
+config.internal_spk = false;
+M5Cardputer.begin(config);</code></pre>
+        <div class="callout"><strong>推奨</strong>音声を使わないスケッチはこの方法にします。speaker用I2Sを初期化しません。</div>
+      </section>
+
+      <section class="section" aria-labelledby="runtime-title">
+        <h2 id="runtime-title">2. 実行中にmuteする</h2>
+        <p>speakerをすでに有効化しているスケッチでは、再生を止めて音量を0にします。</p>
+        <pre><code>M5Cardputer.Speaker.stop();
+M5Cardputer.Speaker.setVolume(0);</code></pre>
+        <p>これはspeakerの初期化自体を取り消す処理ではありません。</p>
+      </section>
+
+      <section class="section" aria-labelledby="screen-mute-title">
+        <h2 id="screen-mute-title">画面リンク版の設定</h2>
+        <p><code>cardputer/screen-link/.env</code>で選びます。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>値</th><th>動作</th><th>画面表示</th></tr></thead>
+            <tbody>
+              <tr><td><code>CARDPUTER_SPEAKER_ENABLED=0</code></td><td>speaker未初期化（既定）</td><td><code>SPK OFF</code></td></tr>
+              <tr><td><code>CARDPUTER_SPEAKER_ENABLED=1</code></td><td>起動時mute。Mキーで0／64切替</td><td><code>MUTE</code>／<code>SPK</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><a class="button primary" href="screen-link.html#cardputer">Cardputer画面リンクを設定する</a></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>対象: M5Cardputer API / M5Unified Speaker API</p>
+        <p><a href="./">トップへ戻る</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

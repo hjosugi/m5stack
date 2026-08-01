@@ -2,6 +2,15 @@
 
 M5Stack StackChan（SKU K151）を主対象に、再現可能な開発環境と安全ゲート付きの実機手順をまとめた公開リポジトリです。Cardputer Advも同じローカル環境でビルド対象にできます。
 
+> **最初に見る:** [図入りの短い手順（GitHub Pages）](https://hjosugi.github.io/m5stack/)
+
+| やりたいこと | 読む場所 |
+| --- | --- |
+| PC画面をCardputer／StackChanへ送る | [PC画面リンク](https://hjosugi.github.io/m5stack/screen-link.html) |
+| Cardputerを完全muteする | [Cardputer mute](https://hjosugi.github.io/m5stack/cardputer-mute.html) |
+| セットアップ、バックアップ、書込み、復旧 | [安全な実機操作](https://hjosugi.github.io/m5stack/safe-development.html) |
+| エラーから調べる | [困ったとき](https://hjosugi.github.io/m5stack/troubleshooting.html) |
+
 このリポジトリは次の事故を防ぐことを優先します。
 
 - USB IDだけで製品型番を決めつける
@@ -33,6 +42,18 @@ StackChan本体 USB-C
 公式StackChanリポジトリ自身が、公開ソースは配布済みファームウェアより遅れる場合があると明記しています。このため、量産系をビルドできても工場出荷版より新しいとは見なしません。まず実機の全Flashを保存し、通常はOTA可能な工場ファームウェアを維持します。
 
 固定値と取得元は[`versions.env`](versions.env)と[`config/upstream.lock`](config/upstream.lock)、選定理由は[OSS選定](docs/oss-selection.md)に記録しています。
+
+## PC画面リンク（試験実装）
+
+ブラウザーで明示的に選んだPC画面またはウィンドウを、同じLAN上の端末へJPEG列として送る試験実装があります。音声は送信しません。端末ごとの実装と手順は混在させず、別ディレクトリに分けています。
+
+| 対象 | ディレクトリ | 表示サイズ | 備考 |
+| --- | --- | --- | --- |
+| PC relay | [`pc/screen-link/`](pc/screen-link/) | 送信元 | GNOME/Waylandでもブラウザーの画面共有APIを使用 |
+| Cardputer Adv | [`cardputer/screen-link/`](cardputer/screen-link/) | 240×135 | speaker未初期化を既定にしてmute |
+| StackChan | [`stackchan/screen-link/`](stackchan/screen-link/) | 320×240 | 公式1.4.3系のAVATAR WebSocket表示を利用 |
+
+StackChanのコミュニティ版v1.0.0には、このPC画面受信経路はありません。画面リンク版のビルドはできますが、ファームウェアを自動で置換しません。
 
 ## 最短の安全な手順
 
@@ -83,6 +104,8 @@ make build             選択製品向けに確認スケッチをビルドする
 make matrix            代表製品向けにビルドする
 make setup-stackchan   固定版ESP-IDFと上流ソースを導入する
 make build-stackchan   公式ファームを日本語設定でビルドする
+make build-cardputer-screen-link  Cardputer画面リンクclientをビルドする
+make build-stackchan-screen-link  StackChan画面リンク版をビルドする
 make check             静的検査、秘密情報監査、単体テストを行う
 ```
 
