@@ -6,9 +6,11 @@ SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 source "$SCRIPT_DIR/lib/common.sh"
 
 require_command bash
+require_command actionlint
 require_command shellcheck
 require_command shfmt
 require_command uv
+require_command python3
 
 mapfile -d '' shell_files < <(
   find \
@@ -25,6 +27,7 @@ for shell_file in "${shell_files[@]}"; do
 done
 shellcheck -x "${shell_files[@]}"
 shfmt -d -i 2 -ci -sr "${shell_files[@]}"
+actionlint "$M5_REPO_ROOT"/.github/workflows/*.yml
 
 awk -F '\t' '
   /^#/ || NF == 0 { next }
@@ -43,6 +46,7 @@ awk -F '|' '
 "$M5_REPO_ROOT/tests/test-safety-gates.sh"
 uv run --project "$M5_REPO_ROOT/pc/screen-link" --frozen \
   python -m unittest discover -s "$M5_REPO_ROOT/pc/screen-link/tests" -v
+python3 "$M5_REPO_ROOT/scripts/check-site.py" "$M5_REPO_ROOT/site"
 "$M5_REPO_ROOT/scripts/audit-public-tree.sh"
 git -C "$M5_REPO_ROOT" diff --check
 log "静的検査と単体テストが完了しました。"

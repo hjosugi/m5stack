@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="M5Stack実機の非破壊確認、バックアップ、書込み、復旧の安全手順。" />
+    <title>安全な実機操作 | M5Stack Safe Lab</title>
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <header class="site-header">
+      <nav class="nav" aria-label="メインナビゲーション">
+        <a class="brand" href="./"><span class="brand-mark">M5</span>M5Stack Safe Lab</a>
+        <ul class="nav-links">
+          <li><a href="screen-link.html">画面リンク</a></li>
+          <li><a href="cardputer-mute.html">Cardputer mute</a></li>
+          <li><a href="safe-development.html" aria-current="page">安全な実機操作</a></li>
+          <li><a href="troubleshooting.html">困ったとき</a></li>
+          <li><a href="https://github.com/hjosugi/m5stack">GitHub</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <p class="breadcrumbs"><a href="./">トップ</a> / 安全な実機操作</p>
+      <section class="hero">
+        <p class="eyebrow">Safe workflow</p>
+        <h1 class="page-title">確認、保存、書込みを分ける</h1>
+        <p class="lead">buildまでは実機を変更しません。Flash操作は対象を固定し、バックアップを検証してから明示フラグ付きで行います。</p>
+        <ul class="toc" aria-label="ページ内リンク">
+          <li><a href="#setup">セットアップ</a></li>
+          <li><a href="#impact">影響一覧</a></li>
+          <li><a href="#backup">バックアップ</a></li>
+          <li><a href="#flash">書込み</a></li>
+          <li><a href="#restore">復旧</a></li>
+        </ul>
+      </section>
+
+      <section class="section" id="setup" aria-labelledby="setup-title">
+        <h2 id="setup-title">非破壊のセットアップ</h2>
+        <pre><code>git clone https://github.com/hjosugi/m5stack.git
+cd m5stack
+direnv allow
+make setup
+make detect
+make init
+./scripts/select-board.sh stackchan
+make build</code></pre>
+        <p>Cardputer Advなら最後から2行目を<code>./scripts/select-board.sh cardputer-adv</code>にします。</p>
+        <div class="callout"><strong>ここまではFlashしません。</strong>USB属性の確認、ローカル設定、依存導入、compileだけです。</div>
+      </section>
+
+      <section class="section" id="impact" aria-labelledby="impact-title">
+        <h2 id="impact-title">コマンドの影響</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>コマンド</th><th>リセット</th><th>Flash読出し</th><th>Flash書込み</th></tr></thead>
+            <tbody>
+              <tr><td><code>make detect / setup / build / check</code></td><td>しない</td><td>しない</td><td>しない</td></tr>
+              <tr><td><code>backup-flash.sh --allow-reset</code></td><td>する</td><td>全体</td><td>しない</td></tr>
+              <tr><td><code>monitor.sh --allow-reset</code></td><td>可能性あり</td><td>しない</td><td>しない</td></tr>
+              <tr><td><code>upload.sh --allow-flash</code></td><td>する</td><td>しない</td><td>する</td></tr>
+              <tr><td><code>restore-flash.sh --allow-flash …</code></td><td>する</td><td>しない</td><td>全体</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="backup" aria-labelledby="backup-title">
+        <h2 id="backup-title">書込み前に全Flashを保存</h2>
+        <p>対象一台だけを接続し、StackChanはサーボの周囲を空けます。</p>
+        <pre><code>make detect
+./scripts/grant-port-access.sh
+./scripts/backup-flash.sh --allow-reset</code></pre>
+        <p>保存先は<code>.local/backups/&lt;製品&gt;/&lt;UTC時刻&gt;/</code>です。Wi-Fi等を含み得るため公開しません。</p>
+      </section>
+
+      <section class="section" id="flash" aria-labelledby="flash-title">
+        <h2 id="flash-title">確認スケッチを書き込む</h2>
+        <div class="callout danger"><strong>工場ファームウェアを置き換えます。</strong>画面リンク用build scriptはこの操作を行いません。以下はリポジトリ標準の確認スケッチ用です。</div>
+        <pre><code># Cardputer Advなど
+./scripts/upload.sh --allow-flash
+
+# StackChan（追加確認あり）
+./scripts/upload.sh --allow-flash --replace-factory-firmware</code></pre>
+        <p>接続実機、製品設定、検証済みバックアップが一致しない場合は中止します。</p>
+      </section>
+
+      <section class="section" id="restore" aria-labelledby="restore-title">
+        <h2 id="restore-title">全Flashを復旧</h2>
+        <pre><code>./scripts/grant-port-access.sh
+./scripts/restore-flash.sh --allow-flash \
+  .local/backups/&lt;製品&gt;/&lt;UTC時刻&gt;/flash-&lt;容量&gt;.bin</code></pre>
+        <p>バックアップ時と同じ実機だけに復旧できます。途中でUSBや電源を抜かないでください。</p>
+        <p><a href="https://github.com/hjosugi/m5stack/blob/main/docs/safe-workflow.md">安全ゲートの詳しい仕様</a>／<a href="https://github.com/hjosugi/m5stack/blob/main/docs/recovery.md">復旧の詳細</a></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>秘密情報とFlash imageはGitへ追加しないでください。</p>
+        <p><a href="./">トップへ戻る</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

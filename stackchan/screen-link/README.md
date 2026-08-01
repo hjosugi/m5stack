@@ -1,5 +1,7 @@
 # StackChan PC画面リンク
 
+PC側を含む設定順は、[GitHub PagesのPC画面リンク手順](https://hjosugi.github.io/m5stack/screen-link.html)にまとめています。
+
 PCブラウザーで選んだ画面またはウィンドウを320×240 JPEGへ変換し、公式M5Stack StackChanファームウェアの`AVATAR`アプリへ送ります。
 
 ## 対応ファームウェア

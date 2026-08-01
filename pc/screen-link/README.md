@@ -1,5 +1,7 @@
 # PC Screen Link relay
 
+最短の設定順と端末側の手順は、[GitHub PagesのPC画面リンク手順](https://hjosugi.github.io/m5stack/screen-link.html)にまとめています。
+
 PCブラウザーの`getDisplayMedia`で、利用者が明示的に選んだ画面またはウィンドウだけを取得します。ブラウザー内でCardputer用240×135とStackChan用320×240へ縮小・JPEG化し、認証付きWebSocketで端末へ中継します。音声は取得も送信もしません。
 
 この方式はOS固有のスクリーンショットAPIを使わないため、GNOME/Waylandでもブラウザーの標準画面共有ダイアログを利用できます。

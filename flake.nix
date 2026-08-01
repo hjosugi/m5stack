@@ -22,6 +22,7 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               acl
+              actionlint
               arduino-cli.pureGoPkg
               bison
               ccache

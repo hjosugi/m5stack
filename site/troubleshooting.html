@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="M5Stack画面リンク、USB、権限、Flash操作の症状別トラブル対応。" />
+    <title>困ったとき | M5Stack Safe Lab</title>
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へ移動</a>
+    <header class="site-header">
+      <nav class="nav" aria-label="メインナビゲーション">
+        <a class="brand" href="./"><span class="brand-mark">M5</span>M5Stack Safe Lab</a>
+        <ul class="nav-links">
+          <li><a href="screen-link.html">画面リンク</a></li>
+          <li><a href="cardputer-mute.html">Cardputer mute</a></li>
+          <li><a href="safe-development.html">安全な実機操作</a></li>
+          <li><a href="troubleshooting.html" aria-current="page">困ったとき</a></li>
+          <li><a href="https://github.com/hjosugi/m5stack">GitHub</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <p class="breadcrumbs"><a href="./">トップ</a> / 困ったとき</p>
+      <section class="hero">
+        <p class="eyebrow">Troubleshooting</p>
+        <h1 class="page-title">症状から確認する</h1>
+        <p class="lead">まず画面リンク、次にUSB、最後に書込みゲートを切り分けます。</p>
+      </section>
+
+      <section class="section" id="screen-link" aria-labelledby="screen-link-title">
+        <h2 id="screen-link-title">画面リンク</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>症状</th><th>確認</th></tr></thead>
+            <tbody>
+              <tr><td><code>run.sh</code>が.envなしで停止</td><td><code>pc/screen-link/.env.example</code>を同じ場所の<code>.env</code>へコピーする。</td></tr>
+              <tr><td>ブラウザーがrelayへ接続できない</td><td>PC自身で<code>http://127.0.0.1:8765/healthz</code>を開く。port 8765の競合も確認する。</td></tr>
+              <tr><td><code>producers: 0</code></td><td>画面共有を開始し、PC用.envとブラウザーへ同じtokenを入力する。</td></tr>
+              <tr><td>端末が<code>0</code>のまま</td><td>同じ2.4 GHz LAN、PCのLAN IP、3か所で同じtokenか確認する。</td></tr>
+              <tr><td>Cardputerに<code>RELAY ERROR</code></td><td><code>SCREEN_LINK_SERVER_HOST</code>へPCのLAN IPを書く。<code>127.0.0.1</code>は使わない。</td></tr>
+              <tr><td>StackChanへ表示されない</td><td>公式1.4.3系のAVATAR受信経路か確認する。コミュニティ版v1.0.0は非対応。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="usb-title">
+        <h2 id="usb-title">USBと権限</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>症状</th><th>確認</th></tr></thead>
+            <tbody>
+              <tr><td>対応デバイスが見つからない</td><td>データ対応USB-Cケーブル、PC直結、別USB portを順に試し、<code>make detect</code>を再実行する。</td></tr>
+              <tr><td>対応デバイスが複数台</td><td>設定時は一台だけ接続する。</td></tr>
+              <tr><td>portを読み書きできない</td><td><code>./scripts/grant-port-access.sh</code>を実行。USBを抜いた後は再実行する。</td></tr>
+              <tr><td><code>.envは既にあります</code></td><td>別実機なら<code>./scripts/init-env.sh --force</code>で明示更新する。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="gate-title">
+        <h2 id="gate-title">書込みゲート</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>表示</th><th>意味</th></tr></thead>
+            <tbody>
+              <tr><td>検証済みバックアップがない</td><td>書込みを止め、先に<a href="safe-development.html#backup">全Flashバックアップ</a>を作る。</td></tr>
+              <tr><td><code>--allow-flash</code>が必要</td><td>Flashを変更する操作。内容と対象を確認した場合だけ明示する。</td></tr>
+              <tr><td><code>--replace-factory-firmware</code>が必要</td><td>StackChan工場版を置換する追加確認。OTA等を失う可能性がある。</td></tr>
+              <tr><td>Secure Boot／Flash Encryptionで中止</td><td>eFuseを変更しない。公式の復旧経路を確認する。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><a href="https://github.com/hjosugi/m5stack/blob/main/docs/recovery.md">USBと復旧の詳しい説明</a></p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>解決しない場合は、秘密情報を除いてエラー全文を確認します。</p>
+        <p><a href="./">トップへ戻る</a></p>
+      </div>
+    </footer>
+  </body>
+</html>

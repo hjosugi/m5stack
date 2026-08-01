@@ -2,6 +2,15 @@
 
 M5Stack StackChan（SKU K151）を主対象に、再現可能な開発環境と安全ゲート付きの実機手順をまとめた公開リポジトリです。Cardputer Advも同じローカル環境でビルド対象にできます。
 
+> **最初に見る:** [図入りの短い手順（GitHub Pages）](https://hjosugi.github.io/m5stack/)
+
+| やりたいこと | 読む場所 |
+| --- | --- |
+| PC画面をCardputer／StackChanへ送る | [PC画面リンク](https://hjosugi.github.io/m5stack/screen-link.html) |
+| Cardputerを完全muteする | [Cardputer mute](https://hjosugi.github.io/m5stack/cardputer-mute.html) |
+| セットアップ、バックアップ、書込み、復旧 | [安全な実機操作](https://hjosugi.github.io/m5stack/safe-development.html) |
+| エラーから調べる | [困ったとき](https://hjosugi.github.io/m5stack/troubleshooting.html) |
+
 このリポジトリは次の事故を防ぐことを優先します。
 
 - USB IDだけで製品型番を決めつける
@@ -34,7 +43,7 @@ StackChan本体 USB-C
 
 固定値と取得元は[`versions.env`](versions.env)と[`config/upstream.lock`](config/upstream.lock)、選定理由は[OSS選定](docs/oss-selection.md)に記録しています。
 
-## PC画面リンク
+## PC画面リンク（試験実装）
 
 ブラウザーで明示的に選んだPC画面またはウィンドウを、同じLAN上の端末へJPEG列として送る試験実装があります。音声は送信しません。端末ごとの実装と手順は混在させず、別ディレクトリに分けています。
 
