@@ -9,8 +9,13 @@ require_command bash
 require_command actionlint
 require_command shellcheck
 require_command shfmt
+require_command task
 require_command uv
 require_command python3
+
+[[ -f $M5_REPO_ROOT/Taskfile.yml ]] || die "Taskfile.ymlがありません。"
+[[ ! -e $M5_REPO_ROOT/Makefile ]] || die "MakefileはTaskfile.ymlへ移行済みです。"
+task --dir "$M5_REPO_ROOT" --list-all > /dev/null
 
 mapfile -d '' shell_files < <(
   find \
@@ -43,6 +48,7 @@ awk -F '|' '
 ' "$M5_REPO_ROOT/config/upstream.lock"
 
 "$M5_REPO_ROOT/tests/test-common.sh"
+"$M5_REPO_ROOT/tests/test-taskfile.sh"
 "$M5_REPO_ROOT/tests/test-safety-gates.sh"
 uv run --project "$M5_REPO_ROOT/pc/screen-link" --frozen \
   python -m unittest discover -s "$M5_REPO_ROOT/pc/screen-link/tests" -v

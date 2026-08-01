@@ -77,8 +77,8 @@ SCREEN_LINK_TOKEN=ここへ生成値</code></pre>
           <h2>Cardputer Advを使う場合</h2>
           <p>2.4 GHz Wi-Fi、PCのLAN IP、PCと同じtokenを書きます。</p>
           <pre><code>cp cardputer/screen-link/.env.example cardputer/screen-link/.env
-make setup
-make build-cardputer-screen-link</code></pre>
+task arduino:setup
+task cardputer:screen-link:build</code></pre>
           <p>成果物は<code>.local/build/cardputer-screen-link/</code>です。speakerは既定で初期化されません。</p>
           <div class="callout"><strong>設定の目印</strong><code>SCREEN_LINK_SERVER_HOST</code>は<code>192.168.x.x</code>等のPCのLAN IPです。<code>127.0.0.1</code>ではありません。</div>
         </li>
@@ -86,9 +86,9 @@ make build-cardputer-screen-link</code></pre>
         <li id="stackchan">
           <h2>StackChanを使う場合</h2>
           <p>公式1.4.3系のAVATAR画面リンク用です。PCのLAN URLと同じtokenを書きます。</p>
-          <pre><code>make setup-stackchan
+          <pre><code>task stackchan:factory:setup
 cp stackchan/screen-link/.env.example stackchan/screen-link/.env
-make build-stackchan-screen-link</code></pre>
+task stackchan:screen-link:build</code></pre>
           <p>成果物は<code>.local/build/stackchan-screen-link-ja/</code>です。</p>
           <div class="callout warning"><strong>対応を確認</strong>コミュニティ版v1.0.0には同じ受信経路がありません。このscriptは実機のファームウェアを自動変更しません。</div>
         </li>
@@ -96,7 +96,8 @@ make build-stackchan-screen-link</code></pre>
         <li id="start">
           <h2>PCから送信</h2>
           <p>relayを起動し、PC自身のブラウザーで画面を選びます。</p>
-          <pre><code>./pc/screen-link/run.sh</code></pre>
+          <pre><code>task host:screen-link:setup
+task host:screen-link:run</code></pre>
           <ol>
             <li><a href="http://127.0.0.1:8765/">http://127.0.0.1:8765/</a>を開く。</li>
             <li>同じtokenを入力する。</li>
@@ -109,8 +110,10 @@ make build-stackchan-screen-link</code></pre>
 
       <section class="section" id="check" aria-labelledby="check-title">
         <h2 id="check-title">つながったか確認</h2>
-        <p>PCで<a href="http://127.0.0.1:8765/healthz">/healthz</a>を開きます。接続済み端末が<code>1</code>ならrelayまで到達しています。</p>
-        <pre><code>{"status":"ok","producers":1,"cardputer":1,"stackchan":0}</code></pre>
+        <p>relayを起動したterminalとは別のterminalで確認します。別hostなら<code>URL=http://host:port</code>を末尾へ追加します。</p>
+        <pre><code>task host:screen-link:status
+task host:stackchan:status</code></pre>
+        <p>JSONを直接確認する場合はPCで<a href="http://127.0.0.1:8765/healthz">/healthz</a>を開きます。接続済み端末が<code>1</code>ならrelayまで到達しています。</p>
         <ul class="check-list">
           <li><code>producers: 1</code> — ブラウザーが送信中</li>
           <li><code>cardputer: 1</code> — Cardputerが接続中</li>

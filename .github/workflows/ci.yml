@@ -24,7 +24,7 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # v31.11.0
       - name: Check
-        run: nix develop --command ./scripts/check.sh
+        run: nix develop --command task check
 
   arduino-setup:
     name: Arduino dependencies
@@ -43,7 +43,7 @@ jobs:
           key: arduino-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', 'versions.env', 'config/upstream.lock', 'scripts/setup.sh') }}
       - name: Install pinned Arduino dependencies
         if: steps.arduino-cache.outputs.cache-hit != 'true'
-        run: nix develop --command ./scripts/setup.sh
+        run: nix develop --command task arduino:setup
 
   arduino:
     name: Arduino / ${{ matrix.name }}
@@ -78,7 +78,7 @@ jobs:
           key: arduino-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('flake.lock', 'versions.env', 'config/upstream.lock', 'scripts/setup.sh') }}
           fail-on-cache-miss: true
       - name: Build ${{ matrix.name }}
-        run: nix develop --command ./scripts/build-ci-target.sh '${{ matrix.target }}'
+        run: nix develop --command task arduino:ci 'TARGET=${{ matrix.target }}'
 
   arduino-result:
     name: Arduino build matrix

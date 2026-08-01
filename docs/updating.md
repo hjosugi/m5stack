@@ -8,8 +8,8 @@
 2. Arduino Library Manager索引でM5Unified、M5GFX、M5Cardputer、依存ライブラリを確認する。
 3. StackChan-BSPの`library.properties`とcommitを確認する。
 4. `versions.env`を更新する。
-5. 新しい空の`.local/`相当で`make setup`を行う。
-6. `make matrix`と`make check`を実行する。
+5. 新しい空の`.local/`相当で`task arduino:setup`を行う。
+6. `task arduino:matrix`と`task check`を実行する。
 
 M5Stack公式CoreとEspressif汎用Coreの版が違う場合、M5Stack固有FQBNを使う本リポジトリでは公式M5Stack索引を優先します。
 
@@ -19,8 +19,8 @@ M5Stack公式CoreとEspressif汎用Coreの版が違う場合、M5Stack固有FQBN
 2. `repos.json`にある全URL/refを確認し、各refを40桁commitへ解決する。
 3. ESP-IDFの注釈付きtagはtag objectではなく、checkout後のcommitを記録する。
 4. `versions.env`と`config/upstream.lock`を同じ変更で更新する。
-5. 新しい`.local/upstream`で`make setup-stackchan`を行う。
-6. `make build-stackchan`で依存照合、host tests、日本語設定、ESP32-S3ビルドを確認する。
+5. 新しい`.local/upstream`で`task stackchan:factory:setup`を行う。
+6. `task stackchan:factory:build`で依存照合、host tests、日本語設定、ESP32-S3ビルドを確認する。
 7. 上流のライセンス、partition、OTA、Secure Boot/Flash Encryption設定の変更を読む。
 
 公開ソースの更新は、工場配布版より新しいことを意味しません。更新後も自動Flashは追加せず、実機の全Flashバックアップと物理安全を別途確認します。
@@ -28,7 +28,7 @@ M5Stack公式CoreとEspressif汎用Coreの版が違う場合、M5Stack固有FQBN
 ## 公開前
 
 ```bash
-make check
+task check
 git diff --check
 git status --short
 ```

@@ -53,7 +53,7 @@
           <table>
             <thead><tr><th>症状</th><th>確認</th></tr></thead>
             <tbody>
-              <tr><td>対応デバイスが見つからない</td><td>データ対応USB-Cケーブル、PC直結、別USB portを順に試し、<code>make detect</code>を再実行する。</td></tr>
+              <tr><td>対応デバイスが見つからない</td><td>データ対応USB-Cケーブル、PC直結、別USB portを順に試し、<code>task device:detect</code>を再実行する。</td></tr>
               <tr><td>対応デバイスが複数台</td><td>設定時は一台だけ接続する。</td></tr>
               <tr><td>portを読み書きできない</td><td><code>./scripts/grant-port-access.sh</code>を実行。USBを抜いた後は再実行する。</td></tr>
               <tr><td><code>.envは既にあります</code></td><td>別実機なら<code>./scripts/init-env.sh --force</code>で明示更新する。</td></tr>

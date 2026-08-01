@@ -10,7 +10,7 @@
 
 ```bash
 direnv allow
-make setup-stackchan
+task stackchan:factory:setup
 ```
 
 この処理は次を`.local/`へ取得します。
@@ -25,7 +25,7 @@ URLとHEADは[`config/upstream.lock`](../config/upstream.lock)に照合されま
 ## ビルド
 
 ```bash
-make build-stackchan
+task stackchan:factory:build
 ```
 
 処理内容は次の通りです。

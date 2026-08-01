@@ -34,7 +34,7 @@
               findutils
               flex
               git
-              gnumake
+              go-task
               gnugrep
               gperf
               jq
@@ -53,7 +53,7 @@
 
             shellHook = ''
               export M5STACK_DEV_SHELL=1
-              echo "M5Stack開発環境: make detect / make setup / make build"
+              echo "M5Stack開発環境: task device:detect / task arduino:setup / task arduino:build"
             '';
           };
         }

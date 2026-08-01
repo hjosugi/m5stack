@@ -18,9 +18,9 @@ expect_rejected "Arduino書込み" "$REPO_ROOT/scripts/upload.sh"
 expect_rejected "シリアルモニター" "$REPO_ROOT/scripts/monitor.sh"
 expect_rejected "Flash復旧" "$REPO_ROOT/scripts/restore-flash.sh"
 
-# Makeの短縮ターゲットも、危険操作を直接呼ばず使用方法を案内するだけにする。
+# Taskの短縮taskも、危険操作を直接呼ばず使用方法を案内するだけにする。
 for target in backup upload monitor restore; do
-  expect_rejected "make $target" make --no-print-directory -C "$REPO_ROOT" "$target"
+  expect_rejected "task $target" task --dir "$REPO_ROOT" "$target"
 done
 
 printf 'safety gate tests: OK\n'

@@ -13,7 +13,8 @@ PCブラウザーの`getDisplayMedia`で、利用者が明示的に選んだ画�
 ```bash
 cp pc/screen-link/.env.example pc/screen-link/.env
 openssl rand -hex 24
-./pc/screen-link/run.sh
+task host:screen-link:setup
+task host:screen-link:run
 ```
 
 生成したtokenは画面へ貼らず、PC、Cardputer、StackChanの各`.env`に同じ値を設定します。relay起動後、PC自身のブラウザーで次を開きます。
@@ -31,6 +32,13 @@ http://127.0.0.1:8765/
 - フレームはディスクへ保存しません。2端末向けJPEGは並列生成し、ネットワークが詰まった場合は古いフレームを捨てて遅延の蓄積を防ぎます。
 - インターネットへport-forwardしないでください。TLS終端を追加していないため、公衆LANでは使用しません。
 - `/healthz`は接続台数だけを返し、画面やtokenを返しません。
+
+relayを起動したterminalとは別のterminalで、host PCから接続状態を確認できます。別hostのrelayを確認する場合は`URL=http://host:port`を追加します。
+
+```bash
+task host:screen-link:status
+task host:stackchan:status
+```
 
 ## プロトコル
 

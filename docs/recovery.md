@@ -7,7 +7,7 @@ USB列挙の失敗とファームウェア故障を混同しません。`error -
 1. データ通信対応USB-Cケーブルの差し直し・交換。
 2. PCへ直結し、外付けHubや延長を外す。
 3. 別のPC側USBポートを試す。
-4. `make detect`でHubとESP32-S3が継続して見えるか確認する。
+4. `task device:detect`でHubとESP32-S3が継続して見えるか確認する。
 5. 安定後にだけポート権限、ブートローダー、Flashを調べる。
 
 ## Download Mode
@@ -21,7 +21,7 @@ USB列挙の失敗とファームウェア故障を混同しません。`error -
 バックアップ作成時と同じ実機を接続し、一時ACLを付けます。
 
 ```bash
-make detect
+task device:detect
 ./scripts/grant-port-access.sh
 ./scripts/restore-flash.sh --allow-flash \
   .local/backups/stackchan/<UTC時刻>/flash-16777216.bin

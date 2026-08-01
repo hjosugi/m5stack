@@ -14,11 +14,11 @@ StackChanは起動するファームウェアによってサーボへ給電し�
 
 ```bash
 direnv allow
-make setup
-make detect
-make init
-./scripts/select-board.sh stackchan
-make build
+task arduino:setup
+task device:detect
+task device:init
+task device:select MODEL=stackchan
+task arduino:build
 ```
 
 `detect`はsysfsだけを読み、シリアルポートを開きません。`init`は検出した生USBシリアルを`.env`へ権限`0600`で保存します。`select-board`により製品名、FQBN、SoC、Flash容量が一組で固定されます。
