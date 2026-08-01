@@ -14,7 +14,7 @@
   "12": "test-common.sh",
   "13": "cardputer/screen-link/build.sh",
   "14": "build-stackchan-factory.sh",
-  "15": "setup-stackchan-factory.sh",
+  "15": "安全な実機ワークフロー",
   "16": "screen_link_auth.cpp",
   "17": "test-safety-gates.sh",
   "18": "run.sh",

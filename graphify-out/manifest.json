@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "pc/screen-link/src/m5_screen_link/static/app.js": {
-    "mtime": 1785550061.3014638,
-    "ast_hash": "3ab7c4637592e0e48196496f6441db21",
+    "mtime": 1785560320.019744,
+    "ast_hash": "a21befc94f2ff980060d04a1c532eb90",
     "semantic_hash": ""
   },
   "pc/screen-link/tests/test_protocol.py": {
@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "scripts/build-matrix.sh": {
-    "mtime": 1785548960.7057242,
-    "ast_hash": "970ad4260c6f275eec20d6fa63fbac15",
+    "mtime": 1785560319.6227434,
+    "ast_hash": "fe00876de2983f4b59f0a5bb94306ae4",
     "semantic_hash": ""
   },
   "scripts/build-stackchan-factory.sh": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1785548458.462075,
-    "ast_hash": "3a6c9c8edaa3f9a2a046e922ed89c53f",
+    "mtime": 1785560319.8187437,
+    "ast_hash": "7d0ecca49aa279f7ccb933d25184e12f",
     "semantic_hash": ""
   },
   ".github/workflows/pages.yml": {
@@ -245,8 +245,8 @@
     "semantic_hash": ""
   },
   "pc/screen-link/README.md": {
-    "mtime": 1785559234.2635298,
-    "ast_hash": "23f89d6087017d09c7cb34376756565b",
+    "mtime": 1785560320.2137444,
+    "ast_hash": "eda964a755b24bea5df3ae0bd2c8918d",
     "semantic_hash": ""
   },
   "pc/screen-link/src/m5_screen_link/static/index.html": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "site/screen-link.html": {
-    "mtime": 1785559139.3021085,
-    "ast_hash": "d3a8c9db1ddef0f9f4f4ac77bdf6ae8c",
+    "mtime": 1785560320.4237447,
+    "ast_hash": "612f67da3621c67c97bd51f277c06f7f",
     "semantic_hash": ""
   },
   "site/troubleshooting.html": {
@@ -292,6 +292,11 @@
   "stackchan/screen-link/components/screen_link_auth/CMakeLists.txt": {
     "mtime": 1785549779.005858,
     "ast_hash": "8a23208c291cc4af9552b3a0020c4ac1",
+    "semantic_hash": ""
+  },
+  "scripts/build-ci-target.sh": {
+    "mtime": 1785560319.412743,
+    "ast_hash": "7d66bcfe18607935c362e2c8c7b59628",
     "semantic_hash": ""
   }
 }

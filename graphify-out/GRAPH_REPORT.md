@@ -1,16 +1,16 @@
 # Graph Report - pc-screen-link  (2026-08-01)
 
 ## Corpus Check
-- 45 files · ~8,748 words
+- 46 files · ~9,059 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 253 nodes · 439 edges · 22 communities (13 shown, 9 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 35 edges (avg confidence: 0.51)
+- 255 nodes · 445 edges · 22 communities (15 shown, 7 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 36 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f8aa894f`
+- Built from commit: `58228ce1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -30,7 +30,7 @@
 - test-common.sh
 - cardputer/screen-link/build.sh
 - build-stackchan-factory.sh
-- setup-stackchan-factory.sh
+- 安全な実機ワークフロー
 - screen_link_auth.cpp
 - test-safety-gates.sh
 - run.sh
@@ -38,9 +38,9 @@
 - m5-screen-link
 
 ## God Nodes (most connected - your core abstractions)
-1. `die()` - 23 edges
-2. `log()` - 19 edges
-3. `require_command()` - 15 edges
+1. `die()` - 24 edges
+2. `log()` - 20 edges
+3. `require_command()` - 16 edges
 4. `詳しい使い方` - 15 edges
 5. `Target` - 12 edges
 6. `create_app()` - 12 edges
@@ -64,19 +64,19 @@
 ## Import Cycles
 - None detected.
 
-## Communities (22 total, 9 thin omitted)
+## Communities (22 total, 7 thin omitted)
 
 ### Community 0 - "common.sh"
 Cohesion: 0.10
-Nodes (38): audit-public-tree.sh script, backup-flash.sh script, build-matrix.sh script, build.sh script, build-stackchan-factory.sh script, check.sh script, detect-device.sh script, checkout_exact() (+30 more)
+Nodes (39): audit-public-tree.sh script, backup-flash.sh script, build-ci-target.sh script, build-matrix.sh script, build.sh script, build-stackchan-factory.sh script, check.sh script, detect-device.sh script (+31 more)
 
 ### Community 1 - "server.py"
 Cohesion: 0.10
 Nodes (35): Application, ArgumentParser, FileResponse, IntEnum, PC screen relay for M5Stack devices., pack_stackchan_packet(), parse_producer_frame(), ProtocolError (+27 more)
 
 ### Community 2 - "README.md"
-Cohesion: 0.05
-Nodes (34): 2026-07-31の非破壊観測, Cardputer Advについて, この時点で行っていない操作, ハードウェア調査記録, 接続の安定性, 結論, Arduino経路, OSSとバージョンの選定 (+26 more)
+Cohesion: 0.07
+Nodes (26): 2026-07-31の非破壊観測, Cardputer Advについて, この時点で行っていない操作, ハードウェア調査記録, 接続の安定性, 結論, Arduino経路, OSSとバージョンの選定 (+18 more)
 
 ### Community 3 - "詳しい使い方"
 Cohesion: 0.13
@@ -88,7 +88,7 @@ Nodes (7): HTMLParser, main(), PageParser, parse_pages(), Path, resolve_local_ta
 
 ### Community 5 - "app.js"
 Cohesion: 0.33
-Nodes (11): clamp(), drawContained(), elements, frameLoop(), jpegBlob(), sendTarget(), setStatus(), start() (+3 more)
+Nodes (11): clamp(), drawContained(), elements, encodeTarget(), frameLoop(), jpegBlob(), setStatus(), start() (+3 more)
 
 ### Community 7 - "m5stack"
 Cohesion: 0.22
@@ -114,10 +114,18 @@ Nodes (4): StackChan PC画面リンク, 使い方, 対応ファームウェア, 
 Cohesion: 0.40
 Nodes (4): M5_BY_ID_ROOT, M5_DEV_ROOT, M5_ENV_FILE, M5_SYSFS_ROOT
 
+### Community 14 - "build-stackchan-factory.sh"
+Cohesion: 0.27
+Nodes (3): IDF_TOOLS_PATH, IDF_TOOLS_PATH, setup-stackchan-factory.sh script
+
+### Community 15 - "安全な実機ワークフロー"
+Cohesion: 0.25
+Nodes (8): 0. 物理安全, 1. 書込みを伴わない準備, 2. ポート権限, 3. 工場出荷Flashの保存, 4. シリアル監視, 5. Arduinoスケッチの書込み, 6. 公式ファームウェア, 安全な実機ワークフロー
+
 ## Knowledge Gaps
 - **78 isolated node(s):** `build.sh script`, `m5-screen-link`, `run.sh script`, `targetIds`, `targetSizes` (+73 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -126,13 +134,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Why does `m5stack` connect `m5stack` to `README.md`?**
   _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **Why does `安全な実機ワークフロー` connect `安全な実機ワークフロー` to `README.md`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `Target` (e.g. with `FrameHub` and `ProtocolTest`) actually correct?**
   _`Target` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `build.sh script`, `m5-screen-link`, `run.sh script` to the rest of the system?**
   _78 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `common.sh` be split into smaller, more focused modules?**
-  _Cohesion score 0.10025062656641603 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09701928696668614 - nodes in this community are weakly interconnected._
 - **Should `server.py` be split into smaller, more focused modules?**
   _Cohesion score 0.09990749306197964 - nodes in this community are weakly interconnected._
-- **Should `README.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.05226480836236934 - nodes in this community are weakly interconnected._
