@@ -1,0 +1,14 @@
+[project]
+name = "m5-local-stt"
+version = "0.1.0"
+description = "OpenAI互換の faster-whisper STTサーバ（StackChan localプロファイル用）"
+requires-python = ">=3.11"
+dependencies = [
+  "faster-whisper>=1.0",
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "python-multipart>=0.0.9",
+]
+
+[tool.uv]
+package = false

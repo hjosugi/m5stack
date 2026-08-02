@@ -1,12 +1,16 @@
 // StackChan (CoreS3) 音声質問→テキスト回答ファーム。
 //
-// 流れ: タッチ長押しでマイク録音 → STT(音声→文字) → LLM → 画面にテキスト表示（音声なし）。
+// 顔(M5Stack-Avatar)は常時表示し、テキストは小さな吹き出しに出す（顔は消さない）。
+// 操作(タッチ): 顔を長押し=録音して質問 / 顔を短くタップ=なで反応 /
+//   上部を短くタップ=cloud↔local切替 / 上部を長押し=設定メニュー。
+// 流れ: 録音 → STT(音声→文字) → LLM → 回答を吹き出しに表示（音声出力なし）。
 // バックエンドは2プロファイル: cloud(DeepSeek + OpenAI Whisper) と local(PC上のOpenAI互換サーバ)。
-// PC(=DSV_LOCAL_HOST)が到達可能なら local を自動優先し、落ちていれば cloud へフォールバック。
-// cloud利用分だけusage/コストをNVSへ積算し、$5/月の予算超過を画面警告する。
+// cloud利用分だけusage/コストをNVSへ積算し、$5/月の予算超過を吹き出しで警告する。
 // 同一/正規化が一致する質問はSDキャッシュから返し、LLM呼び出しを節約する。
+// 自発発話(既定OFF)はメニューでON。予算節約のため定型文をローテーションで話す。
 
 #include <ArduinoJson.h>
+#include <Avatar.h>
 #include <HTTPClient.h>
 #include <M5Unified.h>
 #include <Preferences.h>
@@ -20,6 +24,8 @@
 #else
 #include "deepseek_voice_secrets.example.h"
 #endif
+
+using namespace m5avatar;
 
 namespace {
 
@@ -52,46 +58,28 @@ const Endpoint kLocalStt = {false, DSV_LOCAL_HOST, DSV_LOCAL_STT_PORT, DSV_LOCAL
                             DSV_LOCAL_STT_KEY, DSV_LOCAL_STT_MODEL};
 
 Preferences prefs;
+Avatar avatar;
+String speechBacking;  // Balloonはポインタ参照のため実体を保持する
 bool sdReady = false;
 bool backendLocal = false;  // 選択中のバックエンド（true=local, false=cloud）
-bool localUp = false;       // localが到達可能か（警告表示用のみ、選択には影響しない）
-uint32_t nextLocalProbe = 0;
 
-// ---- 表示ヘルパ -------------------------------------------------------------
+// ---- 表示ヘルパ（顔は消さず、テキストは小さく吹き出しに出す） ----------------
 
-void drawHeader() {
-  const int w = M5.Display.width();
-  M5.Display.fillRect(0, 0, w, 20, TFT_BLACK);
-  M5.Display.setFont(&fonts::lgfxJapanGothic_16);
-  // local選択かつ到達不可なら赤で警告。cloudは水色。
-  M5.Display.setTextColor(backendLocal ? (localUp ? TFT_GREEN : TFT_RED) : TFT_CYAN, TFT_BLACK);
-  M5.Display.setCursor(4, 2);
-  M5.Display.print(backendLocal ? "LOCAL" : "CLOUD");
-  M5.Display.setTextColor(TFT_DARKGREY, TFT_BLACK);
-  M5.Display.setCursor(78, 2);
-  M5.Display.print("上部タップで切替");
+void say(const String& text) {
+  speechBacking = text;
+  avatar.setSpeechText(speechBacking.c_str());
+  Serial.println(text);
 }
 
 void showStatus(const char* text, uint16_t color = TFT_WHITE) {
-  M5.Display.fillRect(0, 20, M5.Display.width(), M5.Display.height() - 20, TFT_BLACK);
-  drawHeader();
-  M5.Display.setFont(&fonts::lgfxJapanGothic_16);
-  M5.Display.setTextColor(color, TFT_BLACK);
-  M5.Display.setTextWrap(true);
-  M5.Display.setCursor(6, 28);
-  M5.Display.print(text);
+  (void)color;
+  say(text);
 }
 
 void showAnswer(const String& question, const String& answer, bool fromCache) {
-  M5.Display.fillScreen(TFT_BLACK);
-  drawHeader();
-  M5.Display.setFont(&fonts::lgfxJapanGothic_16);
-  M5.Display.setTextWrap(true);
-  M5.Display.setCursor(6, 24);
-  M5.Display.setTextColor(TFT_YELLOW, TFT_BLACK);
-  M5.Display.printf("Q: %s\n", question.c_str());
-  M5.Display.setTextColor(fromCache ? TFT_LIGHTGREY : TFT_WHITE, TFT_BLACK);
-  M5.Display.print(answer);
+  (void)fromCache;
+  Serial.printf("Q: %s\n", question.c_str());
+  say(answer);
 }
 
 // ---- usage / 予算 -----------------------------------------------------------
@@ -232,24 +220,6 @@ int httpPost(const Endpoint& ep, const char* contentType, const uint8_t* body, s
     http.end();
   }
   return status;
-}
-
-// PCのローカルLLMポートへTCP接続できるか（=完全ローカルへ切替可能か）。
-bool probeLocal() {
-  if (strlen(DSV_LOCAL_HOST) == 0) return false;  // local未設定なら探索しない
-  WiFiClient c;
-  bool ok = c.connect(DSV_LOCAL_HOST, DSV_LOCAL_LLM_PORT, 400);
-  c.stop();
-  return ok;
-}
-
-void refreshBackend() {
-  if (millis() >= nextLocalProbe) {
-    nextLocalProbe = millis() + 3000;
-    bool prev = localUp;
-    localUp = probeLocal();
-    if (prev != localUp) drawHeader();
-  }
 }
 
 // ---- 音声処理 ---------------------------------------------------------------
@@ -414,12 +384,98 @@ void handleInteraction() {
   showStatus((String("考え中… (") + (backendLocal ? "local" : "cloud") + ")").c_str());
   if (!askLlm(question, answer)) return;
   cachePut(norm, answer);
-  showAnswer(question, answer, false);
-
   if (!backendLocal && estimatedCostUsd() > DSV_MONTHLY_BUDGET_USD) {
-    M5.Display.setTextColor(TFT_RED, TFT_BLACK);
-    M5.Display.print("\n[予算超過] localへ切替推奨");
+    say(answer + " ［予算超過］");
+  } else {
+    showAnswer(question, answer, false);
   }
+}
+
+// ---- 自発モード / なで反応 / メニュー ---------------------------------------
+
+bool proactiveOn = false;  // 自発発話は既定OFF。メニューでON。
+bool headReactionOn = true;
+uint32_t proactiveIntervalMs = 5UL * 60 * 1000;
+uint32_t lastProactiveMs = 0;
+bool inMenu = false;
+int menuIndex = 0;
+
+const char* const kIdleLines[] = {"ひまだなぁ", "なにか手伝おうか？", "話しかけてね", "げんきー？",
+                                  "ちょっと休憩する？"};
+const char* const kPatLines[] = {"なでてくれてうれしい", "えへへ", "きもちいい", "ありがとう"};
+
+void loadSettings() {
+  proactiveOn = prefs.getBool("pro_on", false);
+  headReactionOn = prefs.getBool("pat_on", true);
+  uint32_t minutes = prefs.getUInt("pro_min", 5);
+  if (minutes < 1) minutes = 1;
+  proactiveIntervalMs = minutes * 60UL * 1000;
+  lastProactiveMs = millis();
+}
+
+void resetProactiveTimer() { lastProactiveMs = millis(); }
+
+void showMenu() {
+  uint32_t minutes = proactiveIntervalMs / 60000;
+  switch (menuIndex) {
+    case 0: say(String("設定1/4 自発:") + (proactiveOn ? "ON" : "OFF") + " 下=切替/上=次"); break;
+    case 1: say(String("設定2/4 間隔:") + minutes + "分 下=+1/上=次"); break;
+    case 2:
+      say(String("設定3/4 なで反応:") + (headReactionOn ? "ON" : "OFF") + " 下=切替/上=次");
+      break;
+    default: say("設定4/4 下=閉じる/上=次"); break;
+  }
+}
+
+void menuNext() {
+  menuIndex = (menuIndex + 1) % 4;
+  showMenu();
+}
+
+void menuChange() {
+  uint32_t minutes = proactiveIntervalMs / 60000;
+  switch (menuIndex) {
+    case 0:
+      proactiveOn = !proactiveOn;
+      prefs.putBool("pro_on", proactiveOn);
+      break;
+    case 1:
+      minutes = minutes >= 60 ? 1 : minutes + 1;
+      proactiveIntervalMs = minutes * 60UL * 1000;
+      prefs.putUInt("pro_min", minutes);
+      break;
+    case 2:
+      headReactionOn = !headReactionOn;
+      prefs.putBool("pat_on", headReactionOn);
+      break;
+    default:
+      inMenu = false;
+      resetProactiveTimer();
+      say("設定を閉じました");
+      return;
+  }
+  showMenu();
+}
+
+// 自発発話。予算を使わないよう定型文をローテーションで話す。
+void proactiveTick() {
+  if (!proactiveOn || inMenu) return;
+  if (millis() - lastProactiveMs < proactiveIntervalMs) return;
+  lastProactiveMs = millis();
+  static uint8_t i = 0;
+  avatar.setExpression(Expression::Happy);
+  say(kIdleLines[i % (sizeof(kIdleLines) / sizeof(kIdleLines[0]))]);
+  i++;
+}
+
+// 顔を短くタップ = なで反応。
+void headPat() {
+  if (!headReactionOn) return;
+  static uint8_t i = 0;
+  avatar.setExpression(Expression::Happy);
+  say(kPatLines[i % (sizeof(kPatLines) / sizeof(kPatLines[0]))]);
+  i++;
+  resetProactiveTimer();
 }
 
 bool configUsable() {
@@ -438,10 +494,15 @@ void setup() {
   cfg.internal_spk = false;  // 音声出力は使わない
   M5.begin(cfg);
   M5.Display.setRotation(1);
-  M5.Display.fillScreen(TFT_BLACK);
+  Serial.begin(115200);
+
+  // StackChanの顔を起動（別タスクで常時描画）。テキストは小さな吹き出しに出す。
+  avatar.init();
+  avatar.setSpeechFont(&fonts::lgfxJapanGothic_12);
 
   recBuffer = static_cast<int16_t*>(ps_malloc(kMaxSamples * sizeof(int16_t)));
   prefs.begin("dsv", false);
+  loadSettings();
 
   if (!configUsable()) {
     showStatus("設定が必要です。build.shで生成してください。", TFT_RED);
@@ -462,23 +523,43 @@ void setup() {
 
   sdReady = SD.begin();
   backendLocal = DSV_PREFER_LOCAL;  // 既定モード。実行中は上部タップで切替可。
-  refreshBackend();
-  showStatus("画面を長押しで話しかけてください。\n上部タップでcloud↔local切替。\n『usage教えて』で使用量表示。",
-             TFT_WHITE);
+  say(backendLocal ? "こんにちは（local）。長押しで話しかけてね。"
+                   : "こんにちは（cloud）。長押しで話しかけてね。");
 }
 
 void loop() {
   M5.update();
-  refreshBackend();
+  proactiveTick();
+
   if (recBuffer && M5.Touch.getCount() > 0) {
     auto detail = M5.Touch.getDetail();
-    if (detail.y < 20) {
-      // 上部タップ: バックエンドを即切替
-      backendLocal = !backendLocal;
-      drawHeader();
-    } else {
-      handleInteraction();
+    bool top = detail.y < 20;
+
+    // 長押し判定のため最大700ms待つ。
+    uint32_t pressStart = millis();
+    while (M5.Touch.getCount() > 0 && millis() - pressStart < 700) {
+      M5.update();
+      delay(10);
     }
+    bool longPress = M5.Touch.getCount() > 0;
+
+    if (inMenu) {
+      // メニュー中: 上=次の項目 / 下=値を変更
+      if (top) menuNext();
+      else menuChange();
+    } else if (top && longPress) {
+      inMenu = true;
+      menuIndex = 0;
+      showMenu();
+    } else if (top) {
+      backendLocal = !backendLocal;  // 上部タップ=cloud↔local
+      say(backendLocal ? "ローカルに切替" : "クラウドに切替");
+    } else if (longPress) {
+      handleInteraction();  // 顔を長押し=録音して質問
+    } else {
+      headPat();  // 顔を短くタップ=なで反応
+    }
+
     // 誤連打防止: 指を離すまで待つ
     while (M5.Touch.getCount() > 0) {
       M5.update();
