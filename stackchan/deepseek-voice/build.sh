@@ -70,6 +70,12 @@ else
     fi
   done
   [[ $MONTHLY_BUDGET_USD =~ ^[0-9]+(\.[0-9]+)?$ ]] || die "MONTHLY_BUDGET_USD が不正です。"
+  # 整数なら小数点を補い、常に有効なfloatリテラルにする（5 -> 5.0, 5.5 -> 5.5）。
+  if [[ $MONTHLY_BUDGET_USD == *.* ]]; then
+    budget_literal=$MONTHLY_BUDGET_USD
+  else
+    budget_literal=$MONTHLY_BUDGET_USD.0
+  fi
 
   escape_c() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
 
@@ -101,7 +107,7 @@ else
     printf '#define DSV_LOCAL_STT_KEY ""\n'
     printf '#define DSV_LOCAL_STT_MODEL "%s"\n' "$(escape_c "$LOCAL_STT_MODEL")"
     printf '#define DSV_PREFER_LOCAL %s\n' "$PREFER_LOCAL"
-    printf '#define DSV_MONTHLY_BUDGET_USD %sf\n' "$MONTHLY_BUDGET_USD"
+    printf '#define DSV_MONTHLY_BUDGET_USD %s\n' "$budget_literal"
   } > "$build_source/deepseek_voice_secrets.h"
   sketch=$build_source
 fi

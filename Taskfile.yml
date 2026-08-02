@@ -155,8 +155,8 @@ tasks:
     cmds:
       - ./stackchan/deepseek-voice/build.sh --ci
 
-  deepseek:wifi:
-    desc: いまPCが使用中のWi-FiをDeepSeek音声版の.envへ取り込む（実行前に確認）
+  wifi:capture:
+    desc: いまPCが使用中のWi-Fiを対象ファームの.envへ取り込む（実行前に確認）
     aliases: [wifi]
     cmds:
       - ./scripts/capture-wifi.sh
@@ -166,6 +166,11 @@ tasks:
     aliases: [flash-deepseek]
     cmds:
       - ./scripts/flash-deepseek-voice.sh
+
+  local:host:
+    desc: このPCのLAN IPをLOCAL_HOSTとして取り込む（実行前に確認）
+    cmds:
+      - ./scripts/set-local-host.sh
 
   local:up:
     desc: PC側の完全ローカルAI（Ollama + faster-whisperサーバ）を起動する

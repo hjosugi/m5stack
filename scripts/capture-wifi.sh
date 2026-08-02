@@ -34,8 +34,9 @@ fi
 [[ -n $ssid ]] || die "SSIDを取得できません。"
 
 has_24=no
-if nmcli -f SSID,FREQ dev wifi list |
-  awk -v s="$ssid" 'index($0, s) && $(NF) ~ /^2[0-9]{3}$/ {found=1} END {exit !found}'; then
+# terseモードで "SSID:FREQ" を得る。FREQは "2462 MHz" 形式なので先頭の数値で判定する。
+if nmcli -t -f SSID,FREQ dev wifi list |
+  awk -F: -v s="$ssid" '$1 == s && $2 ~ /^2[0-9]{3}/ {found = 1} END {exit !found}'; then
   has_24=yes
 fi
 [[ $has_24 == yes ]] ||

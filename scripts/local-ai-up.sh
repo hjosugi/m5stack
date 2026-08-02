@@ -11,8 +11,21 @@ SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=lib/common.sh
 source "$SCRIPT_DIR/lib/common.sh"
 
+# 対象ファームの.envからモデル/ポートを読む（無ければ既定）。
+env_file="$M5_REPO_ROOT/stackchan/deepseek-voice/.env"
+if [[ -f $env_file ]]; then
+  from_env=$(grep -E '^LOCAL_LLM_MODEL=' "$env_file" | tail -1 | cut -d= -f2-)
+  [[ -n $from_env ]] && LOCAL_LLM_MODEL=$from_env
+  from_env=$(grep -E '^LOCAL_STT_PORT=' "$env_file" | tail -1 | cut -d= -f2-)
+  [[ -n $from_env ]] && LOCAL_STT_PORT=$from_env
+fi
 llm_model=${LOCAL_LLM_MODEL:-qwen2.5:3b}
 stt_port=${LOCAL_STT_PORT:-8000}
+
+# モデルの保存先。既定は /mnt/data 上の repo .local/。OLLAMA_MODELS 環境変数で上書き可。
+export OLLAMA_MODELS=${OLLAMA_MODELS:-"$M5_REPO_ROOT/.local/ollama/models"}
+mkdir -p "$OLLAMA_MODELS"
+log "モデル保存先: $OLLAMA_MODELS （OLLAMA_MODELS で変更可）"
 
 lan_ip=$(hostname -I 2> /dev/null | awk '{print $1}')
 [[ -n $lan_ip ]] || lan_ip="<PCのLAN IP>"

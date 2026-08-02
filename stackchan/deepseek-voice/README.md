@@ -17,7 +17,9 @@ StackChan (CoreS3) 用。**画面を長押しで話しかける → 音声をSTT
 ```sh
 # 1) 設定（実キーはこのファイルのみ。Git管理されない）
 cp stackchan/deepseek-voice/.env.example stackchan/deepseek-voice/.env
-#   WIFI_SSID / WIFI_PASSWORD / DEEPSEEK_API / STT_API_KEY を設定
+#   DEEPSEEK_API / STT_API_KEY を設定
+#   Wi-Fiは task wifi でPCの現在の接続から取り込める（確認あり）:
+task wifi
 #   完全ローカルも使うなら PREFER_LOCAL / LOCAL_HOST 等も設定
 
 # 2) ビルド（書込みなし）

@@ -42,6 +42,7 @@
               libusb1
               ninja
               nodejs
+              ollama
               openssl
               pkg-config
               python3
