@@ -25,6 +25,15 @@
 #include "deepseek_voice_secrets.example.h"
 #endif
 
+// 手ふり検知（CoreS3カメラ）。SCCBが内部I2Cと共有で実機調整が要るため既定OFF。
+// 実機で確認できたら secrets.h 側で 1 にする。
+#ifndef DSV_ENABLE_CAMERA
+#define DSV_ENABLE_CAMERA 0
+#endif
+#if DSV_ENABLE_CAMERA
+#include "esp_camera.h"
+#endif
+
 using namespace m5avatar;
 
 namespace {
@@ -226,24 +235,51 @@ int httpPost(const Endpoint& ep, const char* contentType, const uint8_t* body, s
 
 int16_t* recBuffer = nullptr;
 
-size_t recordWhileTouched() {
+// 1チャンクのRMS（無音判定用）。
+double chunkRms(const int16_t* p, size_t n) {
+  uint64_t sum = 0;
+  for (size_t i = 0; i < n; i++) {
+    int32_t v = p[i];
+    sum += static_cast<uint64_t>(v * v);
+  }
+  return sqrt(static_cast<double>(sum) / n);
+}
+
+constexpr double kVadThreshold = 550.0;  // 無音/発話の境界（実機で調整）
+
+// 一発話を録音。話し始めを待ち、末尾の無音約1秒で自動停止する（タップして話す）。
+// announce=false は無告知（ハンズフリーの常時listen用）。声が無ければ0を返す。
+size_t recordUtterance(bool announce) {
   size_t total = 0;
   M5.Speaker.end();
   M5.Mic.begin();
-  showStatus("聞いています… (指を離すと送信)", TFT_ORANGE);
-  while (total < kMaxSamples) {
-    M5.update();
-    if (M5.Touch.getCount() == 0) break;
-    size_t chunk = kChunkSamples;
-    if (total + chunk > kMaxSamples) chunk = kMaxSamples - total;
-    if (!M5.Mic.record(recBuffer + total, chunk, kSampleRate)) break;
-    while (M5.Mic.isRecording()) {
-      delay(1);
+  if (announce) {
+    avatar.setExpression(Expression::Neutral);
+    say("どうぞ…");
+  }
+  bool heard = false;
+  uint32_t silentMs = 0;
+  uint32_t waitedMs = 0;
+  const uint32_t chunkMs = kChunkSamples * 1000 / kSampleRate;
+  while (total + kChunkSamples <= kMaxSamples) {
+    if (!M5.Mic.record(recBuffer + total, kChunkSamples, kSampleRate)) break;
+    while (M5.Mic.isRecording()) delay(1);
+    double rms = chunkRms(recBuffer + total, kChunkSamples);
+    total += kChunkSamples;
+    if (rms > kVadThreshold) {
+      heard = true;
+      silentMs = 0;
+    } else if (heard) {
+      silentMs += chunkMs;
+      if (silentMs > 1000) break;  // 末尾無音1秒で確定
+    } else {
+      waitedMs += chunkMs;
+      if (waitedMs > 4000) break;  // 4秒話し始めなければ諦める
     }
-    total += chunk;
+    M5.update();
   }
   M5.Mic.end();
-  return total;
+  return heard ? total : 0;
 }
 
 // PCMをWAV(16bit mono)へ包む。bufは呼び出し側がps_mallocで確保。
@@ -358,32 +394,43 @@ bool askLlm(const String& question, String& answer) {
   return answer.length() > 0;
 }
 
-void handleInteraction() {
-  size_t samples = recordWhileTouched();
-  if (samples < kSampleRate / 2) {  // 0.5秒未満は無視
-    showStatus("短すぎます。長押しで話しかけてください。", TFT_LIGHTGREY);
+// 呼びかけ語（スタックちゃん）を含むか。ハンズフリーで会話を始める合図。
+bool containsWake(const String& t) {
+  String s = t;
+  s.toLowerCase();
+  return s.indexOf("stack") >= 0 || t.indexOf("スタック") >= 0 || t.indexOf("すたっく") >= 0 ||
+         t.indexOf("すたっぷ") >= 0 || t.indexOf("スタッフ") >= 0;
+}
+
+// 録音済みサンプルを STT→(必要なら呼びかけ判定)→LLM→吹き出し表示。表情も切り替える。
+void processSamples(size_t samples, bool requireWake) {
+  uint32_t sttMs = samples * 1000 / kSampleRate;
+  avatar.setExpression(Expression::Doubt);
+  String question;
+  if (!transcribe(recBuffer, samples, sttMs, question)) {
+    avatar.setExpression(Expression::Sad);
     return;
   }
-  uint32_t sttMs = samples * 1000 / kSampleRate;
-  showStatus("文字起こし中…");
-  String question;
-  if (!transcribe(recBuffer, samples, sttMs, question)) return;
+  if (requireWake && !containsWake(question)) return;  // 呼びかけでなければLLMを呼ばない
 
   if (isUsageQuery(question)) {
     showUsage();
     return;
   }
-
   String norm = normalizeQuestion(question);
   String answer;
   if (cacheGet(norm, answer)) {
+    avatar.setExpression(Expression::Happy);
     showAnswer(question, answer, true);
     return;
   }
-
-  showStatus((String("考え中… (") + (backendLocal ? "local" : "cloud") + ")").c_str());
-  if (!askLlm(question, answer)) return;
+  say(String("考え中…(") + (backendLocal ? "local" : "cloud") + ")");
+  if (!askLlm(question, answer)) {
+    avatar.setExpression(Expression::Sad);
+    return;
+  }
   cachePut(norm, answer);
+  avatar.setExpression(Expression::Happy);
   if (!backendLocal && estimatedCostUsd() > DSV_MONTHLY_BUDGET_USD) {
     say(answer + " ［予算超過］");
   } else {
@@ -391,10 +438,21 @@ void handleInteraction() {
   }
 }
 
-// ---- 自発モード / なで反応 / メニュー ---------------------------------------
+// 顔をタップ=話す。少し待って声を録り、無音で自動確定。
+void handleInteraction() {
+  size_t samples = recordUtterance(true);
+  if (samples < kSampleRate / 3) {
+    avatar.setExpression(Expression::Neutral);
+    say("よく聞こえなかったよ");
+    return;
+  }
+  processSamples(samples, false);
+}
+
+// ---- 会話モード / 自発モード / メニュー -------------------------------------
 
 bool proactiveOn = false;  // 自発発話は既定OFF。メニューでON。
-bool headReactionOn = true;
+bool handsFree = false;    // 呼びかけ会話（常時listen）。既定OFF。
 uint32_t proactiveIntervalMs = 5UL * 60 * 1000;
 uint32_t lastProactiveMs = 0;
 bool inMenu = false;
@@ -402,11 +460,10 @@ int menuIndex = 0;
 
 const char* const kIdleLines[] = {"ひまだなぁ", "なにか手伝おうか？", "話しかけてね", "げんきー？",
                                   "ちょっと休憩する？"};
-const char* const kPatLines[] = {"なでてくれてうれしい", "えへへ", "きもちいい", "ありがとう"};
 
 void loadSettings() {
   proactiveOn = prefs.getBool("pro_on", false);
-  headReactionOn = prefs.getBool("pat_on", true);
+  handsFree = prefs.getBool("hf_on", false);
   uint32_t minutes = prefs.getUInt("pro_min", 5);
   if (minutes < 1) minutes = 1;
   proactiveIntervalMs = minutes * 60UL * 1000;
@@ -418,11 +475,11 @@ void resetProactiveTimer() { lastProactiveMs = millis(); }
 void showMenu() {
   uint32_t minutes = proactiveIntervalMs / 60000;
   switch (menuIndex) {
-    case 0: say(String("設定1/4 自発:") + (proactiveOn ? "ON" : "OFF") + " 下=切替/上=次"); break;
-    case 1: say(String("設定2/4 間隔:") + minutes + "分 下=+1/上=次"); break;
-    case 2:
-      say(String("設定3/4 なで反応:") + (headReactionOn ? "ON" : "OFF") + " 下=切替/上=次");
+    case 0:
+      say(String("設定1/4 会話:") + (handsFree ? "呼びかけ" : "手動(タッチ)") + " 下=切替/上=次");
       break;
+    case 1: say(String("設定2/4 自発:") + (proactiveOn ? "ON" : "OFF") + " 下=切替/上=次"); break;
+    case 2: say(String("設定3/4 自発間隔:") + minutes + "分 下=+1/上=次"); break;
     default: say("設定4/4 下=閉じる/上=次"); break;
   }
 }
@@ -436,46 +493,37 @@ void menuChange() {
   uint32_t minutes = proactiveIntervalMs / 60000;
   switch (menuIndex) {
     case 0:
+      handsFree = !handsFree;
+      prefs.putBool("hf_on", handsFree);
+      break;
+    case 1:
       proactiveOn = !proactiveOn;
       prefs.putBool("pro_on", proactiveOn);
       break;
-    case 1:
+    case 2:
       minutes = minutes >= 60 ? 1 : minutes + 1;
       proactiveIntervalMs = minutes * 60UL * 1000;
       prefs.putUInt("pro_min", minutes);
       break;
-    case 2:
-      headReactionOn = !headReactionOn;
-      prefs.putBool("pat_on", headReactionOn);
-      break;
     default:
       inMenu = false;
       resetProactiveTimer();
-      say("設定を閉じました");
+      say(handsFree ? "設定を閉じた。『スタックちゃん』と呼んでね" : "設定を閉じた");
       return;
   }
   showMenu();
 }
 
-// 自発発話。予算を使わないよう定型文をローテーションで話す。
+// 自発発話。予算を使わないよう定型文をローテーションで話し、表情も変える。
 void proactiveTick() {
   if (!proactiveOn || inMenu) return;
   if (millis() - lastProactiveMs < proactiveIntervalMs) return;
   lastProactiveMs = millis();
   static uint8_t i = 0;
-  avatar.setExpression(Expression::Happy);
+  const Expression moods[] = {Expression::Happy, Expression::Doubt, Expression::Sleepy};
+  avatar.setExpression(moods[i % 3]);
   say(kIdleLines[i % (sizeof(kIdleLines) / sizeof(kIdleLines[0]))]);
   i++;
-}
-
-// 顔を短くタップ = なで反応。
-void headPat() {
-  if (!headReactionOn) return;
-  static uint8_t i = 0;
-  avatar.setExpression(Expression::Happy);
-  say(kPatLines[i % (sizeof(kPatLines) / sizeof(kPatLines[0]))]);
-  i++;
-  resetProactiveTimer();
 }
 
 bool configUsable() {
@@ -531,33 +579,37 @@ void loop() {
   M5.update();
   proactiveTick();
 
+  // 呼びかけ会話: 待機中は常時listen。声＋『スタックちゃん』で会話開始。
+  if (handsFree && !inMenu && M5.Touch.getCount() == 0) {
+    size_t s = recordUtterance(false);
+    if (s >= kSampleRate / 3) processSamples(s, true);
+  }
+
   if (recBuffer && M5.Touch.getCount() > 0) {
     auto detail = M5.Touch.getDetail();
     bool top = detail.y < 20;
-
-    // 長押し判定のため最大700ms待つ。
-    uint32_t pressStart = millis();
-    while (M5.Touch.getCount() > 0 && millis() - pressStart < 700) {
-      M5.update();
-      delay(10);
-    }
-    bool longPress = M5.Touch.getCount() > 0;
 
     if (inMenu) {
       // メニュー中: 上=次の項目 / 下=値を変更
       if (top) menuNext();
       else menuChange();
-    } else if (top && longPress) {
-      inMenu = true;
-      menuIndex = 0;
-      showMenu();
     } else if (top) {
-      backendLocal = !backendLocal;  // 上部タップ=cloud↔local
-      say(backendLocal ? "ローカルに切替" : "クラウドに切替");
-    } else if (longPress) {
-      handleInteraction();  // 顔を長押し=録音して質問
+      // 上部: 短タップ=cloud/local切替、長押し=設定メニュー
+      uint32_t pressStart = millis();
+      while (M5.Touch.getCount() > 0 && millis() - pressStart < 700) {
+        M5.update();
+        delay(10);
+      }
+      if (M5.Touch.getCount() > 0) {
+        inMenu = true;
+        menuIndex = 0;
+        showMenu();
+      } else {
+        backendLocal = !backendLocal;
+        say(backendLocal ? "ローカルに切替" : "クラウドに切替");
+      }
     } else {
-      headPat();  // 顔を短くタップ=なで反応
+      handleInteraction();  // 顔をさわる=話しかける（タップして話す）
     }
 
     // 誤連打防止: 指を離すまで待つ
