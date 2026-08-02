@@ -53,8 +53,8 @@ fi
 # 実キー入りのsecrets.hを生成し、生成済みスケッチをコンパイルする（書込みなし）。
 "$SCRIPT_DIR/build.sh"
 
-build_source="$M5_REPO_ROOT/.local/generated/deepseek-voice/DeepSeekVoice"
-build_dir="$M5_REPO_ROOT/.local/build/deepseek-voice"
+build_source="$M5_REPO_ROOT/.local/generated/voice/DeepSeekVoice"
+build_dir="$M5_REPO_ROOT/.local/build/voice"
 [[ -f $build_source/deepseek_voice_secrets.h ]] || die "生成済みsecretsが見つかりません。"
 
 log "StackChan DeepSeek音声版を書き込みます: $resolved_port"

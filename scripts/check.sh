@@ -93,6 +93,7 @@ awk -F '|' '
 "$M5_REPO_ROOT/tests/test-common.sh"
 "$M5_REPO_ROOT/tests/test-taskfile.sh"
 "$M5_REPO_ROOT/tests/test-safety-gates.sh"
+"$M5_REPO_ROOT/tests/test-setup-wizard.sh"
 uv run --project "$M5_REPO_ROOT/pc/screen-link" --frozen \
   python -m unittest discover -s "$M5_REPO_ROOT/pc/screen-link/tests" -v
 "$M5_REPO_ROOT/scripts/audit-public-tree.sh"

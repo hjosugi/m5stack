@@ -13,7 +13,7 @@ REPO_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)
 source "$REPO_ROOT/scripts/lib/common.sh"
 
 # 対象ファームの.envからモデル/ポートを読む（無ければ既定）。
-env_file="$M5_REPO_ROOT/stackchan/deepseek-voice/.env"
+env_file="$M5_REPO_ROOT/stackchan/voice/.env"
 if [[ -f $env_file ]]; then
   from_env=$(grep -E '^LOCAL_LLM_MODEL=' "$env_file" | tail -1 | cut -d= -f2-)
   [[ -n $from_env ]] && LOCAL_LLM_MODEL=$from_env
@@ -39,10 +39,19 @@ log "StackChanの .env に LOCAL_HOST=$lan_ip を設定してください。"
 log ""
 
 # --- LLM (Ollama) ---
+# 端末(LAN)から繋げるには 0.0.0.0 で待受ける必要がある（既定は127.0.0.1のみ）。
+export OLLAMA_HOST=${OLLAMA_HOST:-0.0.0.0:11434}
 if command -v ollama > /dev/null 2>&1; then
-  if ! curl -fsS "http://127.0.0.1:11434/api/tags" > /dev/null 2>&1; then
-    log "Ollamaを起動します (ollama serve をバックグラウンドで)。"
-    (ollama serve > /dev/null 2>&1 &)
+  if curl -fsS "http://127.0.0.1:11434/api/tags" > /dev/null 2>&1; then
+    # 起動済み。LAN(端末)から見えるか確認する。
+    if ! curl -fsS "http://$lan_ip:11434/api/tags" > /dev/null 2>&1; then
+      warn "Ollamaが 127.0.0.1 のみで待受けています。端末(LAN)からは繋がりません。"
+      warn "  → 'pkill -x ollama' で止めてから 'task local:up' を再実行してください"
+      warn "    （OLLAMA_HOST=$OLLAMA_HOST で起動し直します）。"
+    fi
+  else
+    log "Ollamaを起動します（OLLAMA_HOST=$OLLAMA_HOST でLANに公開）。"
+    (ollama serve > "$M5_REPO_ROOT/.local/ollama-serve.log" 2>&1 &)
     sleep 2
   fi
   log "モデル $llm_model を確認します（未取得なら pull）。"

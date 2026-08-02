@@ -22,7 +22,7 @@ for argument in "$@"; do
   esac
 done
 
-env_file=${target_env:-"$M5_REPO_ROOT/stackchan/deepseek-voice/.env"}
+env_file=${target_env:-"$M5_REPO_ROOT/stackchan/voice/.env"}
 [[ -f $env_file ]] || die "$env_file がありません。.env.exampleをコピーしてください。"
 
 if [[ -z $iface ]]; then

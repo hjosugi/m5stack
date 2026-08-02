@@ -19,8 +19,8 @@ if [[ -f $balloon_src && -f $balloon_dst ]] && ! cmp -s "$balloon_src" "$balloon
 fi
 
 source_sketch="$SCRIPT_DIR/firmware/DeepSeekVoice"
-build_source="$REPO_ROOT/.local/generated/deepseek-voice/DeepSeekVoice"
-build_dir="$REPO_ROOT/.local/build/deepseek-voice"
+build_source="$REPO_ROOT/.local/generated/voice/DeepSeekVoice"
+build_dir="$REPO_ROOT/.local/build/voice"
 fqbn="m5stack:esp32:m5stack_cores3"
 
 if [[ ${1:-} == --ci ]]; then

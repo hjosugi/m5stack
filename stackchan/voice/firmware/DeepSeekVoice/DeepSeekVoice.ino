@@ -1,8 +1,10 @@
 // StackChan (CoreS3) 音声質問→テキスト回答ファーム。
 //
 // 顔(M5Stack-Avatar)は常時表示し、テキストは小さな吹き出しに出す（顔は消さない）。
-// 操作(タッチ): 顔を長押し=録音して質問 / 顔を短くタップ=なで反応 /
-//   上部を短くタップ=cloud↔local切替 / 上部を長押し=設定メニュー。
+// 操作: 画面を短タップ=話しかける（録音→質問。触った側へ顔を向ける。声が入らなければ「なで」反応）/
+//   画面を長押し(700ms)=設定メニュー(パネル)。cloud↔local切替もメニュー内。電源ボタンは通常の電源。
+//   メニュー中は 項目をタッチで切替、「とじる」で保存して終了。
+// 表示: 回答が長いと吹き出し内を電光掲示板のように横スクロールする。
 // 流れ: 録音 → STT(音声→文字) → LLM → 回答を吹き出しに表示（音声出力なし）。
 // バックエンドは2プロファイル: cloud(DeepSeek + OpenAI Whisper) と local(PC上のOpenAI互換サーバ)。
 // cloud利用分だけusage/コストをNVSへ積算し、$5/月の予算超過を吹き出しで警告する。
@@ -17,6 +19,7 @@
 #include <SD.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
+#include <esp_system.h>  // esp_random()
 #include <mbedtls/sha256.h>
 
 #if __has_include("deepseek_voice_secrets.h")
@@ -119,11 +122,12 @@ void emote(Expression exp, float tiltDeg, float gazeV, float gazeH, float scale 
   avatar.setPosition(0, 0);
 }
 
-void moodListening() { emote(Expression::Neutral, 0, -0.2f, 0.0f, 1.03f); }  // 前のめり
+// タッチした側へ顔を向けるための視線オフセット（-1..1）。あたまタッチ時に更新。
+float g_listenGazeH = 0.0f;
+void moodListening() { emote(Expression::Neutral, 0, -0.2f, g_listenGazeH, 1.03f); }  // 触った方を向く
 void moodThinking() { emote(Expression::Doubt, 9, -0.4f, 0.5f, 1.0f); }      // 上を見て考える
 void moodHappy() { emote(Expression::Happy, -4, -0.15f, 0.0f, 1.05f); }      // うれしい
 void moodSad() { emote(Expression::Sad, 6, 0.5f, -0.2f, 0.97f); }            // しょんぼり
-void moodPet() { emote(Expression::Happy, 8, 0.3f, 0.2f, 1.02f); }           // なでられて照れ
 
 // うなずき（頭を軽く上下）。短時間ブロックするので会話の合間に使う。
 void nod(int times = 2) {
@@ -253,11 +257,13 @@ int httpPost(const Endpoint& ep, const char* contentType, const uint8_t* body, s
              String& out) {
   HTTPClient http;
   int status = -1;
+  // ローカルはCPU推論で初回が遅い（モデル読込）ため長めに待つ。
+  const uint16_t timeoutMs = ep.tls ? 30000 : 90000;
   if (ep.tls) {
     WiFiClientSecure client;
     client.setInsecure();  // 個人利用: 証明書検証を省略
     if (!http.begin(client, buildUrl(ep))) return -1;
-    http.setTimeout(30000);
+    http.setTimeout(timeoutMs);
     if (strlen(ep.key) > 0) http.addHeader("Authorization", String("Bearer ") + ep.key);
     http.addHeader("Content-Type", contentType);
     status = http.POST(const_cast<uint8_t*>(body), len);
@@ -266,7 +272,7 @@ int httpPost(const Endpoint& ep, const char* contentType, const uint8_t* body, s
   } else {
     WiFiClient client;
     if (!http.begin(client, buildUrl(ep))) return -1;
-    http.setTimeout(30000);
+    http.setTimeout(timeoutMs);
     if (strlen(ep.key) > 0) http.addHeader("Authorization", String("Bearer ") + ep.key);
     http.addHeader("Content-Type", contentType);
     status = http.POST(const_cast<uint8_t*>(body), len);
@@ -389,6 +395,75 @@ bool tryRemember(const String& q) {
   return true;
 }
 
+// ---- 個性・感性（学習で少しずつ変化する） ----------------------------------
+// 単語(FACT)だけでなく「きぶん/テンション/こうきしん」を会話から学習し、
+// 表情の出やすさ・返事のトーンに反映する。まれに自然変動もする（気まぐれ）。
+// より高度な“topicごとの好き嫌い/確率モデル”はroadmap参照。
+
+float persMood = 0.0f;       // -1(ふきげん) .. +1(ごきげん)
+float persEnergy = 0.5f;     // 0..1 テンション
+float persCuriosity = 0.5f;  // 0..1 こうきしん
+
+float clampf(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+void loadPersonality() {
+  persMood = prefs.getFloat("p_mood", 0.0f);
+  persEnergy = prefs.getFloat("p_energy", 0.5f);
+  persCuriosity = prefs.getFloat("p_curio", 0.5f);
+}
+
+void savePersonality() {
+  prefs.putFloat("p_mood", persMood);
+  prefs.putFloat("p_energy", persEnergy);
+  prefs.putFloat("p_curio", persCuriosity);
+}
+
+// ユーザ発話のごく簡単な感情極性（+すき/ありがと 〜 -きらい/やめて）。
+int sentimentOf(const String& t) {
+  static const char* const kPos[] = {"すき",   "ありがと", "うれし", "たのし",
+                                     "かわいい", "すごい",  "いいね", "だいすき"};
+  static const char* const kNeg[] = {"きらい", "やめて", "つまらん", "うざい",
+                                     "こわい", "かなし", "だめ",   "いや"};
+  int s = 0;
+  for (auto w : kPos)
+    if (t.indexOf(w) >= 0) s++;
+  for (auto w : kNeg)
+    if (t.indexOf(w) >= 0) s--;
+  return s;
+}
+
+// 会話1回ごとに個性を少し更新（学習）。気分は自然に中庸へ戻る。
+void learnFromUtterance(const String& q) {
+  int s = sentimentOf(q);
+  persMood = clampf(persMood * 0.98f + s * 0.15f, -1.0f, 1.0f);
+  persEnergy = clampf(persEnergy + (s > 0 ? 0.03f : (s < 0 ? -0.03f : 0.0f)), 0.0f, 1.0f);
+  persCuriosity = clampf(persCuriosity + 0.01f, 0.0f, 1.0f);  // 会話するほど好奇心↑
+  savePersonality();
+}
+
+// 現在の気分を短いラベルに（プロンプト注入・表情選択に使う）。
+String moodLabel() {
+  if (persMood > 0.4f) return "ごきげん";
+  if (persMood < -0.4f) return "ちょっと ふきげん";
+  return "ふつう";
+}
+String energyLabel() {
+  if (persEnergy > 0.6f) return "げんき";
+  if (persEnergy < 0.3f) return "のんびり";
+  return "ふつう";
+}
+
+// 個性に応じた「答えるときの表情」。気分で確率的に出る顔が変わる。
+void moodByPersonality() {
+  if (persMood > 0.3f) {
+    moodHappy();
+  } else if (persMood < -0.3f) {
+    emote(Expression::Doubt, 6, 0.2f, -0.3f);
+  } else {
+    emote(Expression::Neutral, 2, 0.0f, 0.2f, 1.02f);
+  }
+}
+
 // ---- 音声処理 ---------------------------------------------------------------
 
 int16_t* recBuffer = nullptr;
@@ -499,7 +574,11 @@ bool transcribe(const int16_t* pcm, size_t samples, uint32_t sttMs, String& text
                         bodyLen, resp);
   free(body);
   if (status != 200) {
-    showStatus((String("STTエラー: ") + status).c_str(), TFT_RED);
+    if (backendLocal && status <= 0)
+      showStatus("STTに つながらない。PCで task local:up してね", TFT_RED);
+    else
+      showStatus((String("STTエラー: ") + status + (backendLocal ? " (local)" : " (cloud)")).c_str(),
+                 TFT_RED);
     return false;
   }
   // response_format=text はプレーンテキスト。JSONで返るサーバもあるので両対応。
@@ -530,6 +609,9 @@ bool askLlm(const String& question, String& answer) {
       "3ぶんいないで みじかく こたえてね。";
   String mem = memContext();  // 覚えた事があればsystemに注入（自己学習）
   if (mem.length() > 0) sysText += String("\n") + mem;
+  // 個性・感性を注入（気分で返事のトーンが変わる）。
+  sysText += String("\nいまの きぶん: ") + moodLabel() + "。テンション: " + energyLabel() +
+             "。きぶんを へんじに そっと にじませてね。";
   sys["content"] = sysText;
   JsonObject um = msgs.add<JsonObject>();
   um["role"] = "user";
@@ -541,7 +623,11 @@ bool askLlm(const String& question, String& answer) {
   int status = httpPost(ep, "application/json",
                         reinterpret_cast<const uint8_t*>(bodyStr.c_str()), bodyStr.length(), resp);
   if (status != 200) {
-    showStatus((String("LLMエラー: ") + status).c_str(), TFT_RED);
+    if (backendLocal && status <= 0)
+      showStatus("LLMに つながらない。PCで task local:up してね", TFT_RED);
+    else
+      showStatus((String("LLMエラー: ") + status + (backendLocal ? " (local)" : " (cloud)")).c_str(),
+                 TFT_RED);
     return false;
   }
   JsonDocument doc;
@@ -581,16 +667,17 @@ void processSamples(size_t samples, bool requireWake) {
     showUsage();
     return;
   }
-  if (tryRemember(question)) {  // 「おぼえて…」→FACTとして学習
+  if (tryRemember(question)) {  // 「おぼえて…」→FACTとして明示学習
     moodHappy();
     nod(1);
     say("おぼえたよ！");
     return;
   }
+  learnFromUtterance(question);  // 基本は毎回学習（気分・感性を更新）
   String norm = normalizeQuestion(question);
   String answer;
   if (cacheGet(norm, answer)) {
-    moodHappy();
+    moodByPersonality();
     showAnswer(question, answer, true);
     return;
   }
@@ -602,7 +689,7 @@ void processSamples(size_t samples, bool requireWake) {
   }
   cachePut(norm, answer);
   memLog(question, answer);  // 自己学習: 履歴を蓄積（localならhostへも）
-  moodHappy();
+  moodByPersonality();
   nod(1);
   if (!backendLocal && estimatedCostUsd() > DSV_MONTHLY_BUDGET_USD) {
     say(answer + " ［予算超過］");
@@ -611,12 +698,13 @@ void processSamples(size_t samples, bool requireWake) {
   }
 }
 
-// 顔をタップ=話す。少し待って声を録り、無音で自動確定。
+// 画面タップ=話す。少し待って声を録り、無音で自動確定。
 void handleInteraction() {
   size_t samples = recordUtterance(true);
   if (samples < kSampleRate / 3) {
-    avatar.setExpression(Expression::Neutral);
-    say("よく聞こえなかったよ");
+    // 声が入らなければ静かに待機へ戻す（会話とかぶるので反応は出さない）。
+    poseReset();
+    say("");
     return;
   }
   processSamples(samples, false);
@@ -631,8 +719,25 @@ uint32_t lastProactiveMs = 0;
 bool inMenu = false;
 int menuIndex = 0;
 
-const char* const kIdleLines[] = {"ひまだなぁ", "なにか手伝おうか？", "話しかけてね", "げんきー？",
-                                  "ちょっと休憩する？"};
+// 自発発話の“気分”。台詞＋表情＋首かしげ＋視線をセットにしてキャラを出す。
+struct IdleMood {
+  const char* line;
+  Expression exp;
+  float tilt;
+  float gazeV;
+  float gazeH;
+};
+const IdleMood kIdleMoods[] = {
+    {"ひまだなぁ…", Expression::Sleepy, -7, 0.4f, -0.3f},
+    {"なにか てつだおうか？", Expression::Happy, 5, -0.2f, 0.4f},
+    {"きょうも いいひに なあれ", Expression::Happy, 0, -0.5f, 0.0f},
+    {"はなしかけてね！", Expression::Neutral, 4, 0.0f, 0.4f},
+    {"げんきー？", Expression::Happy, -5, 0.2f, -0.4f},
+    {"むむっ、なにか かんがえ中", Expression::Doubt, 8, -0.4f, 0.5f},
+    {"ふぁ〜、ねむい…", Expression::Sleepy, 9, 0.5f, 0.0f},
+    {"わくわくしてきた！", Expression::Happy, -7, -0.4f, 0.3f},
+    {"きみは えらいなあ", Expression::Happy, 3, -0.1f, -0.3f},
+};
 
 void loadSettings() {
   proactiveOn = prefs.getBool("pro_on", false);
@@ -645,35 +750,67 @@ void loadSettings() {
 
 void resetProactiveTimer() { lastProactiveMs = millis(); }
 
-void showMenu() {
+// 設定はパネルで表示する。描画中は顔タスクを止めておく（avatar.suspend）。
+// 項目をタッチすると切り替わり、「とじる」で保存して終了する。
+constexpr int kMenuCount = 5;
+constexpr int kMenuRowsY0 = 30;  // 項目リストの開始y
+constexpr int kMenuRowH = 40;    // 1項目の高さ
+
+// タッチy座標→項目index（0..kMenuCount-1）。
+int menuRowAt(int y) {
+  int idx = (y - kMenuRowsY0) / kMenuRowH;
+  if (idx < 0) idx = 0;
+  if (idx >= kMenuCount) idx = kMenuCount - 1;
+  return idx;
+}
+
+void drawMenuPanel() {
+  auto& d = M5.Display;
   uint32_t minutes = proactiveIntervalMs / 60000;
-  switch (menuIndex) {
-    case 0:
-      say(String("設定1/4 会話:") + (handsFree ? "呼びかけ" : "手動(タッチ)") + " 下=切替/上=次");
-      break;
-    case 1: say(String("設定2/4 自発:") + (proactiveOn ? "ON" : "OFF") + " 下=切替/上=次"); break;
-    case 2: say(String("設定3/4 自発間隔:") + minutes + "分 下=+1/上=次"); break;
-    default: say("設定4/4 下=閉じる/上=次"); break;
+  String rows[kMenuCount];
+  rows[0] = String("モード: ") + (backendLocal ? "local" : "cloud");
+  rows[1] = String("かいわ: ") + (handsFree ? "よびかけ" : "タッチ");
+  rows[2] = String("じはつ: ") + (proactiveOn ? "ON" : "OFF");
+  rows[3] = String("かんかく: ") + minutes + "ふん";
+  rows[4] = "とじる";
+
+  d.startWrite();
+  d.fillScreen(TFT_BLACK);
+  d.fillRect(0, 0, d.width(), 24, TFT_DARKGREY);
+  d.setFont(&fonts::lgfxJapanGothic_16);
+  d.setTextDatum(ML_DATUM);
+  d.setTextColor(TFT_WHITE, TFT_DARKGREY);
+  d.drawString("せってい（タッチで きりかえ）", 10, 12);
+
+  // 各項目。タッチで切替。最後の「とじる」で保存して終了。
+  for (int i = 0; i < kMenuCount; ++i) {
+    int y = kMenuRowsY0 + i * kMenuRowH;
+    bool close = (i == kMenuCount - 1);
+    uint16_t bg = close ? TFT_DARKGREEN : TFT_NAVY;
+    d.fillRoundRect(8, y, d.width() - 16, kMenuRowH - 6, 6, bg);
+    d.setTextColor(TFT_WHITE, bg);
+    d.setTextDatum(ML_DATUM);
+    d.drawString(rows[i].c_str(), 18, y + (kMenuRowH - 6) / 2);
   }
+  d.endWrite();
 }
 
-void menuNext() {
-  menuIndex = (menuIndex + 1) % 4;
-  showMenu();
-}
-
-void menuChange() {
+// 選択中の項目を決定（トグル/変更/閉じる）。
+void menuApply() {
   uint32_t minutes = proactiveIntervalMs / 60000;
   switch (menuIndex) {
     case 0:
+      backendLocal = !backendLocal;  // cloud ↔ local
+      break;
+    case 1:
       handsFree = !handsFree;
       prefs.putBool("hf_on", handsFree);
       break;
-    case 1:
+    case 2:
       proactiveOn = !proactiveOn;
       prefs.putBool("pro_on", proactiveOn);
       break;
-    case 2:
+    case 3:
       minutes = minutes >= 60 ? 1 : minutes + 1;
       proactiveIntervalMs = minutes * 60UL * 1000;
       prefs.putUInt("pro_min", minutes);
@@ -681,10 +818,12 @@ void menuChange() {
     default:
       inMenu = false;
       resetProactiveTimer();
-      say(handsFree ? "設定を閉じた。『スタックちゃん』と呼んでね" : "設定を閉じた");
+      avatar.resume();  // 顔タスクを再開
+      poseReset();
+      say(handsFree ? "せってい ほぞんした。『スタックちゃん』とよんでね" : "せってい ほぞんした");
       return;
   }
-  showMenu();
+  drawMenuPanel();
 }
 
 // 自発発話。予算を使わないよう定型文をローテーションで話し、表情も変える。
@@ -692,10 +831,22 @@ void proactiveTick() {
   if (!proactiveOn || inMenu) return;
   if (millis() - lastProactiveMs < proactiveIntervalMs) return;
   lastProactiveMs = millis();
+  // 気まぐれ: まれに気分が自然変動する（あるとき性格が変わる）。
+  if (random(100) < 8) {
+    persMood = clampf(persMood + (random(2) ? 0.3f : -0.3f), -1.0f, 1.0f);
+    savePersonality();
+  }
   static uint8_t i = 0;
-  const Expression moods[] = {Expression::Happy, Expression::Doubt, Expression::Sleepy};
-  avatar.setExpression(moods[i % 3]);
-  say(kIdleLines[i % (sizeof(kIdleLines) / sizeof(kIdleLines[0]))]);
+  const size_t n = sizeof(kIdleMoods) / sizeof(kIdleMoods[0]);
+  // 気分が良ければ明るい台詞を、悪ければ落ち着いた台詞を出やすくする（確率が個性で変わる）。
+  size_t idx = i % n;
+  if (persMood > 0.4f)
+    idx = random(3);  // 前半(明るめ)に寄せる
+  else if (persMood < -0.4f)
+    idx = 5 + random(n - 5);  // 後半(ねむい/むむっ等)に寄せる
+  const IdleMood& m = kIdleMoods[idx];
+  emote(m.exp, m.tilt, m.gazeV, m.gazeH);
+  say(m.line);
   i++;
 }
 
@@ -719,11 +870,14 @@ void setup() {
 
   // StackChanの顔を起動（別タスクで常時描画）。テキストは小さな吹き出しに出す。
   avatar.init();
-  avatar.setSpeechFont(&fonts::lgfxJapanGothic_8);  // 小さめ（顔の邪魔をしない）
+  avatar.setSpeechFont(&fonts::lgfxJapanGothic_12);  // 少し大きめ（吹き出しはBalloon側で小さく）
+  poseReset();
 
   recBuffer = static_cast<int16_t*>(ps_malloc(kMaxSamples * sizeof(int16_t)));
   prefs.begin("dsv", false);
   loadSettings();
+  loadPersonality();
+  randomSeed(esp_random());  // 気まぐれ用の乱数を実機ごとにばらす
 
   if (!configUsable()) {
     showStatus("設定が必要です。build.shで生成してください。", TFT_RED);
@@ -743,9 +897,10 @@ void setup() {
   configTime(9 * 3600, 0, "ntp.nict.jp", "pool.ntp.org");  // JST。月次リセット判定用
 
   sdReady = SD.begin();
+  memTrim();                        // 学習ファイルを上限行数に整える
   backendLocal = DSV_PREFER_LOCAL;  // 既定モード。実行中は上部タップで切替可。
-  say(backendLocal ? "こんにちは（local）。長押しで話しかけてね。"
-                   : "こんにちは（cloud）。長押しで話しかけてね。");
+  say(backendLocal ? "こんにちは（local）。ぼくを タッチして はなしてね。ながおしで せってい。"
+                   : "こんにちは（cloud）。ぼくを タッチして はなしてね。ながおしで せってい。");
 }
 
 void loop() {
@@ -760,14 +915,13 @@ void loop() {
 
   if (recBuffer && M5.Touch.getCount() > 0) {
     auto detail = M5.Touch.getDetail();
-    bool top = detail.y < 20;
 
     if (inMenu) {
-      // メニュー中: 上=次の項目 / 下=値を変更
-      if (top) menuNext();
-      else menuChange();
-    } else if (top) {
-      // 上部: 短タップ=cloud/local切替、長押し=設定メニュー
+      // メニュー中: 触った項目を切替。「とじる」で保存して終了。
+      menuIndex = menuRowAt(detail.y);
+      menuApply();
+    } else {
+      // 画面を短タップ=話しかける / 長押し(700ms)=設定メニュー。
       uint32_t pressStart = millis();
       while (M5.Touch.getCount() > 0 && millis() - pressStart < 700) {
         M5.update();
@@ -776,13 +930,13 @@ void loop() {
       if (M5.Touch.getCount() > 0) {
         inMenu = true;
         menuIndex = 0;
-        showMenu();
+        avatar.suspend();  // 顔タスクを止めてパネルを描く
+        drawMenuPanel();
       } else {
-        backendLocal = !backendLocal;
-        say(backendLocal ? "ローカルに切替" : "クラウドに切替");
+        // 触った側へ顔を向けて話しかける。
+        g_listenGazeH = (160.0f - detail.x) / 160.0f * 0.6f;
+        handleInteraction();
       }
-    } else {
-      handleInteraction();  // 顔をさわる=話しかける（タップして話す）
     }
 
     // 誤連打防止: 指を離すまで待つ

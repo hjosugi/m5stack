@@ -203,6 +203,17 @@ tasks:
     cmds:
       - ./pc/local-ai/up.sh
 
+  local:status:
+    desc: 完全ローカルAI（Ollama/STT）の稼働状態を確認する
+    aliases: [local:st]
+    cmds:
+      - ./pc/local-ai/status.sh
+
+  local:dev:
+    desc: 開発モード。STTサーバをフォアグラウンド(デバッグログ)で起動する（Ctrl-Cで停止）
+    cmds:
+      - ./pc/local-ai/dev.sh
+
   host:screen-link:setup:
     desc: host PCへ画面relayの固定版Python依存を導入する
     aliases: [host:setup]
