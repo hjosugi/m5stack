@@ -12,15 +12,17 @@ require_command ip
 
 assume_yes=false
 iface=''
+target_env=''
 for argument in "$@"; do
   case "$argument" in
     --yes | -y) assume_yes=true ;;
     --iface=*) iface=${argument#--iface=} ;;
-    *) die "使用方法: $0 [--yes] [--iface=IFACE]" ;;
+    --env=*) target_env=${argument#--env=} ;;
+    *) die "使用方法: $0 [--yes] [--iface=IFACE] [--env=PATH]" ;;
   esac
 done
 
-env_file="$M5_REPO_ROOT/stackchan/deepseek-voice/.env"
+env_file=${target_env:-"$M5_REPO_ROOT/stackchan/deepseek-voice/.env"}
 [[ -f $env_file ]] || die "$env_file がありません。.env.exampleをコピーしてください。"
 
 if [[ -z $iface ]]; then

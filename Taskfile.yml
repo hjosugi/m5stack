@@ -166,6 +166,16 @@ tasks:
     cmds:
       - ./scripts/capture-wifi.sh
 
+  setup:stackchan:
+    desc: StackChan(DeepSeek音声版)の設定を対話で入力する（Wi-Fi/キー/予算/local/補完）
+    cmds:
+      - ./scripts/setup-wizard.sh stackchan
+
+  setup:cardputer:
+    desc: Cardputer(画面リンク)の設定を対話で入力する
+    cmds:
+      - ./scripts/setup-wizard.sh cardputer
+
   deepseek:flash:
     desc: "安全案内のみ。実行は stackchan/deepseek-voice/flash.sh --allow-flash --replace-factory-firmware"
     aliases: [flash-deepseek]

@@ -13,15 +13,17 @@ require_command nmcli
 
 assume_yes=false
 target_ssid=''
+target_env=''
 for argument in "$@"; do
   case "$argument" in
     --yes | -y) assume_yes=true ;;
     --ssid=*) target_ssid=${argument#--ssid=} ;;
-    *) die "使用方法: $0 [--yes] [--ssid=NAME]" ;;
+    --env=*) target_env=${argument#--env=} ;;
+    *) die "使用方法: $0 [--yes] [--ssid=NAME] [--env=PATH]" ;;
   esac
 done
 
-env_file="$M5_REPO_ROOT/stackchan/deepseek-voice/.env"
+env_file=${target_env:-"$M5_REPO_ROOT/stackchan/deepseek-voice/.env"}
 [[ -f $env_file ]] || die "$env_file がありません。.env.exampleをコピーしてください。"
 
 conn=$(nmcli -t -f NAME,TYPE connection show --active | awk -F: '$2 ~ /wireless/ {print $1; exit}')
