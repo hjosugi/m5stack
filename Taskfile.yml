@@ -189,3 +189,16 @@ tasks:
       SCREEN_LINK_STATUS_URL: "{{.STATUS_URL}}"
     cmds:
       - ./scripts/screen-link-status.sh --target cardputer
+
+  m5burner:setup:
+    desc: M5Burnerをダウンロードしてセットアップ・更新する（task m5burner:setup FORCE=1で再取得）
+    aliases: [burner:setup]
+    cmds:
+      - ./scripts/setup-m5burner.sh {{if .FORCE}}--force{{end}}
+
+  m5burner:run:
+    desc: M5Burnerを起動する
+    aliases: [burner, burner:run]
+    cmds:
+      - ./scripts/run-m5burner.sh
+

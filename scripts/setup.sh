@@ -29,6 +29,7 @@ install_library() {
 install_library M5GFX "$M5GFX_VERSION"
 install_library M5Unified "$M5UNIFIED_VERSION"
 install_library M5Cardputer "$M5CARDPUTER_VERSION"
+install_library ArduinoJson "$ARDUINOJSON_VERSION"
 install_library ArduinoWebsockets "$ARDUINOWEBSOCKETS_VERSION"
 install_library IRremoteESP8266 "$IRREMOTEESP8266_VERSION"
 install_library M5Unit-NFC "$M5UNIT_NFC_VERSION"

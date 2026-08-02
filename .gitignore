@@ -23,3 +23,10 @@ sdkconfig.old
 
 .DS_Store
 Thumbs.db
+
+# M5Burner downloaded binaries and archives
+.m5burner/
+tools/m5burner/
+M5Burner*/
+*.zip
+
