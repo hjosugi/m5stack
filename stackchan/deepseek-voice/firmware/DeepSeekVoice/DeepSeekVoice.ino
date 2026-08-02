@@ -91,6 +91,51 @@ void showAnswer(const String& question, const String& answer, bool fromCache) {
   say(answer);
 }
 
+// ---- 表情・モーション（キャラクタ表現） -------------------------------------
+// Avatarは別タスクで常時描画するので、ここで姿勢/視線/表情を書き換えると
+// 次のフレームから反映される（まばたき・呼吸は自動で続く）。
+
+void poseReset() {
+  avatar.setRotation(0);
+  avatar.setScale(1.0f);
+  avatar.setPosition(0, 0);
+  avatar.setRightGaze(0, 0);
+  avatar.setLeftGaze(0, 0);
+}
+
+void faceLook(float vertical, float horizontal) {
+  avatar.setRightGaze(vertical, horizontal);
+  avatar.setLeftGaze(vertical, horizontal);
+}
+
+void faceTiltDeg(float deg) { avatar.setRotation(deg * 0.01745329f); }  // 度→ラジアン
+
+// 表情＋首かしげ＋視線＋拡大をまとめて設定する“気分”プリセット。
+void emote(Expression exp, float tiltDeg, float gazeV, float gazeH, float scale = 1.0f) {
+  avatar.setExpression(exp);
+  faceTiltDeg(tiltDeg);
+  faceLook(gazeV, gazeH);
+  avatar.setScale(scale);
+  avatar.setPosition(0, 0);
+}
+
+void moodListening() { emote(Expression::Neutral, 0, -0.2f, 0.0f, 1.03f); }  // 前のめり
+void moodThinking() { emote(Expression::Doubt, 9, -0.4f, 0.5f, 1.0f); }      // 上を見て考える
+void moodHappy() { emote(Expression::Happy, -4, -0.15f, 0.0f, 1.05f); }      // うれしい
+void moodSad() { emote(Expression::Sad, 6, 0.5f, -0.2f, 0.97f); }            // しょんぼり
+void moodPet() { emote(Expression::Happy, 8, 0.3f, 0.2f, 1.02f); }           // なでられて照れ
+
+// うなずき（頭を軽く上下）。短時間ブロックするので会話の合間に使う。
+void nod(int times = 2) {
+  for (int t = 0; t < times; ++t) {
+    avatar.setPosition(6, 0);
+    delay(110);
+    avatar.setPosition(-2, 0);
+    delay(110);
+  }
+  avatar.setPosition(0, 0);
+}
+
 // ---- usage / 予算 -----------------------------------------------------------
 
 // 現在の年月キー（NVSにRTCが無い場合は0000固定でも良いが、可能ならNTPで更新）。
@@ -231,6 +276,119 @@ int httpPost(const Endpoint& ep, const char* contentType, const uint8_t* body, s
   return status;
 }
 
+// ---- 自己学習（メモリ） -----------------------------------------------------
+// SDに会話メモを蓄積し、FACT（明示的に覚えた事）をLLMのsystemに注入する。
+// localモード時は host 側(このrepoの .local)へも送って蓄積する。
+
+const char* const kMemPath = "/dsv_mem.txt";  // SD上の学習ファイル
+constexpr size_t kMemMaxLines = 80;           // 起動時にこの行数へ切り詰める
+constexpr size_t kMemCtxFacts = 6;            // systemに注入するFACT最大数
+
+// host側(このrepo)の学習エンドポイント。localモードのみ送信。失敗は無視。
+void memPushHost(const char* kind, const String& text) {
+  if (!backendLocal || strlen(DSV_LOCAL_HOST) == 0) return;
+  Endpoint ep = {false, DSV_LOCAL_HOST, DSV_LOCAL_STT_PORT, "/memory", "", ""};
+  JsonDocument d;
+  d["kind"] = kind;
+  d["text"] = text;
+  String body;
+  serializeJson(d, body);
+  String resp;
+  httpPost(ep, "application/json", reinterpret_cast<const uint8_t*>(body.c_str()), body.length(),
+           resp);
+}
+
+void memAppendSd(const String& line) {
+  if (!sdReady) return;
+  File f = SD.open(kMemPath, FILE_APPEND);
+  if (!f) return;
+  f.println(line);
+  f.close();
+}
+
+// 明示的に覚えた事。FACT行はsystemへ注入され、host側にも送る。
+void memRemember(const String& fact) {
+  memAppendSd(String("FACT\t") + fact);
+  memPushHost("fact", fact);
+}
+
+// 通常の質問応答も履歴として残す（host側の自己学習データになる）。
+void memLog(const String& q, const String& a) {
+  memAppendSd(String("QA\t") + q + "\t" + a);
+  memPushHost("qa", q + " => " + a);
+}
+
+// 末尾のFACTを集めてsystem注入用の短い文字列を作る。無ければ空。
+String memContext() {
+  if (!sdReady) return "";
+  File f = SD.open(kMemPath, FILE_READ);
+  if (!f) return "";
+  String facts[kMemCtxFacts];
+  size_t cnt = 0;
+  while (f.available()) {
+    String ln = f.readStringUntil('\n');
+    ln.trim();
+    if (!ln.startsWith("FACT\t")) continue;
+    String fact = ln.substring(5);
+    if (fact.length() == 0) continue;
+    if (cnt < kMemCtxFacts) {
+      facts[cnt++] = fact;
+    } else {  // 最新kMemCtxFacts件だけ残すリング
+      for (size_t i = 1; i < kMemCtxFacts; ++i) facts[i - 1] = facts[i];
+      facts[kMemCtxFacts - 1] = fact;
+    }
+  }
+  f.close();
+  if (cnt == 0) return "";
+  String ctx = "しっていること:";
+  for (size_t i = 0; i < cnt; ++i) ctx += String(" ・") + facts[i];
+  return ctx;
+}
+
+// 起動時にファイルを末尾kMemMaxLines行へ切り詰める（無制限な肥大化を防ぐ）。
+void memTrim() {
+  if (!sdReady || !SD.exists(kMemPath)) return;
+  File f = SD.open(kMemPath, FILE_READ);
+  if (!f) return;
+  String ring[kMemMaxLines];
+  size_t cnt = 0, head = 0;
+  bool over = false;
+  while (f.available()) {
+    String ln = f.readStringUntil('\n');
+    ln.trim();
+    if (ln.length() == 0) continue;
+    ring[head] = ln;
+    head = (head + 1) % kMemMaxLines;
+    if (cnt < kMemMaxLines) cnt++;
+    else over = true;
+  }
+  f.close();
+  if (!over) return;  // 上限内ならそのまま
+  File w = SD.open(kMemPath, FILE_WRITE);
+  if (!w) return;
+  size_t start = head;  // overのとき head が最古の位置
+  for (size_t i = 0; i < cnt; ++i) w.println(ring[(start + i) % kMemMaxLines]);
+  w.close();
+}
+
+// 「おぼえて/覚えて/メモして」を含めば、その内容をFACTとして保存する。
+bool tryRemember(const String& q) {
+  if (q.indexOf("おぼえて") < 0 && q.indexOf("覚えて") < 0 && q.indexOf("メモして") < 0 &&
+      q.indexOf("めもして") < 0) {
+    return false;
+  }
+  String fact = q;
+  fact.replace("おぼえて", "");
+  fact.replace("覚えて", "");
+  fact.replace("メモして", "");
+  fact.replace("めもして", "");
+  fact.replace("って", "");
+  fact.trim();
+  if (fact.length() == 0) fact = q;
+  memRemember(fact);
+  return true;
+}
+
 // ---- 音声処理 ---------------------------------------------------------------
 
 int16_t* recBuffer = nullptr;
@@ -254,7 +412,7 @@ size_t recordUtterance(bool announce) {
   M5.Speaker.end();
   M5.Mic.begin();
   if (announce) {
-    avatar.setExpression(Expression::Neutral);
+    moodListening();
     say("どうぞ…");
   }
   bool heard = false;
@@ -366,7 +524,13 @@ bool askLlm(const String& question, String& answer) {
   JsonArray msgs = req["messages"].to<JsonArray>();
   JsonObject sys = msgs.add<JsonObject>();
   sys["role"] = "system";
-  sys["content"] = "あなたはStackChanという小さな卓上ロボットです。日本語で簡潔に、3文以内で答えてください。";
+  String sysText =
+      "あなたはStackChanという小さな卓上ロボットです。げんきで すこし おっちょこちょい、"
+      "あいてを おうえんする やさしい せいかく。かんじを つかわず、カタカナと ひらがなだけで、"
+      "3ぶんいないで みじかく こたえてね。";
+  String mem = memContext();  // 覚えた事があればsystemに注入（自己学習）
+  if (mem.length() > 0) sysText += String("\n") + mem;
+  sys["content"] = sysText;
   JsonObject um = msgs.add<JsonObject>();
   um["role"] = "user";
   um["content"] = question;
@@ -405,10 +569,10 @@ bool containsWake(const String& t) {
 // 録音済みサンプルを STT→(必要なら呼びかけ判定)→LLM→吹き出し表示。表情も切り替える。
 void processSamples(size_t samples, bool requireWake) {
   uint32_t sttMs = samples * 1000 / kSampleRate;
-  avatar.setExpression(Expression::Doubt);
+  moodThinking();
   String question;
   if (!transcribe(recBuffer, samples, sttMs, question)) {
-    avatar.setExpression(Expression::Sad);
+    moodSad();
     return;
   }
   if (requireWake && !containsWake(question)) return;  // 呼びかけでなければLLMを呼ばない
@@ -417,20 +581,29 @@ void processSamples(size_t samples, bool requireWake) {
     showUsage();
     return;
   }
+  if (tryRemember(question)) {  // 「おぼえて…」→FACTとして学習
+    moodHappy();
+    nod(1);
+    say("おぼえたよ！");
+    return;
+  }
   String norm = normalizeQuestion(question);
   String answer;
   if (cacheGet(norm, answer)) {
-    avatar.setExpression(Expression::Happy);
+    moodHappy();
     showAnswer(question, answer, true);
     return;
   }
-  say(String("考え中…(") + (backendLocal ? "local" : "cloud") + ")");
+  moodThinking();
+  say(String("かんがえ中…(") + (backendLocal ? "local" : "cloud") + ")");
   if (!askLlm(question, answer)) {
-    avatar.setExpression(Expression::Sad);
+    moodSad();
     return;
   }
   cachePut(norm, answer);
-  avatar.setExpression(Expression::Happy);
+  memLog(question, answer);  // 自己学習: 履歴を蓄積（localならhostへも）
+  moodHappy();
+  nod(1);
   if (!backendLocal && estimatedCostUsd() > DSV_MONTHLY_BUDGET_USD) {
     say(answer + " ［予算超過］");
   } else {
@@ -546,7 +719,7 @@ void setup() {
 
   // StackChanの顔を起動（別タスクで常時描画）。テキストは小さな吹き出しに出す。
   avatar.init();
-  avatar.setSpeechFont(&fonts::lgfxJapanGothic_12);
+  avatar.setSpeechFont(&fonts::lgfxJapanGothic_8);  // 小さめ（顔の邪魔をしない）
 
   recBuffer = static_cast<int16_t*>(ps_malloc(kMaxSamples * sizeof(int16_t)));
   prefs.begin("dsv", false);

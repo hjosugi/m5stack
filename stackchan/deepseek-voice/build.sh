@@ -9,6 +9,15 @@ source "$REPO_ROOT/scripts/lib/common.sh"
 require_command arduino-cli
 configure_arduino_env
 
+# 吹き出しを小さく/狭くする自前パッチをライブラリへ再適用する。
+# arduino-cli lib install（setup時）で純正へ戻るため、毎ビルドで上書きする。
+balloon_src="$SCRIPT_DIR/firmware/DeepSeekVoice/vendor/Balloon.h"
+balloon_dst="$REPO_ROOT/.local/arduino/user/libraries/M5Stack_Avatar/src/Balloon.h"
+if [[ -f $balloon_src && -f $balloon_dst ]] && ! cmp -s "$balloon_src" "$balloon_dst"; then
+  cp "$balloon_src" "$balloon_dst"
+  log "吹き出しパッチを適用しました: Balloon.h"
+fi
+
 source_sketch="$SCRIPT_DIR/firmware/DeepSeekVoice"
 build_source="$REPO_ROOT/.local/generated/deepseek-voice/DeepSeekVoice"
 build_dir="$REPO_ROOT/.local/build/deepseek-voice"

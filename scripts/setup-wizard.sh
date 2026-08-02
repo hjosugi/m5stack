@@ -54,6 +54,21 @@ ask_value() {
   [[ -n $value ]] && set_key "$key" "$value"
 }
 
+# 数値(整数/小数)だけ受け付ける。誤入力は再入力を促す。
+ask_number() {
+  local key=$1 label=$2 cur value
+  cur=$(get_key "$key")
+  while true; do
+    read -r -p "$label [${cur:-未設定}]: " value
+    [[ -z $value ]] && return 0
+    if [[ $value =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+      set_key "$key" "$value"
+      return 0
+    fi
+    warn "数値で入力してください（例: 5 または 5.5）。"
+  done
+}
+
 ask_secret() {
   local key=$1 label=$2 cur value answer
   cur=$(get_key "$key")
@@ -84,7 +99,7 @@ log "== $device 設定ウィザード =="
 
 read -r -p "いまPCが使用中のWi-Fiを取り込む? [Y/n] " answer
 if [[ $answer != n && $answer != N ]]; then
-  "$SCRIPT_DIR/capture-wifi.sh" --yes --env="$firm_env" || warn "Wi-Fi取り込み失敗。手動で設定してください。"
+  bash "$SCRIPT_DIR/capture-wifi.sh" --yes --env="$firm_env" || warn "Wi-Fi取り込み失敗。手動で設定してください。"
 else
   ask_value WIFI_SSID "WIFI_SSID"
   ask_secret WIFI_PASSWORD "WIFI_PASSWORD"
@@ -93,11 +108,11 @@ fi
 if [[ $device == stackchan ]]; then
   ask_secret DEEPSEEK_API "DeepSeek APIキー"
   ask_secret STT_API_KEY "STT(OpenAI Whisper) APIキー"
-  ask_value MONTHLY_BUDGET_USD "1か月の予算USD"
+  ask_number MONTHLY_BUDGET_USD "1か月の予算USD"
   read -r -p "完全ローカル(PC上のAI)を使う? [y/N] " answer
   if [[ $answer == y || $answer == Y ]]; then
     set_key PREFER_LOCAL 1
-    "$SCRIPT_DIR/set-local-host.sh" --yes --env="$firm_env" || warn "LOCAL_HOST自動設定失敗。手動で。"
+    bash "$SCRIPT_DIR/set-local-host.sh" --yes --env="$firm_env" || warn "LOCAL_HOST自動設定失敗。手動で。"
     ask_value LOCAL_LLM_MODEL "ローカルLLMモデル"
   else
     set_key PREFER_LOCAL 0
