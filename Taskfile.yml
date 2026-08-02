@@ -58,6 +58,11 @@ tasks:
     cmds:
       - ./scripts/backup-flash.sh
 
+  device:backup:run:
+    desc: "実行: 全Flashバックアップ（--allow-reset）。実機をリセットします。"
+    cmds:
+      - ./scripts/backup-flash.sh --allow-reset
+
   device:upload:
     desc: "安全案内のみ。実行は scripts/upload.sh --allow-flash"
     aliases: [upload]
@@ -166,6 +171,17 @@ tasks:
     aliases: [flash-deepseek]
     cmds:
       - ./stackchan/deepseek-voice/flash.sh
+
+  deepseek:flash:run:
+    desc: "実行: StackChanへ書き込む（全Flashバックアップmarkerが必要）。"
+    cmds:
+      - ./stackchan/deepseek-voice/flash.sh --allow-flash --replace-factory-firmware
+
+  deepseek:flash:i:
+    desc: "対話実行: 確認してから書き込む（バックアップ不可時。復旧はM5Burner前提）。"
+    aliases: [flash-deepseek-i]
+    cmds:
+      - ./stackchan/deepseek-voice/flash.sh --interactive --allow-flash --replace-factory-firmware --official-recovery-ready
 
   local:host:
     desc: このPCのLAN IPをLOCAL_HOSTとして取り込む（実行前に確認）
