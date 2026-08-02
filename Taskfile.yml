@@ -144,6 +144,34 @@ tasks:
     cmds:
       - ./stackchan/screen-link/build.sh --ci
 
+  deepseek:build:
+    desc: StackChan DeepSeek音声版を実キーでビルドする（Flashなし）
+    aliases: [build-deepseek]
+    cmds:
+      - ./stackchan/deepseek-voice/build.sh
+
+  deepseek:build:ci:
+    desc: 公開用の例ヘッダでDeepSeek音声版のコンパイル可否を確認する（Flashなし）
+    cmds:
+      - ./stackchan/deepseek-voice/build.sh --ci
+
+  deepseek:wifi:
+    desc: いまPCが使用中のWi-FiをDeepSeek音声版の.envへ取り込む（実行前に確認）
+    aliases: [wifi]
+    cmds:
+      - ./scripts/capture-wifi.sh
+
+  deepseek:flash:
+    desc: "安全案内のみ。実行は scripts/flash-deepseek-voice.sh --allow-flash --replace-factory-firmware"
+    aliases: [flash-deepseek]
+    cmds:
+      - ./scripts/flash-deepseek-voice.sh
+
+  local:up:
+    desc: PC側の完全ローカルAI（Ollama + faster-whisperサーバ）を起動する
+    cmds:
+      - ./scripts/local-ai-up.sh
+
   host:screen-link:setup:
     desc: host PCへ画面relayの固定版Python依存を導入する
     aliases: [host:setup]
