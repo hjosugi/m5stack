@@ -12,7 +12,7 @@ if [[ ! -f "${BINARY}" ]]; then
 fi
 
 # dialout / uucp グループチェックの親切案内
-if ! groups 2>/dev/null | grep -E -q 'dialout|uucp'; then
+if ! groups 2> /dev/null | grep -E -q 'dialout|uucp'; then
   echo "【注意】ユーザーが dialout または uucp グループに所属していません。"
   echo "シリアルポート(/dev/ttyACM0)書き込みエラーになる場合は以下を実行してください:"
   echo "  sudo groupadd dialout 2>/dev/null || true"

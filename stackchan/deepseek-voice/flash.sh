@@ -2,8 +2,9 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=lib/common.sh
-source "$SCRIPT_DIR/lib/common.sh"
+REPO_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)
+# shellcheck source=../../scripts/lib/common.sh
+source "$REPO_ROOT/scripts/lib/common.sh"
 
 allow_flash=false
 replace_factory=false
@@ -34,7 +35,7 @@ marker=$(backup_marker_path)
 warn "StackChanを書き換えます。再起動後の不意な動作に備えて周囲を空けてください。"
 
 # 実キー入りのsecrets.hを生成し、生成済みスケッチをコンパイルする（書込みなし）。
-"$M5_REPO_ROOT/stackchan/deepseek-voice/build.sh"
+"$SCRIPT_DIR/build.sh"
 
 build_source="$M5_REPO_ROOT/.local/generated/deepseek-voice/DeepSeekVoice"
 build_dir="$M5_REPO_ROOT/.local/build/deepseek-voice"

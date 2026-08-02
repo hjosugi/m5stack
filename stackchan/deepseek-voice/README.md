@@ -29,7 +29,7 @@ task deepseek:build
 # 3) 書込み（StackChanを1台に固定し、全Flashバックアップ確保後）
 task device:init && task device:select MODEL=stackchan
 task device:grant
-./scripts/flash-deepseek-voice.sh --allow-flash --replace-factory-firmware
+./stackchan/deepseek-voice/flash.sh --allow-flash --replace-factory-firmware
 ```
 
 ## 完全ローカル（任意）
@@ -45,7 +45,7 @@ task local:up   # Ollama + faster-whisper系サーバの起動を案内
 
 ## 注意
 
-- 書込みは `scripts/flash-deepseek-voice.sh` の安全ゲート（対象1台固定・全Flashバックアップmarker・
+- 書込みは `stackchan/deepseek-voice/flash.sh` の安全ゲート（対象1台固定・全Flashバックアップmarker・
   StackChan置換フラグ）を通過した場合のみ実行される。
 - TLSは個人利用のため証明書検証を省略している（`setInsecure`）。
 - 単価は概算。改定時は `.ino` の `kPrice*` を更新すること。

@@ -31,6 +31,7 @@ mapfile -d '' shell_files < <(
     "$M5_REPO_ROOT/tests" \
     "$M5_REPO_ROOT/cardputer" \
     "$M5_REPO_ROOT/stackchan" \
+    "$M5_REPO_ROOT/pc" \
     -type f -name '*.sh' -print0 | sort -z
 )
 ((${#shell_files[@]} > 0)) || die "検査対象のShellスクリプトがありません。"

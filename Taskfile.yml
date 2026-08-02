@@ -162,10 +162,10 @@ tasks:
       - ./scripts/capture-wifi.sh
 
   deepseek:flash:
-    desc: "安全案内のみ。実行は scripts/flash-deepseek-voice.sh --allow-flash --replace-factory-firmware"
+    desc: "安全案内のみ。実行は stackchan/deepseek-voice/flash.sh --allow-flash --replace-factory-firmware"
     aliases: [flash-deepseek]
     cmds:
-      - ./scripts/flash-deepseek-voice.sh
+      - ./stackchan/deepseek-voice/flash.sh
 
   local:host:
     desc: このPCのLAN IPをLOCAL_HOSTとして取り込む（実行前に確認）
@@ -175,7 +175,7 @@ tasks:
   local:up:
     desc: PC側の完全ローカルAI（Ollama + faster-whisperサーバ）を起動する
     cmds:
-      - ./scripts/local-ai-up.sh
+      - ./pc/local-ai/up.sh
 
   host:screen-link:setup:
     desc: host PCへ画面relayの固定版Python依存を導入する

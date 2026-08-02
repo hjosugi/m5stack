@@ -8,8 +8,9 @@ set -euo pipefail
 # GPUやモデルの導入方針はPCに依存するため、本スクリプトは前提を確認して案内する。
 
 SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=lib/common.sh
-source "$SCRIPT_DIR/lib/common.sh"
+REPO_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)
+# shellcheck source=../../scripts/lib/common.sh
+source "$REPO_ROOT/scripts/lib/common.sh"
 
 # 対象ファームの.envからモデル/ポートを読む（無ければ既定）。
 env_file="$M5_REPO_ROOT/stackchan/deepseek-voice/.env"
