@@ -79,54 +79,73 @@ if grep -Eiq 'secure boot[^[:alnum:]]*(enabled|true)|flash encryption[^[:alnum:]
   die "Secure BootまたはFlash Encryptionが有効です。暗号化済みバックアップを復旧可能と誤認しないため中止しました。"
 fi
 
-log "Flash全体 $BOARD_FLASH_BYTES bytes を64 KiBずつ読出します。"
-: > "$backup_partial"
-for ((chunk_index = 0; chunk_index < chunk_count; chunk_index += 1)); do
-  chunk_offset=$((chunk_index * chunk_bytes))
-  chunk_file="$backup_dir/chunk-$(printf '%03d' "$chunk_index").bin"
-  after_reset=no-reset
-  if ((chunk_index + 1 == chunk_count)); then
-    after_reset=hard-reset
-  fi
+if [[ ${M5_BACKUP_READ_MODE:-chunked} == single-nostub ]]; then
+  # ESP32-S3のUSB-Serial-JTAGでは、stub経由の継続セッション分割読出しが
+  # "No more data to read from the serial port" で落ちやすい。
+  # 実測では単発の --no-stub 読出しが安定するため、このモードを用意する。
+  log "Flash全体 $BOARD_FLASH_BYTES bytes を単発(--no-stub)で読出します。"
+  single_ok=false
+  for ((single_attempt = 1; single_attempt <= 3; single_attempt += 1)); do
+    rm -f -- "$backup_partial"
+    if esptool --chip "$BOARD_CHIP" --port "$resolved_port" --baud "$M5_ESPTOOL_BAUD" \
+      --before default-reset --after hard-reset --no-stub \
+      read-flash 0 "$BOARD_FLASH_BYTES" "$backup_partial" --no-progress 2>&1 | redact_device_identity; then
+      single_ok=true
+      break
+    fi
+    warn "単発(--no-stub)読出しに失敗しました（試行 $single_attempt/3）。"
+  done
+  [[ $single_ok == true ]] || die "単発(--no-stub)読出しに3回試行しても成功しませんでした。"
+else
+  log "Flash全体 $BOARD_FLASH_BYTES bytes を64 KiBずつ読出します。"
+  : > "$backup_partial"
+  for ((chunk_index = 0; chunk_index < chunk_count; chunk_index += 1)); do
+    chunk_offset=$((chunk_index * chunk_bytes))
+    chunk_file="$backup_dir/chunk-$(printf '%03d' "$chunk_index").bin"
+    after_reset=no-reset
+    if ((chunk_index + 1 == chunk_count)); then
+      after_reset=hard-reset
+    fi
 
-  if ((chunk_index % 16 == 0 || chunk_index + 1 == chunk_count)); then
-    log "  チャンク $((chunk_index + 1))/$chunk_count: offset=$chunk_offset"
-  fi
+    if ((chunk_index % 16 == 0 || chunk_index + 1 == chunk_count)); then
+      log "  チャンク $((chunk_index + 1))/$chunk_count: offset=$chunk_offset"
+    fi
 
-  chunk_label="チャンク $((chunk_index + 1))/$chunk_count"
-  if ! read_flash_piece "$chunk_offset" "$chunk_bytes" "$chunk_file" "$after_reset" "$chunk_label" no-reset; then
-    warn "$chunk_label を4 KiB単位へ分割して再試行します。"
-    subpiece_bytes=4096
-    subpiece_count=$((chunk_bytes / subpiece_bytes))
-    subpiece_file="$backup_dir/subpiece.bin"
-    : > "$chunk_file"
+    chunk_label="チャンク $((chunk_index + 1))/$chunk_count"
+    if ! read_flash_piece "$chunk_offset" "$chunk_bytes" "$chunk_file" "$after_reset" "$chunk_label" no-reset; then
+      warn "$chunk_label を4 KiB単位へ分割して再試行します。"
+      subpiece_bytes=4096
+      subpiece_count=$((chunk_bytes / subpiece_bytes))
+      subpiece_file="$backup_dir/subpiece.bin"
+      : > "$chunk_file"
 
-    for ((subpiece_index = 0; subpiece_index < subpiece_count; subpiece_index += 1)); do
-      subpiece_offset=$((chunk_offset + subpiece_index * subpiece_bytes))
-      subpiece_after_reset=no-reset
-      if ((chunk_index + 1 == chunk_count && subpiece_index + 1 == subpiece_count)); then
-        subpiece_after_reset=hard-reset
-      fi
-      subpiece_before_reset=no-reset
-      if ((subpiece_index == 0)); then
-        subpiece_before_reset=default-reset
-      fi
-      subpiece_label="$chunk_label サブチャンク $((subpiece_index + 1))/$subpiece_count"
+      for ((subpiece_index = 0; subpiece_index < subpiece_count; subpiece_index += 1)); do
+        subpiece_offset=$((chunk_offset + subpiece_index * subpiece_bytes))
+        subpiece_after_reset=no-reset
+        if ((chunk_index + 1 == chunk_count && subpiece_index + 1 == subpiece_count)); then
+          subpiece_after_reset=hard-reset
+        fi
+        subpiece_before_reset=no-reset
+        if ((subpiece_index == 0)); then
+          subpiece_before_reset=default-reset
+        fi
+        subpiece_label="$chunk_label サブチャンク $((subpiece_index + 1))/$subpiece_count"
 
-      read_flash_piece "$subpiece_offset" "$subpiece_bytes" "$subpiece_file" "$subpiece_after_reset" "$subpiece_label" "$subpiece_before_reset" ||
-        die "$subpiece_label を3回試行しても成功しませんでした。"
-      subpiece_size=$(stat -c %s "$subpiece_file")
-      [[ $subpiece_size == "$subpiece_bytes" ]] || die "サブチャンクサイズが一致しません: index=$subpiece_index size=$subpiece_size"
-      dd if="$subpiece_file" of="$chunk_file" bs="$subpiece_bytes" seek="$subpiece_index" conv=notrunc status=none
-      rm -f -- "$subpiece_file"
-    done
-  fi
+        read_flash_piece "$subpiece_offset" "$subpiece_bytes" "$subpiece_file" "$subpiece_after_reset" "$subpiece_label" "$subpiece_before_reset" ||
+          die "$subpiece_label を3回試行しても成功しませんでした。"
+        subpiece_size=$(stat -c %s "$subpiece_file")
+        [[ $subpiece_size == "$subpiece_bytes" ]] || die "サブチャンクサイズが一致しません: index=$subpiece_index size=$subpiece_size"
+        dd if="$subpiece_file" of="$chunk_file" bs="$subpiece_bytes" seek="$subpiece_index" conv=notrunc status=none
+        rm -f -- "$subpiece_file"
+      done
+    fi
 
-  chunk_size=$(stat -c %s "$chunk_file")
-  [[ $chunk_size == "$chunk_bytes" ]] || die "チャンクサイズが一致しません: index=$chunk_index size=$chunk_size"
-  dd if="$chunk_file" of="$backup_partial" bs="$chunk_bytes" seek="$chunk_index" conv=notrunc status=none
-  rm -f -- "$chunk_file"
-done
+    chunk_size=$(stat -c %s "$chunk_file")
+    [[ $chunk_size == "$chunk_bytes" ]] || die "チャンクサイズが一致しません: index=$chunk_index size=$chunk_size"
+    dd if="$chunk_file" of="$backup_partial" bs="$chunk_bytes" seek="$chunk_index" conv=notrunc status=none
+    rm -f -- "$chunk_file"
+  done
+fi
 mv -- "$backup_partial" "$backup_file"
 
 actual_size=$(stat -c %s "$backup_file")

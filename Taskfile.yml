@@ -73,9 +73,19 @@ tasks:
 
   device:grant-port:
     desc: 選択済みUSB portへ一時的な利用権限を付ける
-    aliases: [grant]
+    aliases: [grant, device:grant]
     cmds:
       - ./scripts/grant-port-access.sh
+
+  device:grant:persist:
+    desc: "安全案内のみ。永続ACL(udevルール)導入は device:grant:persist:run"
+    cmds:
+      - ./scripts/install-udev-rule.sh
+
+  device:grant:persist:run:
+    desc: "実行: udev永続ルールを配置し以後 task grant を不要にする（pkexec）"
+    cmds:
+      - ./scripts/install-udev-rule.sh --install
 
   device:backup:
     desc: "安全案内のみ。実行は scripts/backup-flash.sh --allow-reset"
@@ -85,6 +95,13 @@ tasks:
 
   device:backup:run:
     desc: "実行: 全Flashバックアップ（--allow-reset）。実機をリセットします。"
+    cmds:
+      - ./scripts/backup-flash.sh --allow-reset
+
+  device:backup:usbjtag:run:
+    desc: "実行: 全Flashバックアップ（単発--no-stub読出し）。ESP32-S3のUSB-Serial-JTAGで分割読出しが不安定な時に。"
+    env:
+      M5_BACKUP_READ_MODE: single-nostub
     cmds:
       - ./scripts/backup-flash.sh --allow-reset
 

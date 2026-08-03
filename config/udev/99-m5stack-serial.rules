@@ -1,0 +1,12 @@
+# M5Stack / ESP32 系 USB-シリアルデバイスへ、ログイン中のローカルユーザに
+# 自動でアクセス権(ACL)を付与する udev ルール。
+# systemd-logind の uaccess タグで、その席のアクティブユーザにACLが付く
+# （グループ追加や再ログインは不要）。念のため GROUP=uucp / 0660 も併記。
+#
+# 対応USB ID は scripts/lib/common.sh の usb_id_is_supported と一致させること。
+# インストール: task device:grant:persist:run （pkexecで /etc/udev/rules.d/ へ配置）
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="303a", ATTRS{idProduct}=="1001", TAG+="uaccess", GROUP="uucp", MODE="0660"
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", TAG+="uaccess", GROUP="uucp", MODE="0660"
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", TAG+="uaccess", GROUP="uucp", MODE="0660"
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", TAG+="uaccess", GROUP="uucp", MODE="0660"
+SUBSYSTEM=="tty", SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", TAG+="uaccess", GROUP="uucp", MODE="0660"
