@@ -35,7 +35,7 @@ show_model() {
     return
   }
   local model
-  model=$(grep -E '^M5_MODEL=' "$file" 2> /dev/null | head -1 | cut -d= -f2-)
+  model=$(env_get M5_MODEL "$file")
   printf '%s' "${model:-<未設定>}"
 }
 

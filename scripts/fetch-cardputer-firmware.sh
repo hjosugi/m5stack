@@ -12,8 +12,9 @@ source "$SCRIPT_DIR/lib/common.sh"
 #   fetch-cardputer-firmware.sh <key>      指定キーだけ取得（launcher/bruce/gamestation…）
 #   fetch-cardputer-firmware.sh --list     カタログを一覧表示（ダウンロードなし）
 
-CATALOG="$M5_REPO_ROOT/config/cardputer-firmware.tsv"
-CACHE_DIR="$M5_REPO_ROOT/.local/firmware-cache/cardputer"
+# パスは common.sh の共有変数を単一の真実として使う。
+CATALOG=$M5_CARDPUTER_FW_CATALOG
+CACHE_DIR=$M5_CARDPUTER_FW_CACHE
 
 [[ -f $CATALOG ]] || die "カタログが見つかりません: $CATALOG"
 

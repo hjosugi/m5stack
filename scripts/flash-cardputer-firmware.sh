@@ -17,9 +17,6 @@ source "$SCRIPT_DIR/lib/common.sh"
 #   flash-cardputer-firmware.sh                       安全案内を表示（何もしない）
 #   flash-cardputer-firmware.sh --allow-flash <key>   実行（key: launcher/bruce/gamestation…）
 
-CATALOG="$M5_REPO_ROOT/config/cardputer-firmware.tsv"
-CACHE_DIR="$M5_REPO_ROOT/.local/firmware-cache/cardputer"
-
 allow_flash=false
 firmware_key=""
 for argument in "$@"; do
@@ -53,20 +50,11 @@ GUIDE
 fi
 
 [[ -n $firmware_key ]] || die "FWキーを指定してください（例: --allow-flash launcher）。"
-[[ -f $CATALOG ]] || die "カタログが見つかりません: $CATALOG"
 
-# カタログから該当行を取得。
-cat_name="" cat_version="" cat_offset="" cat_filename="" cat_sha=""
-# shellcheck disable=SC2034  # url列は書込みでは使わない（fetch側で使用）。
-while IFS=$'\t' read -r key name version offset filename sha url; do
-  [[ -z $key || $key == \#* ]] && continue
-  if [[ $key == "$firmware_key" ]]; then
-    cat_name=$name cat_version=$version cat_offset=$offset cat_filename=$filename cat_sha=$sha
-    break
-  fi
-done < "$CATALOG"
-[[ -n $cat_filename ]] || die "不明なFWキーです: $firmware_key（task cardputer:fw:list で確認）。"
-[[ $cat_offset == 0x0 ]] || die "このスクリプトは 0x0 全体イメージ専用です（offset=$cat_offset）。"
+# カタログから該当行を取得（FW_* が設定される）。
+firmware_catalog_lookup "$firmware_key" ||
+  die "不明なFWキーです: $firmware_key（task cardputer:fw:list で確認）。"
+[[ $FW_OFFSET == 0x0 ]] || die "このスクリプトは 0x0 全体イメージ専用です（offset=$FW_OFFSET）。"
 
 require_command esptool
 require_command sha256sum
@@ -83,9 +71,9 @@ resolved_port=$(require_port_access)
 marker=$(backup_marker_path)
 [[ -s $marker ]] || die "検証済みの全Flashバックアップがありません。先に task device:backup:run を実行してください。"
 
-bin_path="$CACHE_DIR/$cat_filename"
+bin_path="$M5_CARDPUTER_FW_CACHE/$FW_FILENAME"
 [[ -f $bin_path ]] || die "binがありません: $bin_path（先に task cardputer:fw:fetch）。"
-printf '%s  %s\n' "$cat_sha" "$bin_path" | sha256sum -c --status ||
+printf '%s  %s\n' "$FW_SHA" "$bin_path" | sha256sum -c --status ||
   die "binのsha256が固定値と一致しません。task cardputer:fw:fetch $firmware_key で取り直してください。"
 
 # 暗号化状態を確認（暗号化領域へ平文を書いて壊さないため）。
@@ -95,12 +83,12 @@ if printf '%s' "$security_info" | grep -Eiq 'secure boot[^[:alnum:]]*(enabled|tr
   die "Secure BootまたはFlash Encryptionが有効です。平文binの書込みを中止しました。"
 fi
 
-warn "$BOARD_MODEL へ $cat_name $cat_version を 0x0 へ書込みます。既存アプリは置き換わります。"
+warn "$BOARD_MODEL へ $FW_NAME $FW_VERSION を 0x0 へ書込みます。既存アプリは置き換わります。"
 warn "復旧が必要になったら task device:restore（バックアップ）または M5Burner を使用してください。"
 
 esptool --chip "$BOARD_CHIP" --port "$resolved_port" --baud "$M5_ESPTOOL_BAUD" \
   --before default-reset --after hard-reset \
-  write-flash --flash-size keep "$cat_offset" "$bin_path"
+  write-flash --flash-size keep "$FW_OFFSET" "$bin_path"
 
-log "書込み完了: $cat_name $cat_version -> $BOARD_MODEL"
+log "書込み完了: $FW_NAME $FW_VERSION -> $BOARD_MODEL"
 log "本体が再起動します。M5Launcherの場合はSD/OTAから次のFWを導入できます。"
