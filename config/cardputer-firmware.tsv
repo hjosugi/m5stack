@@ -7,3 +7,5 @@
 launcher	M5Launcher	2.8.0	0x0	launcher-2.8.0.bin	308c11982fd7260f535c4fe1f999c3cd4e13b649cd27a29b0cbeb2064f35483e	https://github.com/bmorcelli/Launcher/releases/download/2.8.0/Launcher-m5stack-cardputer.bin
 bruce	Bruce	1.16	0x0	bruce-1.16.bin	a0e1346db08fdfe7adf4a8f206530fc9ed1a4e2f551d91512000d0a2889bee77	https://github.com/BruceDevices/firmware/releases/download/1.16/Bruce-m5stack-cardputer.bin
 gamestation	Cardputer-Game-Station	1.2	0x0	gamestation-1.2.bin	cc6e14ea7d3688aabd2f958ef36c94c6ac37b9481bb523f1abfafa5ae281c7c8	https://github.com/geo-tp/Cardputer-Game-Station-Emulators/releases/download/v1.2/CardputerGameStation12.bin
+nemo	NEMO	3.2.2	0x0	nemo-3.2.2.bin	90e65f8c83081bd08b64c7343b5b0e6d603f0f04feda17b2985f3278b1a1faac	https://github.com/n0xa/m5stick-nemo/releases/download/v3.2.2/M5Nemo-v3.2.2-M5Cardputer.bin
+meshcore	MeshCore-CardputerADV-LoRa1262	1.15.0	0x0	meshcore-1.15.0.bin	6f3742808f65303fefba5ce5a2d562365c967610d1ab3e3d400dec6dd0e57b6c	https://github.com/hdcasey/meshcore-cardputer-adv/releases/download/v1.15.0/M5stack_cardputer_cap_lora1262_companion-v1.15.0-merged.bin
