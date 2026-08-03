@@ -317,7 +317,7 @@ firmware_catalog_each() {
 firmware_catalog_lookup() {
   local want=$1
   local key name version offset filename sha url
-  FW_KEY= FW_NAME= FW_VERSION= FW_OFFSET= FW_FILENAME= FW_SHA= FW_URL=
+  FW_KEY='' FW_NAME='' FW_VERSION='' FW_OFFSET='' FW_FILENAME='' FW_SHA='' FW_URL=''
   [[ -f $M5_CARDPUTER_FW_CATALOG ]] || die "カタログが見つかりません: $M5_CARDPUTER_FW_CATALOG"
   while IFS=$'\t' read -r key name version offset filename sha url; do
     [[ -z $key || $key == \#* ]] && continue
