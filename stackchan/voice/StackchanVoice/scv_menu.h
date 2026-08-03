@@ -143,10 +143,10 @@ void proactiveTick() {
 }
 
 bool configUsable() {
-#ifdef DSV_EXAMPLE_CONFIG
+#ifdef SCV_EXAMPLE_CONFIG
   return false;
 #else
-  return strlen(DSV_WIFI_SSID) > 0;
+  return strlen(SCV_WIFI_SSID) > 0;
 #endif
 }
 

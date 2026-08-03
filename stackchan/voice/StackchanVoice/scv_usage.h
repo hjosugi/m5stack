@@ -41,7 +41,7 @@ void addUsage(uint32_t in_tok, uint32_t out_tok, uint32_t stt_ms) {
 void showUsage() {
   rolloverIfNeeded();
   float cost = estimatedCostUsd();
-  float budget = DSV_MONTHLY_BUDGET_USD;
+  float budget = SCV_MONTHLY_BUDGET_USD;
   char buf[256];
   snprintf(buf, sizeof(buf),
            "今月の使用量\n入力: %lu tok\n出力: %lu tok\nSTT: %.1f 分\n概算: $%.4f / $%.2f",

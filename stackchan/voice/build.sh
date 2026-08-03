@@ -11,15 +11,15 @@ configure_arduino_env
 
 # 吹き出しを小さく/狭くする自前パッチをライブラリへ再適用する。
 # arduino-cli lib install（setup時）で純正へ戻るため、毎ビルドで上書きする。
-balloon_src="$SCRIPT_DIR/firmware/DeepSeekVoice/vendor/Balloon.h"
+balloon_src="$SCRIPT_DIR/StackchanVoice/vendor/Balloon.h"
 balloon_dst="$REPO_ROOT/.local/arduino/user/libraries/M5Stack_Avatar/src/Balloon.h"
 if [[ -f $balloon_src && -f $balloon_dst ]] && ! cmp -s "$balloon_src" "$balloon_dst"; then
   cp "$balloon_src" "$balloon_dst"
   log "吹き出しパッチを適用しました: Balloon.h"
 fi
 
-source_sketch="$SCRIPT_DIR/firmware/DeepSeekVoice"
-build_source="$REPO_ROOT/.local/generated/voice/DeepSeekVoice"
+source_sketch="$SCRIPT_DIR/StackchanVoice"
+build_source="$REPO_ROOT/.local/generated/voice/StackchanVoice"
 build_dir="$REPO_ROOT/.local/build/voice"
 fqbn="m5stack:esp32:m5stack_cores3"
 
@@ -95,30 +95,30 @@ else
   umask 077
   {
     printf '#pragma once\n'
-    printf '#define DSV_WIFI_SSID "%s"\n' "$(escape_c "$WIFI_SSID")"
-    printf '#define DSV_WIFI_PASSWORD "%s"\n' "$(escape_c "$WIFI_PASSWORD")"
-    printf '#define DSV_CLOUD_LLM_HOST "%s"\n' "$(escape_c "$DEEPSEEK_HOST")"
-    printf '#define DSV_CLOUD_LLM_PORT 443\n'
-    printf '#define DSV_CLOUD_LLM_PATH "/chat/completions"\n'
-    printf '#define DSV_CLOUD_LLM_KEY "%s"\n' "$(escape_c "$DEEPSEEK_API")"
-    printf '#define DSV_CLOUD_LLM_MODEL "%s"\n' "$(escape_c "$DEEPSEEK_MODEL")"
-    printf '#define DSV_CLOUD_STT_HOST "%s"\n' "$(escape_c "$STT_HOST")"
-    printf '#define DSV_CLOUD_STT_PORT 443\n'
-    printf '#define DSV_CLOUD_STT_PATH "/v1/audio/transcriptions"\n'
-    printf '#define DSV_CLOUD_STT_KEY "%s"\n' "$(escape_c "$STT_API_KEY")"
-    printf '#define DSV_CLOUD_STT_MODEL "%s"\n' "$(escape_c "$STT_MODEL")"
-    printf '#define DSV_LOCAL_HOST "%s"\n' "$(escape_c "$LOCAL_HOST")"
-    printf '#define DSV_LOCAL_LLM_PORT %s\n' "$((10#$LOCAL_LLM_PORT))"
-    printf '#define DSV_LOCAL_LLM_PATH "/v1/chat/completions"\n'
-    printf '#define DSV_LOCAL_LLM_KEY "%s"\n' "$(escape_c "$LOCAL_LLM_KEY")"
-    printf '#define DSV_LOCAL_LLM_MODEL "%s"\n' "$(escape_c "$LOCAL_LLM_MODEL")"
-    printf '#define DSV_LOCAL_STT_PORT %s\n' "$((10#$LOCAL_STT_PORT))"
-    printf '#define DSV_LOCAL_STT_PATH "/v1/audio/transcriptions"\n'
-    printf '#define DSV_LOCAL_STT_KEY ""\n'
-    printf '#define DSV_LOCAL_STT_MODEL "%s"\n' "$(escape_c "$LOCAL_STT_MODEL")"
-    printf '#define DSV_PREFER_LOCAL %s\n' "$PREFER_LOCAL"
-    printf '#define DSV_MONTHLY_BUDGET_USD %s\n' "$budget_literal"
-  } > "$build_source/deepseek_voice_secrets.h"
+    printf '#define SCV_WIFI_SSID "%s"\n' "$(escape_c "$WIFI_SSID")"
+    printf '#define SCV_WIFI_PASSWORD "%s"\n' "$(escape_c "$WIFI_PASSWORD")"
+    printf '#define SCV_CLOUD_LLM_HOST "%s"\n' "$(escape_c "$DEEPSEEK_HOST")"
+    printf '#define SCV_CLOUD_LLM_PORT 443\n'
+    printf '#define SCV_CLOUD_LLM_PATH "/chat/completions"\n'
+    printf '#define SCV_CLOUD_LLM_KEY "%s"\n' "$(escape_c "$DEEPSEEK_API")"
+    printf '#define SCV_CLOUD_LLM_MODEL "%s"\n' "$(escape_c "$DEEPSEEK_MODEL")"
+    printf '#define SCV_CLOUD_STT_HOST "%s"\n' "$(escape_c "$STT_HOST")"
+    printf '#define SCV_CLOUD_STT_PORT 443\n'
+    printf '#define SCV_CLOUD_STT_PATH "/v1/audio/transcriptions"\n'
+    printf '#define SCV_CLOUD_STT_KEY "%s"\n' "$(escape_c "$STT_API_KEY")"
+    printf '#define SCV_CLOUD_STT_MODEL "%s"\n' "$(escape_c "$STT_MODEL")"
+    printf '#define SCV_LOCAL_HOST "%s"\n' "$(escape_c "$LOCAL_HOST")"
+    printf '#define SCV_LOCAL_LLM_PORT %s\n' "$((10#$LOCAL_LLM_PORT))"
+    printf '#define SCV_LOCAL_LLM_PATH "/v1/chat/completions"\n'
+    printf '#define SCV_LOCAL_LLM_KEY "%s"\n' "$(escape_c "$LOCAL_LLM_KEY")"
+    printf '#define SCV_LOCAL_LLM_MODEL "%s"\n' "$(escape_c "$LOCAL_LLM_MODEL")"
+    printf '#define SCV_LOCAL_STT_PORT %s\n' "$((10#$LOCAL_STT_PORT))"
+    printf '#define SCV_LOCAL_STT_PATH "/v1/audio/transcriptions"\n'
+    printf '#define SCV_LOCAL_STT_KEY ""\n'
+    printf '#define SCV_LOCAL_STT_MODEL "%s"\n' "$(escape_c "$LOCAL_STT_MODEL")"
+    printf '#define SCV_PREFER_LOCAL %s\n' "$PREFER_LOCAL"
+    printf '#define SCV_MONTHLY_BUDGET_USD %s\n' "$budget_literal"
+  } > "$build_source/stackchan_voice_secrets.h"
   sketch=$build_source
 fi
 

@@ -12,8 +12,8 @@ constexpr size_t kMemCtxFacts = 6;            // systemに注入するFACT最大
 
 // host側(このrepo)の学習エンドポイント。localモードのみ送信。失敗は無視。
 void memPushHost(const char* kind, const String& text) {
-  if (!backendLocal || strlen(DSV_LOCAL_HOST) == 0) return;
-  Endpoint ep = {false, DSV_LOCAL_HOST, DSV_LOCAL_STT_PORT, "/memory", "", ""};
+  if (!backendLocal || strlen(SCV_LOCAL_HOST) == 0) return;
+  Endpoint ep = {false, SCV_LOCAL_HOST, SCV_LOCAL_STT_PORT, "/memory", "", ""};
   JsonDocument d;
   d["kind"] = kind;
   d["text"] = text;

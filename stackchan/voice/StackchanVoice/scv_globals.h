@@ -21,14 +21,14 @@ struct Endpoint {
   const char* model;
 };
 
-const Endpoint kCloudLlm = {true, DSV_CLOUD_LLM_HOST, DSV_CLOUD_LLM_PORT, DSV_CLOUD_LLM_PATH,
-                            DSV_CLOUD_LLM_KEY, DSV_CLOUD_LLM_MODEL};
-const Endpoint kCloudStt = {true, DSV_CLOUD_STT_HOST, DSV_CLOUD_STT_PORT, DSV_CLOUD_STT_PATH,
-                            DSV_CLOUD_STT_KEY, DSV_CLOUD_STT_MODEL};
-const Endpoint kLocalLlm = {false, DSV_LOCAL_HOST, DSV_LOCAL_LLM_PORT, DSV_LOCAL_LLM_PATH,
-                            DSV_LOCAL_LLM_KEY, DSV_LOCAL_LLM_MODEL};
-const Endpoint kLocalStt = {false, DSV_LOCAL_HOST, DSV_LOCAL_STT_PORT, DSV_LOCAL_STT_PATH,
-                            DSV_LOCAL_STT_KEY, DSV_LOCAL_STT_MODEL};
+const Endpoint kCloudLlm = {true, SCV_CLOUD_LLM_HOST, SCV_CLOUD_LLM_PORT, SCV_CLOUD_LLM_PATH,
+                            SCV_CLOUD_LLM_KEY, SCV_CLOUD_LLM_MODEL};
+const Endpoint kCloudStt = {true, SCV_CLOUD_STT_HOST, SCV_CLOUD_STT_PORT, SCV_CLOUD_STT_PATH,
+                            SCV_CLOUD_STT_KEY, SCV_CLOUD_STT_MODEL};
+const Endpoint kLocalLlm = {false, SCV_LOCAL_HOST, SCV_LOCAL_LLM_PORT, SCV_LOCAL_LLM_PATH,
+                            SCV_LOCAL_LLM_KEY, SCV_LOCAL_LLM_MODEL};
+const Endpoint kLocalStt = {false, SCV_LOCAL_HOST, SCV_LOCAL_STT_PORT, SCV_LOCAL_STT_PATH,
+                            SCV_LOCAL_STT_KEY, SCV_LOCAL_STT_MODEL};
 
 Preferences prefs;
 Avatar avatar;

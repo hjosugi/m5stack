@@ -229,7 +229,7 @@ void processSamples(size_t samples, bool requireWake) {
   memLog(question, answer);  // 自己学習: 履歴を蓄積（localならhostへも）
   moodByPersonality();
   nod(1);
-  if (!backendLocal && estimatedCostUsd() > DSV_MONTHLY_BUDGET_USD) {
+  if (!backendLocal && estimatedCostUsd() > SCV_MONTHLY_BUDGET_USD) {
     say(answer + " ［予算超過］");
   } else {
     showAnswer(question, answer, false);

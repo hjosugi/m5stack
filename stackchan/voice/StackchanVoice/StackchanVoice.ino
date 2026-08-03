@@ -22,18 +22,18 @@
 #include <esp_system.h>  // esp_random()
 #include <mbedtls/sha256.h>
 
-#if __has_include("deepseek_voice_secrets.h")
-#include "deepseek_voice_secrets.h"
+#if __has_include("stackchan_voice_secrets.h")
+#include "stackchan_voice_secrets.h"
 #else
-#include "deepseek_voice_secrets.example.h"
+#include "stackchan_voice_secrets.example.h"
 #endif
 
 // 手ふり検知（CoreS3カメラ）。SCCBが内部I2Cと共有で実機調整が要るため既定OFF。
 // 実機で確認できたら secrets.h 側で 1 にする。
-#ifndef DSV_ENABLE_CAMERA
-#define DSV_ENABLE_CAMERA 0
+#ifndef SCV_ENABLE_CAMERA
+#define SCV_ENABLE_CAMERA 0
 #endif
-#if DSV_ENABLE_CAMERA
+#if SCV_ENABLE_CAMERA
 #include "esp_camera.h"
 #endif
 
@@ -43,15 +43,15 @@ using namespace m5avatar;
 // 各ヘッダは #pragma once の後、自身を無名namespaceで包む（同一TU内の
 // 複数の無名namespaceは同じ名前空間を共有するのでグローバルは相互に見える）。
 // 依存順（定義は使用より前）に include すること。
-#include "dsv_globals.h"       // 定数・Endpoint表・小さなグローバル
-#include "dsv_display.h"       // say/showStatus/showAnswer と表情・モーション
-#include "dsv_usage.h"         // usage/予算(NVS)
-#include "dsv_cache.h"         // SDキャッシュ + SHA
-#include "dsv_http.h"          // buildUrl/httpPost
-#include "dsv_memory.h"        // 自己学習メモリ
-#include "dsv_personality.h"   // 個性・感性（学習）
-#include "dsv_audio.h"         // 録音・STT・LLM・processSamples
-#include "dsv_menu.h"          // 設定/自発/メニュー
+#include "scv_globals.h"       // 定数・Endpoint表・小さなグローバル
+#include "scv_display.h"       // say/showStatus/showAnswer と表情・モーション
+#include "scv_usage.h"         // usage/予算(NVS)
+#include "scv_cache.h"         // SDキャッシュ + SHA
+#include "scv_http.h"          // buildUrl/httpPost
+#include "scv_memory.h"        // 自己学習メモリ
+#include "scv_personality.h"   // 個性・感性（学習）
+#include "scv_audio.h"         // 録音・STT・LLM・processSamples
+#include "scv_menu.h"          // 設定/自発/メニュー
 
 
 void setup() {
@@ -81,7 +81,7 @@ void setup() {
   showStatus("Wi-Fi接続中…");
   WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);
-  WiFi.begin(DSV_WIFI_SSID, DSV_WIFI_PASSWORD);
+  WiFi.begin(SCV_WIFI_SSID, SCV_WIFI_PASSWORD);
   uint32_t deadline = millis() + 20000;
   while (WiFi.status() != WL_CONNECTED && static_cast<int32_t>(deadline - millis()) > 0) delay(100);
   if (WiFi.status() != WL_CONNECTED) {
@@ -92,7 +92,7 @@ void setup() {
 
   sdReady = SD.begin();
   memTrim();                        // 学習ファイルを上限行数に整える
-  backendLocal = DSV_PREFER_LOCAL;  // 既定モード。実行中は上部タップで切替可。
+  backendLocal = SCV_PREFER_LOCAL;  // 既定モード。実行中は上部タップで切替可。
   say(backendLocal ? "こんにちは（local）。ぼくを タッチして はなしてね。ながおしで せってい。"
                    : "こんにちは（cloud）。ぼくを タッチして はなしてね。ながおしで せってい。");
 }

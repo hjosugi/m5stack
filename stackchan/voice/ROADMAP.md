@@ -8,12 +8,12 @@ issue代わりに残す。`gh issue create` で個別issue化してもよい。
 - **声の方向に顔を向ける（音源方向）**
   CoreS3 のマイクは単一PDMマイク。到来方向推定(DoA)には最低2〜4chのマイクアレイが要る。
   → 現状は代替として「あたまをタッチした側へ顔を向ける」動きを実装済み
-    （[DeepSeekVoice.ino](firmware/DeepSeekVoice/DeepSeekVoice.ino) の `g_listenGazeH`）。
+    （[StackchanVoice.ino](StackchanVoice/StackchanVoice.ino) の `g_listenGazeH`）。
   将来: PDM×2 or I2Sマイクアレイ増設 → GCC-PHAT等でDoA → 顔/視線を向ける。
 
 - **カメラで手ふり・呼びかけに反応**
   GC0308 のSCCB(制御I2C)が内部I2Cと共有で、実機での初期化/ピン調整が要る。ブラインドでは危険。
-  → `DSV_ENABLE_CAMERA=0` で保留（ガード済み）。まず単純なフレーム差分での「動き検知」から。
+  → `SCV_ENABLE_CAMERA=0` で保留（ガード済み）。まず単純なフレーム差分での「動き検知」から。
   呼びかけワード「スタックちゃん」は実装済みなので当面はそちらで代替。
 
 ## ソフトウェアの今後

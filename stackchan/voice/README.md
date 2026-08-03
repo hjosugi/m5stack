@@ -30,7 +30,7 @@ StackChan (CoreS3) 用。**顔(M5Stack-Avatar)は常時表示**し、**回答は
 
 - 使用量: cloud利用分のtoken/STT秒をNVSに積算。`usage教えて`と話すと今月の概算コストを表示。
 - 節約: 正規化した質問をSDにキャッシュし、一致すればLLMを呼ばない。
-- 秘密情報: WiFi/APIキーは `stackchan/voice/.env`（Git管理外）に置き、build.shが `deepseek_voice_secrets.h` を生成する。
+- 秘密情報: WiFi/APIキーは `stackchan/voice/.env`（Git管理外）に置き、build.shが `stackchan_voice_secrets.h` を生成する。
 
 ## 使い方
 
