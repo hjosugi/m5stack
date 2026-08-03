@@ -195,7 +195,7 @@ def run_chat(brain: Brain):
         try:
             print(f"スタックちゃん[{brain.mood_label()}]> {brain.respond(q)}")
         except (urllib.error.URLError, OSError) as exc:
-            print(f"(LLMに つながらない: {exc}. PCで task local:up してね)", file=sys.stderr)
+            print(f"(LLMに つながらない: {exc}. PCで task stackchan:local:up してね)", file=sys.stderr)
 
 
 def run_gui(brain: Brain):

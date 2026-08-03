@@ -575,7 +575,7 @@ bool transcribe(const int16_t* pcm, size_t samples, uint32_t sttMs, String& text
   free(body);
   if (status != 200) {
     if (backendLocal && status <= 0)
-      showStatus("STTに つながらない。PCで task local:up してね", TFT_RED);
+      showStatus("STTに つながらない。PCで task stackchan:local:up してね", TFT_RED);
     else
       showStatus((String("STTエラー: ") + status + (backendLocal ? " (local)" : " (cloud)")).c_str(),
                  TFT_RED);
@@ -624,7 +624,7 @@ bool askLlm(const String& question, String& answer) {
                         reinterpret_cast<const uint8_t*>(bodyStr.c_str()), bodyStr.length(), resp);
   if (status != 200) {
     if (backendLocal && status <= 0)
-      showStatus("LLMに つながらない。PCで task local:up してね", TFT_RED);
+      showStatus("LLMに つながらない。PCで task stackchan:local:up してね", TFT_RED);
     else
       showStatus((String("LLMエラー: ") + status + (backendLocal ? " (local)" : " (cloud)")).c_str(),
                  TFT_RED);

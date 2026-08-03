@@ -151,7 +151,7 @@ main() {
 
   log "設定完了: $firm_env"
   if [[ $device == stackchan ]]; then
-    log "次: task deepseek:build （書込みは task deepseek:flash:i）"
+    log "次: task stackchan:build （書込みは task stackchan:flash:i）"
   else
     log "次: task build-cardputer-screen-link"
   fi

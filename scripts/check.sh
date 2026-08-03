@@ -96,6 +96,8 @@ awk -F '|' '
 "$M5_REPO_ROOT/tests/test-setup-wizard.sh"
 uv run --project "$M5_REPO_ROOT/pc/screen-link" --frozen \
   python -m unittest discover -s "$M5_REPO_ROOT/pc/screen-link/tests" -v
+# StackChanシミュレータ（標準ライブラリのみ・ヘッドレス）。
+python -m unittest discover -s "$M5_REPO_ROOT/pc/stackchan-sim/tests" -v
 "$M5_REPO_ROOT/scripts/audit-public-tree.sh"
 mkdocs build --strict --config-file "$M5_REPO_ROOT/mkdocs.yml"
 git -C "$M5_REPO_ROOT" diff --check

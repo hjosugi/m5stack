@@ -149,16 +149,60 @@ tasks:
     cmds:
       - ./stackchan/screen-link/build.sh --ci
 
-  deepseek:build:
-    desc: StackChan DeepSeek音声版を実キーでビルドする（Flashなし）
-    aliases: [build-deepseek]
+  stackchan:build:
+    desc: StackChan音声ファームを実キーでビルドする（Flashなし）
     cmds:
-      - ./stackchan/deepseek-voice/build.sh
+      - ./stackchan/voice/build.sh
 
-  deepseek:build:ci:
-    desc: 公開用の例ヘッダでDeepSeek音声版のコンパイル可否を確認する（Flashなし）
+  stackchan:build:ci:
+    desc: 公開用の例ヘッダでコンパイル可否を確認する（Flashなし）
     cmds:
-      - ./stackchan/deepseek-voice/build.sh --ci
+      - ./stackchan/voice/build.sh --ci
+
+  stackchan:flash:
+    desc: "安全案内のみ。実行は stackchan/voice/flash.sh --allow-flash --replace-factory-firmware"
+    cmds:
+      - ./stackchan/voice/flash.sh
+
+  stackchan:flash:run:
+    desc: "実行: StackChanへ書き込む（全Flashバックアップmarkerが必要）。"
+    cmds:
+      - ./stackchan/voice/flash.sh --allow-flash --replace-factory-firmware
+
+  stackchan:flash:i:
+    desc: "対話実行: 確認してから書き込む（バックアップ不可時。復旧はM5Burner前提）。"
+    cmds:
+      - ./stackchan/voice/flash.sh --interactive --allow-flash --replace-factory-firmware --official-recovery-ready
+
+  stackchan:local:up:
+    desc: PC側の完全ローカルAI（Ollama + faster-whisperサーバ）を起動する
+    cmds:
+      - ./pc/local-ai/up.sh
+
+  stackchan:local:status:
+    desc: 完全ローカルAI（Ollama/STT）の稼働状態を確認する
+    cmds:
+      - ./pc/local-ai/status.sh
+
+  stackchan:local:dev:
+    desc: 開発モード。ローカルAI(STT+Ollama)をフォアグラウンド(ログ表示)で起動（Ctrl-Cで停止）
+    cmds:
+      - ./pc/local-ai/dev.sh
+
+  stackchan:local:host:
+    desc: このPCのLAN IPをLOCAL_HOSTとして取り込む（実行前に確認）
+    cmds:
+      - ./scripts/set-local-host.sh
+
+  stackchan:chat:
+    desc: host側でStackChanとテキスト会話する（ローカルLLM経由）
+    cmds:
+      - python pc/stackchan-sim/sim.py --chat
+
+  stackchan:sim:
+    desc: 実機なしでStackChanの顔ミニ窓を出してチャットする（シミュレータ・e2e用）
+    cmds:
+      - python pc/stackchan-sim/sim.py --gui
 
   wifi:capture:
     desc: いまPCが使用中のWi-Fiを対象ファームの.envへ取り込む（実行前に確認）
@@ -167,7 +211,7 @@ tasks:
       - ./scripts/capture-wifi.sh
 
   setup:stackchan:
-    desc: StackChan(DeepSeek音声版)の設定を対話で入力する（Wi-Fi/キー/予算/local/補完）
+    desc: StackChan音声ファームの設定を対話で入力する（Wi-Fi/キー/予算/local/補完）
     cmds:
       - ./scripts/setup-wizard.sh stackchan
 
@@ -175,44 +219,6 @@ tasks:
     desc: Cardputer(画面リンク)の設定を対話で入力する
     cmds:
       - ./scripts/setup-wizard.sh cardputer
-
-  deepseek:flash:
-    desc: "安全案内のみ。実行は stackchan/deepseek-voice/flash.sh --allow-flash --replace-factory-firmware"
-    aliases: [flash-deepseek]
-    cmds:
-      - ./stackchan/deepseek-voice/flash.sh
-
-  deepseek:flash:run:
-    desc: "実行: StackChanへ書き込む（全Flashバックアップmarkerが必要）。"
-    cmds:
-      - ./stackchan/deepseek-voice/flash.sh --allow-flash --replace-factory-firmware
-
-  deepseek:flash:i:
-    desc: "対話実行: 確認してから書き込む（バックアップ不可時。復旧はM5Burner前提）。"
-    aliases: [flash-deepseek-i]
-    cmds:
-      - ./stackchan/deepseek-voice/flash.sh --interactive --allow-flash --replace-factory-firmware --official-recovery-ready
-
-  local:host:
-    desc: このPCのLAN IPをLOCAL_HOSTとして取り込む（実行前に確認）
-    cmds:
-      - ./scripts/set-local-host.sh
-
-  local:up:
-    desc: PC側の完全ローカルAI（Ollama + faster-whisperサーバ）を起動する
-    cmds:
-      - ./pc/local-ai/up.sh
-
-  local:status:
-    desc: 完全ローカルAI（Ollama/STT）の稼働状態を確認する
-    aliases: [local:st]
-    cmds:
-      - ./pc/local-ai/status.sh
-
-  local:dev:
-    desc: 開発モード。STTサーバをフォアグラウンド(デバッグログ)で起動する（Ctrl-Cで停止）
-    cmds:
-      - ./pc/local-ai/dev.sh
 
   host:screen-link:setup:
     desc: host PCへ画面relayの固定版Python依存を導入する

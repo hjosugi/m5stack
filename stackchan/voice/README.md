@@ -43,8 +43,8 @@ task wifi
 #   完全ローカルも使うなら PREFER_LOCAL / LOCAL_HOST 等も設定
 
 # 2) ビルド（書込みなし）
-task deepseek:build
-# 例ヘッダだけで疎通確認するなら: task deepseek:build:ci
+task stackchan:build
+# 例ヘッダだけで疎通確認するなら: task stackchan:build:ci
 
 # 3) 書込み（StackChanを1台に固定し、全Flashバックアップ確保後）
 task device:init && task device:select MODEL=stackchan
@@ -57,8 +57,8 @@ task device:grant
 PCで OpenAI互換のLLM/STTを起動する:
 
 ```sh
-task local:up       # Ollama + faster-whisper系サーバを起動
-task local:status   # 稼働状態を確認（OK/NG）
+task stackchan:local:up       # Ollama + faster-whisper系サーバを起動
+task stackchan:local:status   # 稼働状態を確認（OK/NG）
 ```
 
 起動後、StackChanの `.env` に `LOCAL_HOST=<PCのIP>` を設定して再ビルド・再書込みし、

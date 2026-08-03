@@ -46,7 +46,7 @@ if command -v ollama > /dev/null 2>&1; then
     # 起動済み。LAN(端末)から見えるか確認する。
     if ! curl -fsS "http://$lan_ip:11434/api/tags" > /dev/null 2>&1; then
       warn "Ollamaが 127.0.0.1 のみで待受けています。端末(LAN)からは繋がりません。"
-      warn "  → 'pkill -x ollama' で止めてから 'task local:up' を再実行してください"
+      warn "  → 'pkill -x ollama' で止めてから 'task stackchan:local:up' を再実行してください"
       warn "    （OLLAMA_HOST=$OLLAMA_HOST で起動し直します）。"
     fi
   else

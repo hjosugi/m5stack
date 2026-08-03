@@ -47,12 +47,12 @@ if probe "LLM (Ollama)" "http://$lan_ip:$llm_port/api/tags"; then
     grep -q "\"$llm_model\""; then
     log "    モデル $llm_model: 取得済み"
   else
-    warn "    モデル $llm_model: 未取得（task local:up で pull されます）"
+    warn "    モデル $llm_model: 未取得（task stackchan:local:up で pull されます）"
   fi
 elif curl -fsS --max-time 5 "http://127.0.0.1:$llm_port/api/tags" > /dev/null 2>&1; then
   # ローカルでは応答するがLANから見えない=127.0.0.1のみで待受け。
   warn "    Ollamaは 127.0.0.1 のみで待受け。端末から繋がりません。"
-  warn "    → pkill -x ollama してから task local:up（OLLAMA_HOST=0.0.0.0で再起動）"
+  warn "    → pkill -x ollama してから task stackchan:local:up（OLLAMA_HOST=0.0.0.0で再起動）"
 fi
 
 # STT: faster-whisper OpenAI互換サーバの /health。
@@ -62,6 +62,6 @@ log ""
 if ((ng == 0)); then
   log "すべて稼働中。StackChanを LOCAL にすれば完全ローカルで動きます。"
 else
-  warn "未起動があります。'task local:up' で起動してください（ログ: .local/stt-server.log）。"
+  warn "未起動があります。'task stackchan:local:up' で起動してください（ログ: .local/stt-server.log）。"
   exit 1
 fi
