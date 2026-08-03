@@ -16,7 +16,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 # 対象ファームの.env（main / テストが設定する）。
 firm_env=${firm_env:-}
 
-get_key() { grep -E "^$1=" "$firm_env" | tail -1 | cut -d= -f2- || true; }
+get_key() { env_get "$1" "$firm_env"; }
 
 set_key() {
   local key=$1 value=$2 tmp

@@ -30,6 +30,9 @@ require_command() {
   command -v "$1" > /dev/null 2>&1 || die "$1 が見つかりません。先に direnv allow または nix develop を実行してください。"
 }
 
+# env_get <key> <file> : print the last KEY=VALUE value for <key> (empty if absent). Never fails.
+env_get() { grep -E "^$1=" "$2" 2> /dev/null | tail -1 | cut -d= -f2- || true; }
+
 read_usb_attr() {
   local device_path=$1
   local attr=$2

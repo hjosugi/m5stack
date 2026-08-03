@@ -18,6 +18,31 @@ tasks:
     cmds:
       - mkdocs build --strict
 
+  target:show:
+    desc: 実機ごとの.envプロファイルの現在状態を表示する（StackChan/Cardputerを分離運用）
+    aliases: [target]
+    cmds:
+      - ./scripts/select-target.sh show
+
+  target:use:
+    desc: "対象プロファイルへ切替（例: task target:use NAME=cardputer）。切替前に現行.envを自動保存"
+    requires:
+      vars: [NAME]
+    env:
+      TASK_NAME: "{{.NAME}}"
+    cmds:
+      - ./scripts/select-target.sh "$TASK_NAME"
+
+  target:cardputer:
+    desc: アクティブ.envをCardputer(.env.cardputer)へ切替える
+    cmds:
+      - ./scripts/select-target.sh cardputer
+
+  target:stackchan:
+    desc: アクティブ.envをStackChan(.env.stackchan)へ切替える
+    cmds:
+      - ./scripts/select-target.sh stackchan
+
   device:detect:
     desc: USB属性だけを読み、対応デバイス候補を表示する
     aliases: [detect]

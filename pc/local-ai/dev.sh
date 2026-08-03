@@ -15,7 +15,7 @@ require_command uv
 require_command ss
 
 env_file="$M5_REPO_ROOT/stackchan/voice/.env"
-read_key() { grep -E "^$1=" "$env_file" 2> /dev/null | tail -1 | cut -d= -f2- || true; }
+read_key() { env_get "$1" "$env_file"; }
 
 stt_port=$(read_key LOCAL_STT_PORT)
 stt_port=${stt_port:-8000}

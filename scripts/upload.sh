@@ -41,5 +41,5 @@ arduino_cli compile \
   --warnings all \
   --upload \
   --port "$M5_PORT" \
-  "$M5_REPO_ROOT/firmware/hello_m5"
+  "$M5_REPO_ROOT/ci/hello_m5"
 log "書込み完了: $M5_MODEL"

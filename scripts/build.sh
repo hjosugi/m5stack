@@ -16,6 +16,6 @@ arduino_cli compile \
   --fqbn "$M5_FQBN" \
   --build-path "$build_dir" \
   --warnings all \
-  "$M5_REPO_ROOT/firmware/hello_m5"
+  "$M5_REPO_ROOT/ci/hello_m5"
 log "ビルド完了: $build_dir"
 log "実機への書込みは行っていません。"

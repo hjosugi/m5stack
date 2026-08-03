@@ -12,7 +12,7 @@ source "$REPO_ROOT/scripts/lib/common.sh"
 require_command curl
 
 env_file="$M5_REPO_ROOT/stackchan/voice/.env"
-read_key() { grep -E "^$1=" "$env_file" 2> /dev/null | tail -1 | cut -d= -f2- || true; }
+read_key() { env_get "$1" "$env_file"; }
 
 llm_port=11434
 stt_port=$(read_key LOCAL_STT_PORT)

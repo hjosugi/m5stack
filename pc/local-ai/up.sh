@@ -15,11 +15,11 @@ source "$REPO_ROOT/scripts/lib/common.sh"
 # 対象ファームの.envからモデル/ポートを読む（無ければ既定）。
 env_file="$M5_REPO_ROOT/stackchan/voice/.env"
 if [[ -f $env_file ]]; then
-  from_env=$(grep -E '^LOCAL_LLM_MODEL=' "$env_file" | tail -1 | cut -d= -f2-)
+  from_env=$(env_get LOCAL_LLM_MODEL "$env_file")
   [[ -n $from_env ]] && LOCAL_LLM_MODEL=$from_env
-  from_env=$(grep -E '^LOCAL_STT_PORT=' "$env_file" | tail -1 | cut -d= -f2-)
+  from_env=$(env_get LOCAL_STT_PORT "$env_file")
   [[ -n $from_env ]] && LOCAL_STT_PORT=$from_env
-  from_env=$(grep -E '^LOCAL_STT_MODEL=' "$env_file" | tail -1 | cut -d= -f2-)
+  from_env=$(env_get LOCAL_STT_MODEL "$env_file")
   [[ -n $from_env ]] && LOCAL_STT_MODEL=$from_env
 fi
 llm_model=${LOCAL_LLM_MODEL:-qwen2.5:3b}
@@ -31,7 +31,7 @@ export OLLAMA_MODELS=${OLLAMA_MODELS:-"$M5_REPO_ROOT/.local/ollama/models"}
 mkdir -p "$OLLAMA_MODELS"
 log "モデル保存先: $OLLAMA_MODELS （OLLAMA_MODELS で変更可）"
 
-lan_ip=$(grep -E '^LOCAL_HOST=' "$env_file" 2> /dev/null | tail -1 | cut -d= -f2- || true)
+lan_ip=$(env_get LOCAL_HOST "$env_file")
 [[ -n ${lan_ip:-} ]] || lan_ip="<PCのLAN IP（.envのLOCAL_HOST）>"
 
 log "== 完全ローカルAI 起動チェック =="

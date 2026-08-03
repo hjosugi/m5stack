@@ -38,12 +38,13 @@ if [[ $allow_flash != true ]]; then
 Cardputer コミュニティFW 書込みガイド（安全案内のみ・実行はしません）
 
 手順:
-  1. 対象を選ぶ:      task device:select MODEL=cardputer-adv   （通常Cardputerは cardputer）
-  2. 機器を固定:      task device:init                          （現在のUSBを .env にバインド）
-  3. ポート権限:      task device:grant                         （pkexecで一時ACL）
-  4. 全Flashバックアップ: task device:backup:run                （復旧用。markerが必須）
-  5. binを取得:       task cardputer:fw:fetch                   （固定版をsha検証で取得）
-  6. 書込み:          task cardputer:fw:flash:run FW=launcher   （0x0へ書込み）
+  1. 対象を切替:      task target:cardputer                     （.env.cardputer をアクティブ化）
+  2. ポート権限:      task device:grant                         （pkexecで一時ACL・要ユーザ操作）
+  3. 全Flashバックアップ: task device:backup:run                （復旧用。markerが必須）
+  4. binを取得:       task cardputer:fw:fetch                   （固定版をsha検証で取得）
+  5. 書込み:          task cardputer:fw:flash:run FW=launcher   （0x0へ書込み）
+
+  （初回のみ・プロファイル未作成なら: ./scripts/init-env.sh --force → task device:select MODEL=cardputer-adv）
 
 推奨構成: まず launcher を書込み → M5Launcherから Bruce 等をSD/OTAで導入。
 カタログ一覧: task cardputer:fw:list

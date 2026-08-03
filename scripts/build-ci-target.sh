@@ -33,4 +33,4 @@ arduino_cli compile \
   --build-path "$build_dir" \
   --jobs 0 \
   --warnings all \
-  "$M5_REPO_ROOT/firmware/hello_m5"
+  "$M5_REPO_ROOT/ci/hello_m5"
