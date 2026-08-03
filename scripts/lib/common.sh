@@ -8,6 +8,8 @@ M5_SYSFS_ROOT=${M5_SYSFS_ROOT:-/sys/bus/usb/devices}
 M5_DEV_ROOT=${M5_DEV_ROOT:-/dev}
 M5_BY_ID_ROOT=${M5_BY_ID_ROOT:-/dev/serial/by-id}
 M5_ESPTOOL_BAUD=${M5_ESPTOOL_BAUD:-115200}
+M5_CARDPUTER_FW_CATALOG=${M5_CARDPUTER_FW_CATALOG:-"$M5_REPO_ROOT/config/cardputer-firmware.tsv"}
+M5_CARDPUTER_FW_CACHE=${M5_CARDPUTER_FW_CACHE:-"$M5_REPO_ROOT/.local/firmware-cache/cardputer"}
 
 # versions.envはGit管理された固定値だけを含む。
 # shellcheck source=../../versions.env
@@ -296,6 +298,36 @@ require_port_access() {
   [[ $resolved_port == /dev/ttyACM* || $resolved_port == /dev/ttyUSB* ]] || die "想定外のデバイスノードです: $resolved_port"
   [[ -r $resolved_port && -w $resolved_port ]] || die "$resolved_port を読み書きできません。./scripts/grant-port-access.sh を実行してください。"
   printf '%s\n' "$resolved_port"
+}
+
+# Cardputer向けFWカタログ(config/cardputer-firmware.tsv)を1行ずつ処理する。
+# コメント/空行を除いた各データ行の全列を、渡したコールバックへ位置引数で渡す:
+#   callback <key> <name> <version> <offset> <filename> <sha> <url>
+firmware_catalog_each() {
+  local callback=$1
+  local key name version offset filename sha url
+  [[ -f $M5_CARDPUTER_FW_CATALOG ]] || die "カタログが見つかりません: $M5_CARDPUTER_FW_CATALOG"
+  while IFS=$'\t' read -r key name version offset filename sha url; do
+    [[ -z $key || $key == \#* ]] && continue
+    "$callback" "$key" "$name" "$version" "$offset" "$filename" "$sha" "$url"
+  done < "$M5_CARDPUTER_FW_CATALOG"
+}
+
+# firmware_catalog_lookup <key>: 見つかれば FW_* を設定して0、無ければ1。
+firmware_catalog_lookup() {
+  local want=$1
+  local key name version offset filename sha url
+  FW_KEY= FW_NAME= FW_VERSION= FW_OFFSET= FW_FILENAME= FW_SHA= FW_URL=
+  [[ -f $M5_CARDPUTER_FW_CATALOG ]] || die "カタログが見つかりません: $M5_CARDPUTER_FW_CATALOG"
+  while IFS=$'\t' read -r key name version offset filename sha url; do
+    [[ -z $key || $key == \#* ]] && continue
+    if [[ $key == "$want" ]]; then
+      FW_KEY=$key FW_NAME=$name FW_VERSION=$version FW_OFFSET=$offset
+      FW_FILENAME=$filename FW_SHA=$sha FW_URL=$url
+      return 0
+    fi
+  done < "$M5_CARDPUTER_FW_CATALOG"
+  return 1
 }
 
 assert_exact_git_checkout() {
