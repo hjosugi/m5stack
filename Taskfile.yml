@@ -114,6 +114,34 @@ tasks:
     cmds:
       - ./cardputer/screen-link/build.sh
 
+  cardputer:fw:list:
+    desc: Cardputer向けコミュニティFW(Launcher/Bruce/GameStation)の固定版カタログを一覧表示する
+    cmds:
+      - ./scripts/fetch-cardputer-firmware.sh --list
+
+  cardputer:fw:fetch:
+    desc: "Cardputer向けFWを固定版で取得しsha検証する（例: task cardputer:fw:fetch FW=bruce で単体、無指定で全件）"
+    vars:
+      FW: '{{.FW | default ""}}'
+    env:
+      TASK_FW: "{{.FW}}"
+    cmds:
+      - ./scripts/fetch-cardputer-firmware.sh "$TASK_FW"
+
+  cardputer:fw:flash:
+    desc: "安全案内のみ。実行は scripts/flash-cardputer-firmware.sh --allow-flash <launcher|bruce|gamestation>"
+    cmds:
+      - ./scripts/flash-cardputer-firmware.sh
+
+  cardputer:fw:flash:run:
+    desc: "実行: Cardputerへ固定版FWを0x0書込み（要 cardputer選択/バインド/バックアップmarker/ポート権限）。例: task cardputer:fw:flash:run FW=launcher"
+    requires:
+      vars: [FW]
+    env:
+      TASK_FW: "{{.FW}}"
+    cmds:
+      - ./scripts/flash-cardputer-firmware.sh --allow-flash "$TASK_FW"
+
   stackchan:fetch:
     desc: StackChan上流ソースを固定commitで取得する
     aliases: [fetch-stackchan]

@@ -1,0 +1,9 @@
+# Cardputer / Cardputer-Adv 向けコミュニティ・ファームウェアの固定版カタログ。
+# いずれも 0x0 書込みの全体イメージ（bootloader + partition table + app 同梱）。
+# 版・URL・sha256 はここで固定し、fetch/flash タスクが検証に使う。
+# 版を上げるときはこの表を更新する（履歴で差分が追える）。
+#
+# key         name                     version  offset  filename                 sha256                                                            url
+launcher	M5Launcher	2.8.0	0x0	launcher-2.8.0.bin	308c11982fd7260f535c4fe1f999c3cd4e13b649cd27a29b0cbeb2064f35483e	https://github.com/bmorcelli/Launcher/releases/download/2.8.0/Launcher-m5stack-cardputer.bin
+bruce	Bruce	1.16	0x0	bruce-1.16.bin	a0e1346db08fdfe7adf4a8f206530fc9ed1a4e2f551d91512000d0a2889bee77	https://github.com/BruceDevices/firmware/releases/download/1.16/Bruce-m5stack-cardputer.bin
+gamestation	Cardputer-Game-Station	1.2	0x0	gamestation-1.2.bin	cc6e14ea7d3688aabd2f958ef36c94c6ac37b9481bb523f1abfafa5ae281c7c8	https://github.com/geo-tp/Cardputer-Game-Station-Emulators/releases/download/v1.2/CardputerGameStation12.bin
