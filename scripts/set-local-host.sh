@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# このPCのLAN IPを、DeepSeek音声版の LOCAL_HOST として取り込む。
+# このPCのLAN IPを、StackChan音声版の LOCAL_HOST として取り込む。
 # 既定は対話確認あり。--yes で無確認、--iface=IFACE でインターフェース上書き。
 
 SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)

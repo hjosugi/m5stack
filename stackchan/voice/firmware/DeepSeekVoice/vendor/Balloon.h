@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full
 // license information.
 //
-// StackChan DeepSeek音声版むけの自前パッチ。純正より吹き出しを小さく・幅を狭く
+// StackChan音声版むけの自前パッチ。純正より吹き出しを小さく・幅を狭く
 // し、長い文は電光掲示板のように横スクロール(マーキー)させる。
 // build.sh がビルド前にライブラリへ上書きする。
 // 変更点: TEXT_SIZE 2->1、楕円を小さく＆幅上限つき、長文はスクロール表示。

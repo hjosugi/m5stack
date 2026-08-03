@@ -45,7 +45,7 @@ warn "StackChanを書き換えます。再起動後の不意な動作に備え�
 
 if [[ $interactive == true ]]; then
   printf '対象: %s (%s)  ポート: %s\n' "$BOARD_MODEL" "$M5_FQBN" "$resolved_port"
-  printf '現行ファームを DeepSeek音声版 で上書きします（復旧はM5Burner工場版）。\n'
+  printf '現行ファームを StackChan音声版 で上書きします（復旧はM5Burner工場版）。\n'
   read -r -p '書き込みますか？ [y/N] ' answer
   [[ $answer == y || $answer == Y ]] || die "中止しました。"
 fi
@@ -57,7 +57,7 @@ build_source="$M5_REPO_ROOT/.local/generated/voice/DeepSeekVoice"
 build_dir="$M5_REPO_ROOT/.local/build/voice"
 [[ -f $build_source/deepseek_voice_secrets.h ]] || die "生成済みsecretsが見つかりません。"
 
-log "StackChan DeepSeek音声版を書き込みます: $resolved_port"
+log "StackChan音声版を書き込みます: $resolved_port"
 arduino_cli compile \
   --fqbn m5stack:esp32:m5stack_cores3 \
   --build-path "$build_dir" \
@@ -65,4 +65,4 @@ arduino_cli compile \
   --upload \
   --port "$resolved_port" \
   "$build_source"
-log "書込み完了: StackChan DeepSeek音声版"
+log "書込み完了: StackChan音声版"

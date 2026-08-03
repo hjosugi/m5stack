@@ -89,8 +89,9 @@ else
   escape_c() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
 
   mkdir -p "$build_source"
-  cp "$source_sketch/DeepSeekVoice.ino" "$source_sketch/deepseek_voice_secrets.example.h" \
-    "$build_source/"
+  # スケッチ直下の .ino / .h（分割したモジュールヘッダを含む）を全部コピーする。
+  # vendor/ はライブラリへ別途あてるパッチなのでコピーしない（重複定義を避ける）。
+  cp "$source_sketch"/*.ino "$source_sketch"/*.h "$build_source/"
   umask 077
   {
     printf '#pragma once\n'
@@ -121,7 +122,7 @@ else
   sketch=$build_source
 fi
 
-log "StackChan DeepSeek音声版をビルドします（実機への書込みなし）。"
+log "StackChan音声版をビルドします（実機への書込みなし）。"
 arduino_cli compile \
   --fqbn "$fqbn" \
   --build-path "$build_dir" \

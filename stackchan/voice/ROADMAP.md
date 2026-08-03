@@ -1,4 +1,4 @@
-# StackChan DeepSeek音声版 — ロードマップ / 既知の制約（issue候補）
+# StackChan音声版 — ロードマップ / 既知の制約（issue候補）
 
 いま実装済みの機能は [README.md](README.md) を参照。ここは「むずかしい所」「今後やる所」を
 issue代わりに残す。`gh issue create` で個別issue化してもよい。

@@ -1,4 +1,4 @@
-# StackChan DeepSeek 音声版（テキスト回答）
+# StackChan 音声版（テキスト回答）
 
 StackChan (CoreS3) 用。**顔(M5Stack-Avatar)は常時表示**し、**回答は小さな吹き出し**に出す（顔は消さない）。
 音声で質問 → STT → LLM → 吹き出しにテキスト表示（音声出力なし）。バックエンドは cloud / local の2プロファイル。

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# いまPCが使用中のWi-Fi（SSID/パスワード）を、DeepSeek音声版の.envへ取り込む。
+# いまPCが使用中のWi-Fi（SSID/パスワード）を、StackChan音声版の.envへ取り込む。
 # 既定は対話確認あり。--yes で無確認、--ssid=NAME で対象SSIDを上書き。
 # ESP32-S3は2.4GHz専用のため、対象SSIDに2.4GHzの電波が無ければ警告する。
 
