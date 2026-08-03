@@ -86,13 +86,26 @@ M5Cardputer / Cardputer-Adv を **M5Launcher 基盤**で運用し、Bruce など
 - **前提ハード**: **Cap LoRa-1262（SX1262）が必要**。無いと通信機能は使えない。
 - **注意**: 地域ごとの周波数帯（EU868 等）と法規に従うこと。ビルドは EU868 版。
 
+## Picoware — M5Launcher の OTA で導入（配布 bin 無し）
+
+**Picoware は GitHub に Cardputer 用 bin が無く**（MicroPython ベースのソースビルド専用）、
+PC ビルドは ESP-IDF + MicroPython の重量級になる。実運用では **M5Launcher の OTA
+（オンライン導入）で本体だけで入れるのが確実**（PC 不要・最新版）。
+
+手順（本体上・Wi-Fi 必要）:
+
+1. Launcher の設定で Wi-Fi を接続（暗号化保存される）。
+2. メニューから **Online / OTA（オンライン一覧）** を開く。
+3. 一覧から **Picoware** を選び、インストール。完了後に起動。
+
+Picoware の中身: 本体上コードエディタ、Python REPL、ファイルマネージャ、App Store、
+MP3/WAV プレイヤー、JPEG/BMP ビューア、Wi-Fi/BLE、Game Boy エミュ、2048/Tetris など。
+Bruce より「携帯 PC・PDA」寄り。同じ OTA 一覧から他ファームも導入できる。
+
 ## M5Burner 経由で入手するもの（GitHub 直取り不可）
 
-以下は GitHub リリースに Cardputer 用 bin が無いため、M5Burner から取得する。
 本リポジトリには M5Burner 導入タスクがある: `task m5burner:setup` → `task m5burner:run`。
 
-- **Picoware 2.1.0** — PDA・ミニ PC 的な用途（エディタ、REPL、ファイル管理、App Store、
-  音楽・画像ビューア、Game Boy エミュ、2048/Tetris など）。日常利用向け。
 - **UIFlow2 2.5.0**（M5Stack 公式）— Blockly + MicroPython による電子工作・学習。
   ブラウザでブロックを組み、Wi-Fi/USB で本体へ転送。
 - **Factory UserDemo ADV-V0.3**（M5Stack 公式）— ハード動作確認・純正復旧用。

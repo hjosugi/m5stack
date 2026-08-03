@@ -185,12 +185,20 @@ tasks:
       - ./scripts/flash-cardputer-firmware.sh --allow-flash "$TASK_FW"
 
   cardputer:sd:provision:
-    desc: "安全案内のみ。M5Launcher公開SDをFAT32初期化しFW binを配置（実行は :run）"
+    desc: "安全案内のみ。SDをFAT32初期化しFW binを配置（実行は :run）。直挿しは SD_DEVICE=/dev/sdX"
+    vars:
+      SD_DEVICE: '{{.SD_DEVICE | default ""}}'
+    env:
+      SD_DEVICE: "{{.SD_DEVICE}}"
     cmds:
       - ./scripts/provision-cardputer-sd.sh
 
   cardputer:sd:provision:run:
-    desc: "実行: Launcher公開SDをFAT32初期化し取得済みFW binを一括配置（pkexec・SD全消去）"
+    desc: "実行: SDをFAT32初期化し取得済みFW binを一括配置（pkexec・SD全消去）。直挿し推奨: SD_DEVICE=/dev/sdX"
+    vars:
+      SD_DEVICE: '{{.SD_DEVICE | default ""}}'
+    env:
+      SD_DEVICE: "{{.SD_DEVICE}}"
     cmds:
       - ./scripts/provision-cardputer-sd.sh --allow-format
 
