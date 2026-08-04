@@ -3,9 +3,14 @@
 # 版・URL・sha256 はここで固定し、fetch/flash タスクが検証に使う。
 # 版を上げるときはこの表を更新する（履歴で差分が追える）。
 #
+# offset列: 0x0=esptoolで0x0へ書ける全体イメージ / sd=アプリ単体イメージ（M5LauncherのSD Install専用。0x0書込みtaskは拒否される）。
+# sd版はM5Burner CDN(https://m5burner-cdn.m5stack.com/firmware/<hash>.bin)由来。
 # key         name                     version  offset  filename                 sha256                                                            url
 launcher	M5Launcher	2.8.0	0x0	launcher-2.8.0.bin	308c11982fd7260f535c4fe1f999c3cd4e13b649cd27a29b0cbeb2064f35483e	https://github.com/bmorcelli/Launcher/releases/download/2.8.0/Launcher-m5stack-cardputer.bin
 bruce	Bruce	1.16	0x0	bruce-1.16.bin	a0e1346db08fdfe7adf4a8f206530fc9ed1a4e2f551d91512000d0a2889bee77	https://github.com/BruceDevices/firmware/releases/download/1.16/Bruce-m5stack-cardputer.bin
 gamestation	Cardputer-Game-Station	1.2	0x0	gamestation-1.2.bin	cc6e14ea7d3688aabd2f958ef36c94c6ac37b9481bb523f1abfafa5ae281c7c8	https://github.com/geo-tp/Cardputer-Game-Station-Emulators/releases/download/v1.2/CardputerGameStation12.bin
 nemo	NEMO	3.2.2	0x0	nemo-3.2.2.bin	90e65f8c83081bd08b64c7343b5b0e6d603f0f04feda17b2985f3278b1a1faac	https://github.com/n0xa/m5stick-nemo/releases/download/v3.2.2/M5Nemo-v3.2.2-M5Cardputer.bin
 meshcore	MeshCore-CardputerADV-LoRa1262	1.15.0	0x0	meshcore-1.15.0.bin	6f3742808f65303fefba5ce5a2d562365c967610d1ab3e3d400dec6dd0e57b6c	https://github.com/hdcasey/meshcore-cardputer-adv/releases/download/v1.15.0/M5stack_cardputer_cap_lora1262_companion-v1.15.0-merged.bin
+picoware	Picoware	2.0.0	sd	picoware-2.0.0.bin	ce339afabef1684ce958fee744dd79c97ebaabb7e25dde1303d421499b703540	https://m5burner-cdn.m5stack.com/firmware/dd3c74b337bda6c20bab861dfa4f6cfd.bin
+uiflow2-adv	UIFlow2-CardputerAdv	v2.5.0	sd	uiflow2-adv-v2.5.0.bin	1892a6da611308fcf8386ee80a1e425d47ce3ec246d2a99d79e46caec6a5734d	https://m5burner-cdn.m5stack.com/firmware/8d278435459ffb8d29bbb5b351463e1a.bin
+userdemo-adv	UserDemo-CardputerAdv	v0.3	sd	userdemo-adv-v0.3.bin	7bb1532427c875445b16186b6139afa371f67ddbdc83ae5bfe4a9089c7883b74	https://m5burner-cdn.m5stack.com/firmware/4ed4ab3a388a74e805971f37d6adcc9f.bin
