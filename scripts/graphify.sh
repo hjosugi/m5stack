@@ -15,37 +15,37 @@
 # https://github.com/Graphify-Labs/graphify
 set -eu
 
-REPO_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+REPO_ROOT=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$REPO_ROOT"
 
 PLATFORMS=${GRAPHIFY_PLATFORMS:-"claude copilot codex"}
 MODE=${1:-setup}
 
 die() {
-    echo "graphify: $*" >&2
-    exit 1
+  echo "graphify: $*" >&2
+  exit 1
 }
 
 # The CLI ships on PyPI as `graphifyy`. uv is preferred because it keeps the
 # tool in its own environment; pipx and a user-level pip install are accepted so
 # the script still works on a machine that has neither.
 ensure_cli() {
-    if command -v uv >/dev/null 2>&1; then
-        if [ "$1" = upgrade ] && uv tool list 2>/dev/null | grep -q '^graphifyy '; then
-            uv tool upgrade graphifyy >/dev/null
-        else
-            uv tool install --quiet graphifyy
-        fi
-    elif command -v pipx >/dev/null 2>&1; then
-        pipx upgrade graphifyy >/dev/null 2>&1 || pipx install graphifyy >/dev/null
-    elif command -v python3 >/dev/null 2>&1; then
-        python3 -m pip install --user --upgrade --quiet graphifyy
+  if command -v uv > /dev/null 2>&1; then
+    if [ "$1" = upgrade ] && uv tool list 2> /dev/null | grep -q '^graphifyy '; then
+      uv tool upgrade graphifyy > /dev/null
     else
-        die "need uv, pipx, or python3 to install the graphifyy CLI"
+      uv tool install --quiet graphifyy
     fi
+  elif command -v pipx > /dev/null 2>&1; then
+    pipx upgrade graphifyy > /dev/null 2>&1 || pipx install graphifyy > /dev/null
+  elif command -v python3 > /dev/null 2>&1; then
+    python3 -m pip install --user --upgrade --quiet graphifyy
+  else
+    die "need uv, pipx, or python3 to install the graphifyy CLI"
+  fi
 
-    command -v graphify >/dev/null 2>&1 ||
-        die "graphify is not on PATH after install; add the tool bin directory to PATH"
+  command -v graphify > /dev/null 2>&1 ||
+    die "graphify is not on PATH after install; add the tool bin directory to PATH"
 }
 
 # `graphify install` records the absolute path of the binary on this machine, so
@@ -54,8 +54,8 @@ ensure_cli() {
 # untouched; Codex has no local variant, so its file is rewritten in place and
 # ignored. Both end up calling `graphify` through PATH.
 localize_hooks() {
-    command -v python3 >/dev/null 2>&1 || return 0
-    python3 - <<'PY'
+  command -v python3 > /dev/null 2>&1 || return 0
+  python3 - << 'PY'
 import json, pathlib
 
 def portable(command):
@@ -111,66 +111,66 @@ PY
 # Everything graphify generates is machine-local and regenerable from this
 # script, so none of it belongs in the history.
 ensure_gitignore() {
-    [ -e .git ] || return 0
-    for pattern in \
-        '.claude/skills/graphify/' \
-        '.claude/settings.local.json' \
-        '.copilot/skills/graphify/' \
-        '.codex/skills/graphify/' \
-        '.codex/hooks.json' \
-        'graphify-out/'; do
-        grep -qxF "$pattern" .gitignore 2>/dev/null && continue
-        if [ -s .gitignore ] && [ -n "$(tail -c1 .gitignore)" ]; then
-            printf '\n' >>.gitignore
-        fi
-        printf '%s\n' "$pattern" >>.gitignore
-    done
+  [ -e .git ] || return 0
+  for pattern in \
+    '.claude/skills/graphify/' \
+    '.claude/settings.local.json' \
+    '.copilot/skills/graphify/' \
+    '.codex/skills/graphify/' \
+    '.codex/hooks.json' \
+    'graphify-out/'; do
+    grep -qxF "$pattern" .gitignore 2> /dev/null && continue
+    if [ -s .gitignore ] && [ -n "$(tail -c1 .gitignore)" ]; then
+      printf '\n' >> .gitignore
+    fi
+    printf '%s\n' "$pattern" >> .gitignore
+  done
 }
 
 case "$MODE" in
-setup) ensure_cli install ;;
-update) ensure_cli upgrade ;;
-*) die "unknown mode '$MODE' (expected setup or update)" ;;
+  setup) ensure_cli install ;;
+  update) ensure_cli upgrade ;;
+  *) die "unknown mode '$MODE' (expected setup or update)" ;;
 esac
 
 # Keep the exact bytes of a committed settings file so that pulling graphify's
 # hooks back out leaves no reformatting behind for someone to review.
 SETTINGS_BEFORE=
 if [ -f .claude/settings.json ]; then
-    SETTINGS_BEFORE=$(mktemp)
-    cp .claude/settings.json "$SETTINGS_BEFORE"
+  SETTINGS_BEFORE=$(mktemp)
+  cp .claude/settings.json "$SETTINGS_BEFORE"
 fi
 
 for platform in $PLATFORMS; do
-    graphify install --project --platform "$platform" >/dev/null ||
-        die "could not install the skill for $platform"
+  graphify install --project --platform "$platform" > /dev/null ||
+    die "could not install the skill for $platform"
 done
 
 localize_hooks
 
 # graphify writes a .graphify-bak beside any file it edits; the originals are
 # either restored below or tracked by git, so the copies are noise.
-find . -name '*.graphify-bak' -not -path './.git/*' -delete 2>/dev/null || true
+find . -name '*.graphify-bak' -not -path './.git/*' -delete 2> /dev/null || true
 
-if [ -n "$SETTINGS_BEFORE" ] && [ -f .claude/settings.json ] && command -v python3 >/dev/null 2>&1; then
-    if python3 -c 'import json,sys
+if [ -n "$SETTINGS_BEFORE" ] && [ -f .claude/settings.json ] && command -v python3 > /dev/null 2>&1; then
+  if python3 -c 'import json,sys
 a=json.load(open(sys.argv[1])); b=json.load(open(sys.argv[2]))
-sys.exit(0 if a==b else 1)' .claude/settings.json "$SETTINGS_BEFORE" 2>/dev/null; then
-        cp "$SETTINGS_BEFORE" .claude/settings.json
-    fi
+sys.exit(0 if a==b else 1)' .claude/settings.json "$SETTINGS_BEFORE" 2> /dev/null; then
+    cp "$SETTINGS_BEFORE" .claude/settings.json
+  fi
 fi
 if [ -n "$SETTINGS_BEFORE" ]; then rm -f "$SETTINGS_BEFORE"; fi
 
 ensure_gitignore
 
 if [ "$MODE" = update ]; then
-    # Only refresh a graph that exists: building the first one is a deliberate
-    # `/graphify .` in the assistant, not something a routine update starts.
-    if [ -f graphify-out/graph.json ]; then
-        graphify update .
-    else
-        echo "graphify: no graph yet — run /graphify . in your assistant to build one"
-    fi
+  # Only refresh a graph that exists: building the first one is a deliberate
+  # `/graphify .` in the assistant, not something a routine update starts.
+  if [ -f graphify-out/graph.json ]; then
+    graphify update .
+  else
+    echo "graphify: no graph yet — run /graphify . in your assistant to build one"
+  fi
 fi
 
 echo "graphify: $MODE complete for $PLATFORMS"
